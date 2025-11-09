@@ -31,7 +31,9 @@
 - [x] Footer com links de contato
 
 ## Próximas Implementações (Backlog)
-- [ ] Shopping cart system
+- [x] Gerar imagens 360° dos perfumes (CS Horizon, CS Enigma, CS Her, CS Origin)
+- [x] Adicionar seção de sabonetes (CS Morning Dew, CS Wild Instinct, CS Forest Whispers, CS Christmas Magic)
+- [x] Implementar carrinho de compras
 - [ ] Product detail pages
 - [ ] WhatsApp floating button
 - [ ] Newsletter signup form

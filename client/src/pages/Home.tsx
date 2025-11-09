@@ -1,6 +1,7 @@
 import Navigation from '@/components/Navigation';
 import HeroSection from '@/components/HeroSection';
-import ProductsSection from '@/components/ProductsSection';
+import PerfumesSection from '@/components/PerfumesSection';
+import SoapSection from '@/components/SoapSection';
 import StorySection from '@/components/StorySection';
 import FeaturesSection from '@/components/FeaturesSection';
 import Footer from '@/components/Footer';
@@ -16,8 +17,11 @@ export default function Home() {
         {/* Hero Section */}
         <HeroSection />
 
-        {/* Products Section */}
-        <ProductsSection />
+        {/* Perfumes Section */}
+        <PerfumesSection />
+
+        {/* Soaps Section */}
+        <SoapSection />
 
         {/* Story Section */}
         <StorySection />
