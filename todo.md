@@ -43,9 +43,9 @@
 ## Pré-lançamento
 - [ ] Adicionar fotos reais dos produtos
 - [ ] Atualizar preços em CAD
-- [ ] Configurar email de contato real
-- [ ] Atualizar número de WhatsApp
-- [ ] Verificar links de redes sociais
+- [x] Configurar email de contato real (contact@csfragrances.ca)
+- [x] Atualizar número de WhatsApp (+1 604 518 6863)
+- [x] Verificar links de redes sociais (@bycsfragrances)
 - [ ] Testar responsividade em mobile
 - [ ] Testar em navegadores (Chrome, Safari, Firefox)
 - [ ] Configurar domínio www.csfragrances.com

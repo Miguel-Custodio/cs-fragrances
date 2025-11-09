@@ -47,29 +47,29 @@ export default function Footer() {
             <div className="space-y-3 md:space-y-4">
               {/* Email */}
               <a
-                href="mailto:hello@csfragrances.com"
+                href="mailto:contact@csfragrances.ca"
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <Mail size={20} />
-                <span>hello@csfragrances.com</span>
+                <span>contact@csfragrances.ca</span>
               </a>
 
               {/* WhatsApp */}
               <a
-                href="https://wa.me/1234567890"
+                href="https://wa.me/16045186863"
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <MessageCircle size={20} />
-                <span>WhatsApp</span>
+                <span>+1 604 518 6863</span>
               </a>
 
               {/* Instagram */}
               <a
-                href="https://instagram.com/csfragrances"
+                href="https://instagram.com/bycsfragrances"
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <Instagram size={20} />
-                <span>@csfragrances</span>
+                <span>@bycsfragrances</span>
               </a>
             </div>
           </div>
