@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { CartProvider } from "./contexts/CartContext";
 import Cart from "./components/Cart";
+import FloatingButtons from "./components/FloatingButtons";
 import Home from "./pages/Home";
 
 function Router() {
@@ -36,6 +37,7 @@ function App() {
             <Toaster />
             <Router />
             <Cart />
+            <FloatingButtons />
           </TooltipProvider>
         </ThemeProvider>
       </CartProvider>

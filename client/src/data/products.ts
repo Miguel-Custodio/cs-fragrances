@@ -6,12 +6,14 @@ export interface Product {
   description: string;
   images: string[];
   featured?: boolean;
+  gender: 'masculino' | 'feminino' | 'unissex';
 }
 
 export const products: Product[] = [
   // Perfumes
   {
     id: 'cs-horizon',
+    gender: 'masculino',
     name: 'CS Horizon',
     category: 'perfume',
     price: 69.90,
@@ -27,6 +29,7 @@ export const products: Product[] = [
   },
   {
     id: 'cs-enigma',
+    gender: 'masculino',
     name: 'CS Enigma',
     category: 'perfume',
     price: 69.90,
@@ -42,6 +45,7 @@ export const products: Product[] = [
   },
   {
     id: 'cs-her',
+    gender: 'feminino',
     name: 'CS Her',
     category: 'perfume',
     price: 69.90,
@@ -57,6 +61,7 @@ export const products: Product[] = [
   },
   {
     id: 'cs-origin',
+    gender: 'feminino',
     name: 'CS Origin',
     category: 'perfume',
     price: 69.90,
@@ -73,6 +78,7 @@ export const products: Product[] = [
   // Soaps
   {
     id: 'cs-soap-morning-dew',
+    gender: 'unissex',
     name: 'CS Morning Dew',
     category: 'soap',
     price: 9.90,
@@ -81,6 +87,7 @@ export const products: Product[] = [
   },
   {
     id: 'cs-soap-wild-instinct',
+    gender: 'unissex',
     name: 'CS Wild Instinct',
     category: 'soap',
     price: 9.90,
@@ -89,6 +96,7 @@ export const products: Product[] = [
   },
   {
     id: 'cs-soap-forest-whispers',
+    gender: 'unissex',
     name: 'CS Forest Whispers',
     category: 'soap',
     price: 9.90,
@@ -97,6 +105,7 @@ export const products: Product[] = [
   },
   {
     id: 'cs-soap-christmas-magic',
+    gender: 'unissex',
     name: 'CS Christmas Magic',
     category: 'soap',
     price: 9.90,
