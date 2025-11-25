@@ -37,7 +37,7 @@ export default function FloatingButtons() {
               </svg>
               <div>
                 <p className="font-semibold">WhatsApp</p>
-                <p className="text-xs">Fale conosco</p>
+                <p className="text-xs">Contact Us</p>
               </div>
             </a>
 
@@ -67,9 +67,9 @@ export default function FloatingButtons() {
 
       {/* Floating Label */}
       {!showMenu && (
-        <div className="absolute bottom-20 right-0 bg-gray-800 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap shadow-lg">
-          Precisa de ajuda?
-        </div>
+          <div className="absolute bottom-20 right-0 bg-gray-800 text-white px-3 py-1 rounded-lg text-sm whitespace-nowrap shadow-lg">
+            Need Help?
+          </div>
       )}
     </div>
   );
