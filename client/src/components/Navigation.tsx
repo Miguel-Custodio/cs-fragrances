@@ -1,14 +1,19 @@
 import { useState } from 'react';
 import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
+import { useCartUI } from '@/contexts/CartUIContext';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
   const { items } = useCart();
+  const { openCart } = useCartUI();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleCartClick = () => {
+    openCart();
   };
 
   return (
@@ -31,7 +36,7 @@ export default function Navigation() {
             Contact
           </a>
           <button
-            onClick={() => setCartOpen(!cartOpen)}
+            onClick={handleCartClick}
             className="relative text-primary hover:text-accent transition-colors p-2"
             aria-label="Shopping cart"
           >
@@ -80,7 +85,7 @@ export default function Navigation() {
               Contact
             </a>
             <button
-              onClick={() => setCartOpen(!cartOpen)}
+              onClick={handleCartClick}
               className="relative text-primary hover:text-accent transition-colors flex items-center gap-2"
               aria-label="Shopping cart"
             >

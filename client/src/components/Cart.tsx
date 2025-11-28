@@ -1,13 +1,13 @@
 import { useCart } from '@/contexts/CartContext';
+import { useCartUI } from '@/contexts/CartUIContext';
 import { Button } from '@/components/ui/button';
 import { X, ShoppingCart } from 'lucide-react';
-import { useState } from 'react';
 
 export default function Cart() {
   const { items, removeItem, updateQuantity, total, clearCart } = useCart();
-  const [isOpen, setIsOpen] = useState(false);
+  const { isCartOpen, closeCart } = useCartUI();
 
-  if (!isOpen) {
+  if (!isCartOpen) {
     return null;
   }
 
@@ -18,7 +18,7 @@ export default function Cart() {
         {/* Backdrop */}
         <div
           className="absolute inset-0 bg-black/50 transition-opacity"
-          onClick={() => setIsOpen(false)}
+          onClick={closeCart}
         />
 
         {/* Cart Panel */}
@@ -27,7 +27,7 @@ export default function Cart() {
           <div className="flex items-center justify-between p-6 border-b">
             <h2 className="text-2xl font-bold text-primary">Shopping Cart</h2>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={closeCart}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               aria-label="Close cart"
             >

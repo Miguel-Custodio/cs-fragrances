@@ -57,7 +57,7 @@ export default function FragranceDetailsSection() {
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="text-3xl font-bold text-primary">{product.name}</h3>
                         <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full capitalize">
-                          {fragrance.gender}
+                          {fragrance.gender === 'feminino' ? 'Female' : fragrance.gender === 'masculino' ? 'Male' : fragrance.gender}
                         </span>
                       </div>
 
