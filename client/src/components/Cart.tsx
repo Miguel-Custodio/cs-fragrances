@@ -8,20 +8,7 @@ export default function Cart() {
   const [isOpen, setIsOpen] = useState(false);
 
   if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 right-6 bg-primary hover:bg-primary/90 text-white rounded-full p-4 shadow-lg transition-all hover:scale-110 z-40"
-        aria-label="Open shopping cart"
-      >
-        <ShoppingCart size={24} />
-        {items.length > 0 && (
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-            {items.length}
-          </span>
-        )}
-      </button>
-    );
+    return null;
   }
 
   return (

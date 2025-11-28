@@ -4,7 +4,6 @@ import PerfumesSection from '@/components/PerfumesSection';
 import FragranceDetailsSection from '@/components/FragranceDetailsSection';
 import InstagramFeedSection from '@/components/InstagramFeedSection';
 import IngredientsSection from '@/components/IngredientsSection';
-import SoapSection from '@/components/SoapSection';
 import StorySection from '@/components/StorySection';
 import FeaturesSection from '@/components/FeaturesSection';
 import Footer from '@/components/Footer';
@@ -31,9 +30,6 @@ export default function Home() {
 
         {/* Ingredients Section */}
         <IngredientsSection />
-
-        {/* Soaps Section */}
-        <SoapSection />
 
         {/* Story Section */}
         <StorySection />

@@ -25,7 +25,7 @@ export default function FragranceDetailsSection() {
             Discover Our Fragrances
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Each fragrance tells a unique story. Explore the notes and essence of our exclusive collection.
+            Each fragrance is a sensory journey, carefully crafted to awaken emotions and memories.
           </p>
         </div>
 
@@ -68,7 +68,7 @@ export default function FragranceDetailsSection() {
 
                       {/* Notes */}
                       <div className="mb-6">
-                        <h4 className="font-semibold text-primary mb-2">Notas Olfativas</h4>
+                        <h4 className="font-semibold text-primary mb-2">Fragrance Notes</h4>
                         <p className="text-sm text-gray-600 leading-relaxed">
                           {fragrance.notes}
                         </p>
@@ -80,7 +80,7 @@ export default function FragranceDetailsSection() {
                       {/* Price */}
                       <div className="mb-4">
                         <span className="text-3xl font-bold text-primary">
-                          R$ {product.price.toFixed(2)}
+                          CAD ${product.price.toFixed(2)}
                         </span>
                       </div>
 

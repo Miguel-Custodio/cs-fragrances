@@ -22,9 +22,9 @@ export default function IngredientsSection() {
             <div className="flex gap-4">
               <AlertCircle className="text-amber-600 flex-shrink-0 mt-1" size={24} />
               <div>
-                <h3 className="font-semibold text-amber-900 mb-2">Aviso de Alergia</h3>
+                <h3 className="font-semibold text-amber-900 mb-2">Allergy Warning</h3>
                 <p className="text-amber-800">
-                  Se você possui sensibilidade ou alergias conhecidas, consulte a lista de alergênicos abaixo antes de usar nossos produtos. Em caso de reação alérgica, interrompa o uso imediatamente e procure um profissional de saúde.
+                  If you have known sensitivities or allergies, please check the allergen list below before using our products. If you experience an allergic reaction, stop use immediately and consult a healthcare professional.
                 </p>
               </div>
             </div>
@@ -32,7 +32,7 @@ export default function IngredientsSection() {
 
           {/* Common Allergens */}
           <div>
-            <h3 className="text-2xl font-bold text-primary mb-6">Alergênicos Comuns Presentes</h3>
+            <h3 className="text-2xl font-bold text-primary mb-6">Common Allergens Present</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {ingredientInfo.commonAllergens.map((allergen, index) => (
                 <div
@@ -41,7 +41,7 @@ export default function IngredientsSection() {
                 >
                   <p className="font-medium text-gray-800">{allergen}</p>
                   <p className="text-sm text-gray-600 mt-1">
-                    Presente em nossas fragrâncias
+                    Present in our fragrances
                   </p>
                 </div>
               ))}
@@ -50,7 +50,7 @@ export default function IngredientsSection() {
 
           {/* Disclaimer */}
           <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
-            <h4 className="font-semibold text-blue-900 mb-2">Informação Importante</h4>
+            <h4 className="font-semibold text-blue-900 mb-2">Important Information</h4>
             <p className="text-blue-800">
               {ingredientInfo.disclaimer}
             </p>
@@ -58,17 +58,17 @@ export default function IngredientsSection() {
 
           {/* Contact for More Info */}
           <div className="bg-primary/5 border border-primary/20 p-6 rounded-lg text-center">
-            <h4 className="font-semibold text-primary mb-2">Dúvidas sobre Ingredientes?</h4>
+            <h4 className="font-semibold text-primary mb-2">Questions About Ingredients?</h4>
             <p className="text-gray-700 mb-4">
-              Entre em contato conosco para obter informações detalhadas sobre os ingredientes de um produto específico.
+              Contact us for detailed information about the ingredients of a specific product.
             </p>
             <a
-              href="https://wa.me/16045186863?text=Olá! Gostaria de saber mais sobre os ingredientes dos produtos da CS Fragrances."
+              href="https://wa.me/16045186863?text=Hello! I would like to know more about the ingredients of CS Fragrances products."
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block px-6 py-2 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors"
             >
-              Fale Conosco via WhatsApp
+              Contact Us via WhatsApp
             </a>
           </div>
         </div>

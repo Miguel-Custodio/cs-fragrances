@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
+import { useCart } from '@/contexts/CartContext';
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
+  const { items } = useCart();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -27,6 +30,18 @@ export default function Navigation() {
           <a href="#contact" className="text-primary hover:text-accent transition-colors font-lora">
             Contact
           </a>
+          <button
+            onClick={() => setCartOpen(!cartOpen)}
+            className="relative text-primary hover:text-accent transition-colors p-2"
+            aria-label="Shopping cart"
+          >
+            <ShoppingCart size={24} />
+            {items.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                {items.length}
+              </span>
+            )}
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -64,6 +79,19 @@ export default function Navigation() {
             >
               Contact
             </a>
+            <button
+              onClick={() => setCartOpen(!cartOpen)}
+              className="relative text-primary hover:text-accent transition-colors flex items-center gap-2"
+              aria-label="Shopping cart"
+            >
+              <ShoppingCart size={20} />
+              <span>Cart</span>
+              {items.length > 0 && (
+                <span className="bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {items.length}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       )}

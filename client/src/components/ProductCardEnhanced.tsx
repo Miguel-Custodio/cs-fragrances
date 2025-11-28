@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { Product } from '@/data/products';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
-import { ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShoppingCart, ChevronLeft, ChevronRight, Maximize2 } from 'lucide-react';
 import { toast } from 'sonner';
+import ProductDetailModal from './ProductDetailModal';
 
 interface ProductCardEnhancedProps {
   product: Product;
@@ -12,6 +13,7 @@ interface ProductCardEnhancedProps {
 export default function ProductCardEnhanced({ product }: ProductCardEnhancedProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { addItem } = useCart();
 
   const handleAddToCart = () => {
@@ -33,12 +35,22 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
   return (
     <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
       {/* Image Gallery */}
-      <div className="relative bg-gray-100 aspect-square overflow-hidden group">
+      <div className="relative bg-gray-100 aspect-square overflow-hidden group cursor-pointer">
         <img
           src={currentImage}
           alt={product.name}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+          onClick={() => setIsModalOpen(true)}
         />
+
+        {/* Expand Button */}
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="absolute top-2 right-2 bg-white/90 hover:bg-white text-primary p-2 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="View product details"
+        >
+          <Maximize2 size={20} />
+        </button>
 
         {/* Navigation Arrows */}
         {product.images.length > 1 && (
@@ -123,6 +135,13 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
           Add to Cart
         </Button>
       </div>
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={product}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }

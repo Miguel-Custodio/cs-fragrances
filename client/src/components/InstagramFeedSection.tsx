@@ -21,37 +21,37 @@ export default function InstagramFeedSection() {
     {
       id: '1',
       url: instagramUrl,
-      caption: 'Confira nossos últimos reels e shorts no Instagram',
+      caption: 'Check out our latest reels and shorts on Instagram',
       thumbnail: '/images/Studio_4 Fragrances.png',
     },
     {
       id: '2',
       url: instagramUrl,
-      caption: 'Descubra a essência de CS Fragrances',
+      caption: 'Discover the essence of CS Fragrances',
       thumbnail: '/images/Studio_CS Her.png',
     },
     {
       id: '3',
       url: instagramUrl,
-      caption: 'Fragrâncias que contam histórias',
+      caption: 'Fragrances that tell stories',
       thumbnail: '/images/Studio_CS Origin.png',
     },
     {
       id: '4',
       url: instagramUrl,
-      caption: 'Qualidade e elegância em cada frasco',
+      caption: 'Quality and elegance in every bottle',
       thumbnail: '/images/Studio_CS Enigma.png',
     },
     {
       id: '5',
       url: instagramUrl,
-      caption: 'Novos lançamentos em breve',
+      caption: 'New launches coming soon',
       thumbnail: '/images/Studio_CS Horizon.png',
     },
     {
       id: '6',
       url: instagramUrl,
-      caption: 'Junte-se à comunidade CS Fragrances',
+      caption: 'Join the CS Fragrances community',
       thumbnail: '/images/Campaign_Her001.png',
     },
   ];
@@ -78,7 +78,7 @@ export default function InstagramFeedSection() {
             </h2>
           </div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Acompanhe nossos reels, shorts e conteúdo exclusivo no Instagram
+            Follow our reels, shorts and exclusive content on Instagram
           </p>
           <a
             href={instagramUrl}
@@ -86,7 +86,7 @@ export default function InstagramFeedSection() {
             rel="noopener noreferrer"
             className="inline-block mt-4 px-6 py-2 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors"
           >
-            Visite {instagramHandle}
+            Visit {instagramHandle}
           </a>
         </div>
 
@@ -95,7 +95,7 @@ export default function InstagramFeedSection() {
           <div className="flex items-center justify-center h-96">
             <div className="text-center">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary mb-4"></div>
-              <p className="text-gray-600">Carregando conteúdo...</p>
+              <p className="text-gray-600">Loading content...</p>
             </div>
           </div>
         ) : (
@@ -134,7 +134,7 @@ export default function InstagramFeedSection() {
         {/* Call to Action */}
         <div className="mt-12 text-center">
           <p className="text-gray-600 mb-4">
-            Não perca nossos conteúdos exclusivos, dicas de uso e novidades!
+            Don't miss our exclusive content, usage tips and latest news!
           </p>
           <a
             href={instagramUrl}
@@ -142,7 +142,7 @@ export default function InstagramFeedSection() {
             rel="noopener noreferrer"
             className="inline-block px-8 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors"
           >
-            Seguir no Instagram
+            Follow on Instagram
           </a>
         </div>
       </div>
