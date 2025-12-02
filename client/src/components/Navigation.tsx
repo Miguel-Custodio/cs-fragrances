@@ -26,14 +26,17 @@ export default function Navigation() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 items-center">
-          <a href="#fragrances" className="text-primary hover:text-accent transition-colors font-lora">
+          <a href="#fragrances" className="text-primary hover:text-accent transition-colors">
             Fragrances
           </a>
-          <a href="#story" className="text-primary hover:text-accent transition-colors font-lora">
+          <a href="#story" className="text-primary hover:text-accent transition-colors">
             Our Story
           </a>
-          <a href="#contact" className="text-primary hover:text-accent transition-colors font-lora">
+          <a href="#contact" className="text-primary hover:text-accent transition-colors">
             Contact
+          </a>
+          <a href="/ingredients" className="text-primary hover:text-accent transition-colors">
+            Ingredients
           </a>
           <button
             onClick={handleCartClick}
@@ -65,24 +68,31 @@ export default function Navigation() {
           <div className="container py-4 flex flex-col gap-4">
             <a
               href="#fragrances"
-              className="text-primary hover:text-accent transition-colors font-lora"
+              className="text-primary hover:text-accent transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Fragrances
             </a>
             <a
               href="#story"
-              className="text-primary hover:text-accent transition-colors font-lora"
+              className="text-primary hover:text-accent transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Our Story
             </a>
             <a
               href="#contact"
-              className="text-primary hover:text-accent transition-colors font-lora"
+              className="text-primary hover:text-accent transition-colors"
               onClick={() => setIsOpen(false)}
             >
               Contact
+            </a>
+            <a
+              href="/ingredients"
+              className="text-primary hover:text-accent transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              Ingredients
             </a>
             <button
               onClick={handleCartClick}

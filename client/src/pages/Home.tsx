@@ -1,4 +1,5 @@
 import Navigation from '@/components/Navigation';
+import HeroCarousel from '@/components/HeroCarousel';
 import HeroSection from '@/components/HeroSection';
 import PerfumesSection from '@/components/PerfumesSection';
 import FragranceDetailsSection from '@/components/FragranceDetailsSection';
@@ -16,6 +17,9 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex-1">
+        {/* Hero Carousel */}
+        <HeroCarousel />
+
         {/* Hero Section */}
         <HeroSection />
 
