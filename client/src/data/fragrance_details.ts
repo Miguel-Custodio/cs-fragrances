@@ -1,5 +1,3 @@
-import { Product } from './products';
-
 export interface FragranceDetail {
   productId: string;
   notes: string; // Ex: Top, Heart, Base notes
