@@ -14,7 +14,7 @@ import Ingredients from "./pages/Ingredients";
 function Router() {
   return (
     <Switch>
-      <Route path={"/ "} component={Home} />
+      <Route path={"/"} component={Home} />
       <Route path={"/ingredients"} component={Ingredients} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
