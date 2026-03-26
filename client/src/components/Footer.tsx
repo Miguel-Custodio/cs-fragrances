@@ -47,11 +47,11 @@ export default function Footer() {
             <div className="space-y-3 md:space-y-4">
               {/* Email */}
               <a
-                href="mailto:contact@csfragrances.ca"
+                href="mailto:info@csfragrances.ca"
                 className="flex items-center gap-3 text-primary-foreground/80 hover:text-accent transition-colors"
               >
                 <Mail size={20} />
-                <span>contact@csfragrances.ca</span>
+                <span>info@csfragrances.ca</span>
               </a>
 
               {/* WhatsApp */}
