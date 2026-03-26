@@ -19,7 +19,11 @@ export const products: Product[] = [
     price: 69.90,
     description: 'A captivating fragrance that captures the essence of endless horizons and new beginnings.',
     images: [
-      '/images/Studio_CS Horizon.png',
+      '/images/CS HORIZON/18.png',
+      '/images/CS HORIZON/19.png',
+      '/images/CS HORIZON/20.png',
+      '/images/CS HORIZON/21.png',
+      '/images/CS HORIZON/22.png',
     ],
     featured: true,
   },
@@ -31,7 +35,11 @@ export const products: Product[] = [
     price: 69.90,
     description: 'A mysterious and intriguing fragrance that reveals new layers with every wear.',
     images: [
-      '/images/Studio_CS Enigma.png',
+      '/images/CS ENIGMA/25.png',
+      '/images/CS ENIGMA/26.png',
+      '/images/CS ENIGMA/27.png',
+      '/images/CS ENIGMA/28.png',
+      '/images/CS ENIGMA/29.png',
     ],
     featured: true,
   },
@@ -43,9 +51,12 @@ export const products: Product[] = [
     price: 69.90,
     description: 'An elegant and sophisticated fragrance designed for the modern woman.',
     images: [
-      '/images/Studio_CS Her.png',
-      '/images/Campaign_Her001.png',
-      '/images/Campaign_Her002.png',
+      '/images/CS HER/4.png',
+      '/images/CS HER/5.png',
+      '/images/CS HER/6.png',
+      '/images/CS HER/7.png',
+      '/images/CS HER/8.png',
+      '/images/CS HER/9.png',
     ],
     featured: true,
   },
@@ -57,11 +68,14 @@ export const products: Product[] = [
     price: 69.90,
     description: 'A timeless fragrance that honors the roots of luxury perfumery.',
     images: [
-      '/images/Studio_CS Origin.png',
+      '/images/CS ORIGIN/11.png',
+      '/images/CS ORIGIN/12.png',
+      '/images/CS ORIGIN/13.png',
+      '/images/CS ORIGIN/14.png',
+      '/images/CS ORIGIN/15.png',
     ],
     featured: true,
   },
-
 ];
 
 export const perfumes = products.filter((p) => p.category === 'perfume');
