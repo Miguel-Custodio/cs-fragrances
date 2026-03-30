@@ -175,10 +175,9 @@
       max-width: 1400px; /* CS Fragrances max-width */
     }
   }
+}
 
 /* CS Fragrances Typography */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Lora:wght@400;500;600&display=swap');
-
 @layer base {
   body {
     font-family: 'Lora', serif;
@@ -218,7 +217,6 @@
       font-size: 2.25rem;
     }
   }
-}
 }
 /* Smooth scroll behavior */
 html {
