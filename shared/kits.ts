@@ -61,7 +61,8 @@ export const KITS: readonly KitDef[] = [
     contents: '5 scented sachets (30 g each).',
     priceCents: null, // TODO confirm online price
     fairPriceCents: 2500,
-    image: null, // TODO no real photo of this bundle yet
+    // Provisional photo from Marketing (Canva); may be replaced after the Nov 28 photo shoot.
+    image: '/kits/five-sachets.webp',
   },
   {
     id: 'kit-five-wax-ornaments',
@@ -93,7 +94,8 @@ export const KITS: readonly KitDef[] = [
     contents: 'Buy 4 handmade soaps and get a 5th one free (5 soaps in total).',
     priceCents: null, // TODO confirm online price
     fairPriceCents: 3900,
-    image: null, // TODO no real photo of this bundle yet
+    // Provisional photo from Marketing (Canva); soap labels in the photo still say 100 g, real weight is 90 g.
+    image: '/kits/four-soaps-one-free.webp',
   },
   {
     id: 'kit-perfume-soap',
@@ -102,8 +104,7 @@ export const KITS: readonly KitDef[] = [
     // Online price confirmed by Miguel: ~CAD 75.00 (perfume is 69.90 online; fair price 65.00).
     priceCents: 7500,
     fairPriceCents: 6500,
-    // PROVISIONAL photo: shows the perfume with the CS gift bag and pouch (no soap in the shot).
-    // The only perfume + soap kit photos are Valentine's-branded. TODO replace with a Christmas photo.
+    // Photo from Marketing (Canva), real products; pending Raquel's approval.
     image: '/kits/perfume-soap.webp',
     option: { label: 'Perfume', values: PERFUME_CHOICES },
   },
