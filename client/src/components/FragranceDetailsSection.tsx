@@ -62,8 +62,8 @@ export default function FragranceDetailsSection() {
                       </div>
 
                       {/* Description */}
-                      <p className="text-gray-700 mb-4 leading-relaxed">
-                        {fragrance.descriptionDetail}
+                      <p className="text-gray-700 mb-4 leading-relaxed font-medium">
+                        {fragrance.family}
                       </p>
 
                       {/* Notes */}

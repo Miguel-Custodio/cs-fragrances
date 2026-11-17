@@ -3,6 +3,13 @@
   <!-- /kits is intentionally NOT listed until the kits are approved and VITE_KITS_ENABLED=true -->
   <url><loc>https://www.csfragrances.ca/</loc></url>
   <url><loc>https://www.csfragrances.ca/ingredients</loc></url>
+  <url><loc>https://www.csfragrances.ca/shop</loc></url>
+  <url><loc>https://www.csfragrances.ca/shop/perfumes</loc></url>
+  <url><loc>https://www.csfragrances.ca/shop/body-mists</loc></url>
+  <url><loc>https://www.csfragrances.ca/shop/home-sprays</loc></url>
+  <url><loc>https://www.csfragrances.ca/shop/sachets</loc></url>
+  <url><loc>https://www.csfragrances.ca/shop/soaps</loc></url>
+  <url><loc>https://www.csfragrances.ca/shop/candles-ornaments</loc></url>
   <url><loc>https://www.csfragrances.ca/returns-refunds</loc></url>
   <url><loc>https://www.csfragrances.ca/cancellation-policy</loc></url>
   <url><loc>https://www.csfragrances.ca/shipping-policy</loc></url>

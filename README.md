@@ -15,6 +15,7 @@ pnpm build      # static site -> dist/public
 | What | File |
 | --- | --- |
 | Prices (single source of truth, integer cents CAD) | `shared/catalog.ts` |
+| Product catalog by category (storefront data) | `client/src/data/products.ts`, pages `client/src/pages/Shop.tsx` (`/shop`, `/shop/:category`) |
 | Gift kits (hidden behind a flag) | `shared/kits.ts`, `client/src/pages/Kits.tsx` |
 | Shipping rates / free-shipping rules (**placeholders - TODO**) | `shared/shipping.ts` |
 | GST 5% / PST 7% (OFF by default) | `shared/tax.ts` |

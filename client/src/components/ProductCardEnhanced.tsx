@@ -36,12 +36,25 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
     <div className="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow">
       {/* Image Gallery */}
       <div className="relative bg-gray-100 aspect-square overflow-hidden group cursor-pointer">
-        <img
-          src={currentImage}
-          alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          onClick={() => setIsModalOpen(true)}
-        />
+        {currentImage ? (
+          <img
+            src={currentImage}
+            alt={product.name}
+            loading="lazy"
+            decoding="async"
+            className={`w-full h-full transition-transform duration-300 group-hover:scale-105 ${
+              product.imageFit === 'contain' ? 'object-contain bg-white' : 'object-cover'
+            }`}
+            onClick={() => setIsModalOpen(true)}
+          />
+        ) : (
+          <div
+            className="w-full h-full flex items-center justify-center text-6xl font-bold text-primary/20 bg-secondary"
+            onClick={() => setIsModalOpen(true)}
+          >
+            CS
+          </div>
+        )}
 
         {/* Expand Button */}
         <button
@@ -90,7 +103,12 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
       {/* Product Info */}
       <div className="p-4 md:p-6">
         <h3 className="text-xl md:text-2xl font-bold text-primary mb-2">{product.name}</h3>
-        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{product.description}</p>
+        <p className="text-sm text-gray-600 mb-4 line-clamp-4">{product.description}</p>
+        {product.availability === 'unconfirmed' && (
+          <p className="text-xs font-medium text-amber-800 bg-amber-50 border border-amber-200 rounded px-2 py-1 mb-4">
+            Availability to be confirmed
+          </p>
+        )}
 
         {/* Price */}
         <div className="mb-4">

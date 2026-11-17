@@ -6,7 +6,7 @@ import { KITS_ENABLED } from '@/lib/flags';
 
 const NAV_LINKS = [
   { href: '/#fragrances', label: 'Fragrances' },
-  { href: '/#soaps', label: 'Soap' },
+  { href: '/shop', label: 'Shop' },
   ...(KITS_ENABLED ? [{ href: '/kits', label: 'Christmas Kits' }] : []),
   { href: '/#story', label: 'Our Story' },
   { href: '#contact', label: 'Contact' },

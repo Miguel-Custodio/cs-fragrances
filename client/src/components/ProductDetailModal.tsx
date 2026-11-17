@@ -88,7 +88,7 @@ export default function ProductDetailModal({
                   }}
                 >
                   <img
-                    src={currentImage}
+                    src={currentImage ?? "/favicon.svg"}
                     alt={product.name}
                     className="w-full h-full object-contain"
                   />

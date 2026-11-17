@@ -1,4 +1,15 @@
-import { priceOf, type ProductCategory } from '@shared/catalog';
+import {
+  BODY_MIST_SCENTS,
+  CANDLE_SCENTS,
+  GOAT_SOAP_SCENTS,
+  HOME_SPRAY_SCENTS,
+  ORNAMENT_SCENTS,
+  SACHET_SCENTS,
+  SHEA_SOAP_SCENTS,
+  findCatalogEntry,
+  priceOf,
+  type ProductCategory,
+} from '@shared/catalog';
 
 export interface Product {
   id: string;
@@ -11,7 +22,51 @@ export interface Product {
   images: string[];
   featured?: boolean;
   gender: 'masculino' | 'feminino' | 'unissex';
+  /** 'unconfirmed' = owner has not confirmed it is still sold. Shown on the card; does not block purchase. */
+  availability?: 'unconfirmed';
+  /** 'contain' for packaging/label art that must not be cropped. */
+  imageFit?: 'cover' | 'contain';
 }
+
+/*
+ * NOTE (Miguel, Nov 2026): marketing descriptions were removed pending his review. The text below is
+ * factual only (type, size, notes taken from the technical sheets). No comparisons with other brands.
+ */
+
+const notes = (top: string, heart: string, base: string) => `Top: ${top}. Heart: ${heart}. Base: ${base}.`;
+
+const BODY_MIST_NOTES: Record<string, string> = {
+  'rose-blush': notes('Rosé champagne, Pink pepper', 'Peach blossom, Rose', 'White musk, Woody accord'),
+  'cashmere-honey': notes('Lavender, Bergamot, Lemon', 'Honey, Cinnamon, Cashmeran, Jasmine Sambac', 'Tobacco Leaf, Vanilla, Tonka Bean'),
+  'amber-aura': notes('Orange, Bergamot, Lemon', 'Fruits accord', 'Vanilla, White musk, Amber'),
+};
+
+const HOME_SPRAY_NOTES: Record<string, string> = {
+  'lavender-muguet': notes('Lavender, Bergamot', 'Rose, Lily of the Valley (Muguet), Iris, Lavandin', 'Sandalwood, Cashmeran, Honey, Musk'),
+  'velvet-bloom': notes('Cassis', 'May Rose, Freesia', 'Vanilla, Patchouli, Woody notes, Ambroxan'),
+  'golden-fig': notes('Bergamot, Rhubarb leaves, Fig', 'Orange Blossom, Green notes, Ylang Ylang', 'Vanilla, Ambergris, Sandalwood'),
+  'misty-moss': notes('Blackberry, Citrus accord, Raspberry, Black Currant', 'Rose, Violet, Geranium', 'Patchouli, Guaiacwood, Balsam Copaiba'),
+};
+
+/** Builds a Product from the shared catalog entry (name, price, availability always come from there). */
+function fromCatalog(
+  id: string,
+  extra: Pick<Product, 'description' | 'images'> & Partial<Pick<Product, 'imageFit' | 'gender'>>,
+): Product {
+  const entry = findCatalogEntry(id);
+  if (!entry) throw new Error(`Missing catalog entry: ${id}`);
+  return {
+    id,
+    name: entry.name,
+    category: entry.category,
+    price: entry.priceCents / 100,
+    gender: 'unissex',
+    availability: entry.availability,
+    ...extra,
+  };
+}
+
+const img = (name: string) => `/shop/${name}.webp`;
 
 export const products: Product[] = [
   // Perfumes
@@ -21,13 +76,13 @@ export const products: Product[] = [
     name: 'CS Horizon',
     category: 'perfume',
     price: priceOf('cs-horizon'),
-    description: 'A captivating fragrance that captures the essence of endless horizons and new beginnings.',
+    description: 'Eau de Parfum 50 ml. Woody Aromatic.',
     images: [
-      '/images/CS HORIZON/18.png',
-      '/images/CS HORIZON/19.png',
-      '/images/CS HORIZON/20.png',
-      '/images/CS HORIZON/21.png',
-      '/images/CS HORIZON/22.png',
+      '/images/CS HORIZON/18.webp',
+      '/images/CS HORIZON/19.webp',
+      '/images/CS HORIZON/20.webp',
+      '/images/CS HORIZON/21.webp',
+      '/images/CS HORIZON/22.webp',
     ],
     featured: true,
   },
@@ -37,13 +92,13 @@ export const products: Product[] = [
     name: 'CS Enigma',
     category: 'perfume',
     price: priceOf('cs-enigma'),
-    description: 'A mysterious and intriguing fragrance that reveals new layers with every wear.',
+    description: 'Eau de Parfum 50 ml. Spicy Woody.',
     images: [
-      '/images/CS ENIGMA/25.png',
-      '/images/CS ENIGMA/26.png',
-      '/images/CS ENIGMA/27.png',
-      '/images/CS ENIGMA/28.png',
-      '/images/CS ENIGMA/29.png',
+      '/images/CS ENIGMA/25.webp',
+      '/images/CS ENIGMA/26.webp',
+      '/images/CS ENIGMA/27.webp',
+      '/images/CS ENIGMA/28.webp',
+      '/images/CS ENIGMA/29.webp',
     ],
     featured: true,
   },
@@ -53,14 +108,14 @@ export const products: Product[] = [
     name: 'CS Her',
     category: 'perfume',
     price: priceOf('cs-her'),
-    description: 'An elegant and sophisticated fragrance designed for the modern woman.',
+    description: 'Eau de Parfum 50 ml. Floral Chypre.',
     images: [
-      '/images/CS HER/4.png',
-      '/images/CS HER/5.png',
-      '/images/CS HER/6.png',
-      '/images/CS HER/7.png',
-      '/images/CS HER/8.png',
-      '/images/CS HER/9.png',
+      '/images/CS HER/4.webp',
+      '/images/CS HER/5.webp',
+      '/images/CS HER/6.webp',
+      '/images/CS HER/7.webp',
+      '/images/CS HER/8.webp',
+      '/images/CS HER/9.webp',
     ],
     featured: true,
   },
@@ -70,28 +125,99 @@ export const products: Product[] = [
     name: 'CS Origin',
     category: 'perfume',
     price: priceOf('cs-origin'),
-    description: 'A timeless fragrance that honors the roots of luxury perfumery.',
+    description: 'Eau de Parfum 50 ml. Oriental Woody.',
     images: [
-      '/images/CS ORIGIN/11.png',
-      '/images/CS ORIGIN/12.png',
-      '/images/CS ORIGIN/13.png',
-      '/images/CS ORIGIN/14.png',
-      '/images/CS ORIGIN/15.png',
+      '/images/CS ORIGIN/11.webp',
+      '/images/CS ORIGIN/12.webp',
+      '/images/CS ORIGIN/13.webp',
+      '/images/CS ORIGIN/14.webp',
+      '/images/CS ORIGIN/15.webp',
     ],
     featured: true,
   },
+  // Body mists
+  ...BODY_MIST_SCENTS.map(([slug]) =>
+    fromCatalog(`bodymist-${slug}`, {
+      description: `Body mist, 100 ml. ${BODY_MIST_NOTES[slug]}`,
+      images: [img(`bodymist-${slug}`)],
+    }),
+  ),
+  // Home & linen sprays
+  ...HOME_SPRAY_SCENTS.map(([slug]) =>
+    fromCatalog(`homespray-${slug}`, {
+      description: `Home & linen spray, 250 ml. For air and fabric use only. ${HOME_SPRAY_NOTES[slug]}`,
+      images: [img(`homespray-${slug}`)],
+    }),
+  ),
+  // Sachets (photos are the packaging label art)
+  ...SACHET_SCENTS.map(([slug]) =>
+    fromCatalog(`sachet-${slug}`, {
+      description: 'Fragranced sachet, 30 g, for drawers, closets and small enclosed spaces. Do not open the sachet.',
+      images: [img(`sachet-${slug}`)],
+      imageFit: 'contain',
+    }),
+  ),
   // Soaps
-  {
-    id: 'cs-soap-christmas-magic',
-    gender: 'unissex',
-    name: 'CS Christmas Magic',
-    category: 'soap',
-    price: priceOf('cs-soap-christmas-magic'),
-    description: 'Luxury goat milk soap with festive seasonal scent. 90g with plantable seed paper packaging.',
-    images: ['/products/cs-soap-christmas-magic.png'],
-    featured: true,
-  },
+  fromCatalog('cs-soap-christmas-magic', {
+    description: 'Goat milk bar soap, 90 g, in plantable seed paper packaging.',
+    images: [img('cs-soap-christmas-magic')],
+  }),
+  ...SHEA_SOAP_SCENTS.map(([slug]) =>
+    fromCatalog(`soap-shea-${slug}`, {
+      description: 'Artisanal shea butter bar soap, 90 g.',
+      images: [img('soap-shea-generic')], // generic example photo (not scent-specific)
+    }),
+  ),
+  ...GOAT_SOAP_SCENTS.map(([slug]) =>
+    fromCatalog(`soap-goat-${slug}`, {
+      description: 'Artisanal goat milk bar soap, 90 g.',
+      images: slug === 'morning-dew' ? [img('soap-goat-morning-dew')] : [], // no photo yet for the others
+    }),
+  ),
+  fromCatalog('soap-decorative-christmas', {
+    description: 'Decorative bar soap in Christmas shapes.',
+    images: [img('soap-decorative-christmas')],
+  }),
+  // Candles & ornaments (Christmas)
+  ...CANDLE_SCENTS.map(([slug]) =>
+    fromCatalog(`candle-${slug}`, {
+      description: 'Glass candle, 100 g (3.5 oz). Limited Christmas Edition.',
+      // label art; the first two also have a group photo
+      images:
+        slug === 'harvest-glow' || slug === 'christmas-memories'
+          ? [img(`candle-${slug}`), img('candles-photo')]
+          : [img(`candle-${slug}`)],
+      imageFit: 'contain',
+    }),
+  ),
+  ...ORNAMENT_SCENTS.map(([slug]) =>
+    fromCatalog(`ornament-${slug}`, {
+      description: 'Scented wax melt hanging ornament.',
+      images: [img('ornaments-hanging'), img('ornaments-organza')], // generic photos (not scent-specific)
+    }),
+  ),
 ];
 
 export const perfumes = products.filter((p) => p.category === 'perfume');
 export const soaps = products.filter((p) => p.category === 'soap');
+
+export interface CategoryGroup {
+  slug: string;
+  title: string;
+  categories: ProductCategory[];
+  /** Image used on the home category tile. */
+  cover: string;
+}
+
+/** Shop-by-category groups, in display order. */
+export const CATEGORY_GROUPS: CategoryGroup[] = [
+  { slug: 'perfumes', title: 'Perfumes', categories: ['perfume'], cover: '/images/Studio_4 Fragrances.webp' },
+  { slug: 'body-mists', title: 'Body Mists', categories: ['body-mist'], cover: img('bodymist-rose-blush') },
+  { slug: 'home-sprays', title: 'Home Sprays', categories: ['home-spray'], cover: img('homespray-misty-moss') },
+  { slug: 'sachets', title: 'Sachets', categories: ['sachet'], cover: img('sachet-golden-fig') },
+  { slug: 'soaps', title: 'Soaps', categories: ['soap'], cover: img('cs-soap-christmas-magic') },
+  { slug: 'candles-ornaments', title: 'Candles & Ornaments', categories: ['candle', 'ornament'], cover: img('candles-photo') },
+];
+
+export const productsInGroup = (group: CategoryGroup) =>
+  products.filter((p) => group.categories.includes(p.category));

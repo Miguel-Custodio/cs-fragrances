@@ -13,6 +13,7 @@ import Ingredients from "./pages/Ingredients";
 import Policy from "./pages/Policy";
 import OrderComplete from "./pages/OrderComplete";
 import Kits from "./pages/Kits";
+import Shop from "./pages/Shop";
 import { POLICIES } from "./data/policies";
 import { KITS_ENABLED } from "./lib/flags";
 
@@ -21,6 +22,8 @@ function Router() {
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/ingredients"} component={Ingredients} />
+      <Route path={"/shop"} component={Shop} />
+      <Route path={"/shop/:slug"} component={Shop} />
       <Route path={"/order-complete"} component={OrderComplete} />
       {POLICIES.map((doc) => (
         <Route key={doc.path} path={doc.path}>

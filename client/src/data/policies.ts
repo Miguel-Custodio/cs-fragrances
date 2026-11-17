@@ -154,7 +154,7 @@ export const shippingPolicy: PolicyDoc = {
     {
       heading: 'Fragrance shipping restrictions',
       paragraphs: [
-        'Perfumes contain alcohol and may be treated as flammable liquids by carriers, so some shipping methods or destinations may be restricted. If we cannot ship your order to your address, we will contact you and refund you.',
+        'Perfumes, body mists, and sprays contain alcohol and may be treated as flammable liquids by carriers, so some shipping methods or destinations may be restricted. If we cannot ship your order to your address, we will contact you and refund you.',
       ],
     },
     {
@@ -334,10 +334,22 @@ export const safetyNotice: PolicyDoc = {
       heading: 'Soap',
       bullets: [
         'For external use only. Avoid contact with eyes; if contact occurs, rinse with water.',
-        'Our goat milk soap contains goat milk. Do not use it if you are allergic to milk or any ingredient.',
+        'Our soaps are made with goat milk or shea butter (see the product name). Do not use a soap if you are allergic to any of its ingredients, including milk.',
         'Stop use and consult a healthcare professional if irritation occurs.',
         'Keep out of reach of young children.',
       ],
+    },
+    {
+      heading: 'Body mists, home sprays, and sachets',
+      bullets: [
+        'Body mists: highly flammable liquid and vapour. Keep away from heat, hot surfaces, sparks, and open flames. No smoking. For external use only; avoid contact with eyes; discontinue use if irritation occurs.',
+        'Home & linen sprays: flammable. Keep away from heat and open flame. For air and fabric use only; not intended for cosmetic use. Avoid direct contact with skin or delicate surfaces.',
+        'Sachets: do not open the sachet. Keep out of reach of children and pets. Do not ingest. Avoid contact with eyes and skin.',
+      ],
+    },
+    {
+      heading: 'Candles',
+      paragraphs: ['[PLACEHOLDER: candle burning and safety instructions from the product label]'],
     },
     {
       heading: 'Common fragrance allergens',

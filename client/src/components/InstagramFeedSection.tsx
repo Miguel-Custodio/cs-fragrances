@@ -22,37 +22,37 @@ export default function InstagramFeedSection() {
       id: '1',
       url: instagramUrl,
       caption: 'Check out our latest reels and shorts on Instagram',
-      thumbnail: '/images/Studio_4 Fragrances.png',
+      thumbnail: '/images/Studio_4 Fragrances.webp',
     },
     {
       id: '2',
       url: instagramUrl,
       caption: 'Discover the essence of CS Fragrances',
-      thumbnail: '/images/Studio_CS Her.png',
+      thumbnail: '/images/Studio_CS Her.webp',
     },
     {
       id: '3',
       url: instagramUrl,
       caption: 'Fragrances that tell stories',
-      thumbnail: '/images/Studio_CS Origin.png',
+      thumbnail: '/images/Studio_CS Origin.webp',
     },
     {
       id: '4',
       url: instagramUrl,
       caption: 'Quality and elegance in every bottle',
-      thumbnail: '/images/Studio_CS Enigma.png',
+      thumbnail: '/images/Studio_CS Enigma.webp',
     },
     {
       id: '5',
       url: instagramUrl,
       caption: 'New launches coming soon',
-      thumbnail: '/images/Studio_CS Horizon.png',
+      thumbnail: '/images/Studio_CS Horizon.webp',
     },
     {
       id: '6',
       url: instagramUrl,
       caption: 'Join the CS Fragrances community',
-      thumbnail: '/images/Campaign_Her001.png',
+      thumbnail: '/images/Campaign_Her001.webp',
     },
   ];
 

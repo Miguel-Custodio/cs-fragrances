@@ -13,8 +13,15 @@ import { KITS, findKit } from './kits.js';
 
 export const CURRENCY = 'CAD' as const;
 
-/** 'kit' is reserved for the Christmas kits (page not built yet, awaiting approval). */
-export type ProductCategory = 'perfume' | 'soap' | 'kit';
+export type ProductCategory =
+  | 'perfume'
+  | 'body-mist'
+  | 'home-spray'
+  | 'sachet'
+  | 'soap'
+  | 'candle'
+  | 'ornament'
+  | 'kit';
 
 export interface CatalogEntry {
   id: string;
@@ -22,23 +29,168 @@ export interface CatalogEntry {
   name: string;
   category: ProductCategory;
   priceCents: number;
+  /**
+   * 'unconfirmed' = the owner has not yet confirmed the product is still for sale.
+   * It does NOT block the purchase; it is only flagged on the product card.
+   */
+  availability?: 'unconfirmed';
 }
 
 export const PERFUME_PRICE_CENTS = 6990; // CAD 69.90 (50 ml)
-export const SOAP_PRICE_CENTS = 990; // CAD 9.90 (90 g)
+export const SOAP_PRICE_CENTS = 990; // CAD 9.90 (90 g bar, confirmed by Miguel)
+export const DECORATIVE_SOAP_PRICE_CENTS = 1290; // CAD 12.90 (Christmas decorative bar)
+export const BODY_MIST_PRICE_CENTS = 2490; // CAD 24.90 (100 ml)
+export const HOME_SPRAY_PRICE_CENTS = 2990; // CAD 29.90 (250 ml)
+// CSV conflict: current price list says 5.90; older art / pop-up page says 6.90. 5.90 is used.
+export const SACHET_PRICE_CENTS = 590; // CAD 5.90 (30 g)
+export const ORNAMENT_PRICE_CENTS = 690; // CAD 6.90 (each)
+export const CANDLE_PRICE_CENTS = 890; // CAD 8.90 (100 g, Limited Christmas Edition)
+
+/** [slug, display name] */
+type Scent = readonly [string, string];
+
+export const BODY_MIST_SCENTS: Scent[] = [
+  ['rose-blush', 'Rosé Blush'],
+  ['cashmere-honey', 'Cashmere Honey'],
+  ['amber-aura', 'Amber Aura'],
+];
+export const HOME_SPRAY_SCENTS: Scent[] = [
+  ['lavender-muguet', 'Lavender Muguet'],
+  ['velvet-bloom', 'Velvet Bloom'],
+  ['misty-moss', 'Misty Moss'],
+  ['golden-fig', 'Golden Fig'],
+];
+export const SACHET_SCENTS: Scent[] = [...BODY_MIST_SCENTS, ...HOME_SPRAY_SCENTS];
+
+/** Shea butter bar soaps (90 g; the CSV says 100 g, Miguel confirmed 90 g). CS Christmas Magic is the separate legacy entry below. */
+export const SHEA_SOAP_SCENTS: Scent[] = [
+  ['morning-dew', 'CS Morning Dew'],
+  ['wild-instinct', 'CS Wild Instinct'],
+  ['forest-whispers', 'CS Forest Whispers'],
+  ['winter-spice', 'CS Winter Spice'],
+  ['warm-winter', 'CS Warm Winter'],
+  ['gingerbread', 'CS Gingerbread'],
+  ['christmas-memories', 'CS Christmas Memories'],
+  ['glowing-snowflake', 'CS Glowing Snowflake'],
+  ['her', 'CS Her'],
+  ['origin', 'CS Origin'],
+  ['enigma', 'CS Enigma'],
+  ['horizon', 'CS Horizon'],
+  ['misty-moss', 'CS Misty Moss'],
+  ['rose-blush', 'CS Rosé Blush'],
+  ['amber-aura', 'CS Amber Aura'],
+  ['cashmere-honey', 'CS Cashmere Honey'],
+  ['lavender-muguet', 'CS Lavender Muguet'],
+  ['velvet-bloom', 'CS Velvet Bloom'],
+  ['golden-fig', 'CS Golden Fig'],
+];
+
+/** Goat milk bar soaps (90 g). Raquel has not confirmed these are still sold -> availability 'unconfirmed'. */
+export const GOAT_SOAP_SCENTS: Scent[] = [
+  ['coastal-breeze', 'CS Coastal Breeze'],
+  ['warm-apple', 'CS Warm Apple'],
+  ['sparkles', 'CS Sparkles'],
+  ['velvet-vanilla', 'CS Velvet Vanilla'],
+  ['morning-dew', 'CS Morning Dew'],
+];
+
+export const ORNAMENT_SCENTS: Scent[] = [
+  ['jade-infusion', 'CS Jade Infusion'],
+  ['harvest-glow', 'CS Harvest Glow'],
+  ['christmas-memories', 'CS Christmas Memories'],
+  ['gingerbread', 'CS Gingerbread'],
+  ['christmas-magic', 'CS Christmas Magic'],
+  ['lavender-muguet', 'CS Lavender Muguet'],
+  ['misty-moss', 'CS Misty Moss'],
+  ['golden-fig', 'CS Golden Fig'],
+  ['cashmere-honey', 'CS Cashmere Honey'],
+  ['enchanted-noir', 'CS Enchanted Noir'],
+];
+
+export const CANDLE_SCENTS: Scent[] = [
+  ['harvest-glow', 'Harvest Glow'],
+  ['christmas-memories', 'Christmas Memories'],
+  ['enchanted-noir', 'Enchanted Noir'],
+  ['modern-ritual', 'Modern Ritual'],
+];
 
 export const CATALOG: readonly CatalogEntry[] = [
   { id: 'cs-horizon', name: 'CS Horizon (50 ml)', category: 'perfume', priceCents: PERFUME_PRICE_CENTS },
   { id: 'cs-enigma', name: 'CS Enigma (50 ml)', category: 'perfume', priceCents: PERFUME_PRICE_CENTS },
   { id: 'cs-her', name: 'CS Her (50 ml)', category: 'perfume', priceCents: PERFUME_PRICE_CENTS },
   { id: 'cs-origin', name: 'CS Origin (50 ml)', category: 'perfume', priceCents: PERFUME_PRICE_CENTS },
+  ...BODY_MIST_SCENTS.map(
+    ([slug, label]): CatalogEntry => ({
+      id: `bodymist-${slug}`,
+      name: `${label} Body Mist (100 ml)`,
+      category: 'body-mist',
+      priceCents: BODY_MIST_PRICE_CENTS,
+    }),
+  ),
+  ...HOME_SPRAY_SCENTS.map(
+    ([slug, label]): CatalogEntry => ({
+      id: `homespray-${slug}`,
+      name: `${label} Home & Linen Spray (250 ml)`,
+      category: 'home-spray',
+      priceCents: HOME_SPRAY_PRICE_CENTS,
+    }),
+  ),
+  ...SACHET_SCENTS.map(
+    ([slug, label]): CatalogEntry => ({
+      id: `sachet-${slug}`,
+      name: `${label} Fragranced Sachet (30 g)`,
+      category: 'sachet',
+      priceCents: SACHET_PRICE_CENTS,
+    }),
+  ),
+  // Legacy site product (goat milk, 90 g on its photo). The CSV lists Christmas Magic as a shea butter
+  // soap: data conflict, to be confirmed by Raquel. Kept as the single Christmas Magic soap.
   {
     id: 'cs-soap-christmas-magic',
     name: 'CS Christmas Magic Goat Milk Soap (90 g)',
     category: 'soap',
     priceCents: SOAP_PRICE_CENTS,
   },
-  // Kits with a CONFIRMED online price (see shared/kits.ts). Unpriced kits are not sellable.
+  ...SHEA_SOAP_SCENTS.map(
+    ([slug, label]): CatalogEntry => ({
+      id: `soap-shea-${slug}`,
+      name: `${label} Shea Butter Soap (90 g)`,
+      category: 'soap',
+      priceCents: SOAP_PRICE_CENTS,
+    }),
+  ),
+  ...GOAT_SOAP_SCENTS.map(
+    ([slug, label]): CatalogEntry => ({
+      id: `soap-goat-${slug}`,
+      name: `${label} Goat Milk Soap (90 g)`,
+      category: 'soap',
+      priceCents: SOAP_PRICE_CENTS,
+      availability: 'unconfirmed',
+    }),
+  ),
+  {
+    id: 'soap-decorative-christmas',
+    name: 'Christmas Decorative Bar Soap',
+    category: 'soap',
+    priceCents: DECORATIVE_SOAP_PRICE_CENTS,
+  },
+  ...ORNAMENT_SCENTS.map(
+    ([slug, label]): CatalogEntry => ({
+      id: `ornament-${slug}`,
+      name: `${label} Wax Melt Hanging Ornament`,
+      category: 'ornament',
+      priceCents: ORNAMENT_PRICE_CENTS,
+    }),
+  ),
+  ...CANDLE_SCENTS.map(
+    ([slug, label]): CatalogEntry => ({
+      id: `candle-${slug}`,
+      name: `${label} Glass Candle - Limited Christmas Edition (100 g)`,
+      category: 'candle',
+      priceCents: CANDLE_PRICE_CENTS,
+    }),
+  ),
+// Kits with a CONFIRMED online price (see shared/kits.ts). Unpriced kits are not sellable.
   // Whether kits may be sold at all is gated by KITS_ENABLED (server) in shared/checkout.ts.
   ...KITS.filter((k) => k.priceCents !== null && !k.option).map(
     (k): CatalogEntry => ({

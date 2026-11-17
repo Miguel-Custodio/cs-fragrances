@@ -27,8 +27,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="/#soaps" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                  Soap
+                <a href="/shop" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                  Shop
                 </a>
               </li>
               {KITS_ENABLED && (

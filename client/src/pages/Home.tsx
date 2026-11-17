@@ -2,7 +2,7 @@ import Navigation from '@/components/Navigation';
 import HeroCarousel from '@/components/HeroCarousel';
 import HeroSection from '@/components/HeroSection';
 import PerfumesSection from '@/components/PerfumesSection';
-import SoapSection from '@/components/SoapSection';
+import CategoriesSection from '@/components/CategoriesSection';
 import KitsBanner from '@/components/KitsBanner';
 import FragranceDetailsSection from '@/components/FragranceDetailsSection';
 import InstagramFeedSection from '@/components/InstagramFeedSection';
@@ -28,8 +28,8 @@ export default function Home() {
         {/* Perfumes Section */}
         <PerfumesSection />
 
-        {/* Soaps Section */}
-        <SoapSection />
+        {/* Shop by category (links to /shop/:category) */}
+        <CategoriesSection />
 
         {/* Christmas kits banner (hidden unless VITE_KITS_ENABLED=true) */}
         <KitsBanner />
