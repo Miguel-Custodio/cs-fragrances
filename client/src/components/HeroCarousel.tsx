@@ -110,9 +110,12 @@ export default function HeroCarousel() {
             <p className="text-lg md:text-2xl mb-8 text-gray-100 animate-fade-in">
               {slide.subtitle}
             </p>
-            <button className="px-8 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors animate-fade-in">
+            <a
+              href="#fragrances"
+              className="inline-block px-8 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors animate-fade-in"
+            >
               {slide.cta}
-            </button>
+            </a>
           </div>
         </div>
 

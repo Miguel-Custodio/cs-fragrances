@@ -14,9 +14,12 @@ export default function HeroSection() {
         </p>
 
         {/* CTA Button */}
-        <button className="mt-4 md:mt-8 px-8 md:px-12 py-3 md:py-4 border-2 border-primary text-primary font-lora text-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:shadow-lg">
+        <a
+          href="#fragrances"
+          className="mt-4 md:mt-8 px-8 md:px-12 py-3 md:py-4 border-2 border-primary text-primary font-lora text-lg hover:bg-primary hover:text-primary-foreground transition-all duration-300 hover:shadow-lg"
+        >
           Discover Our Fragrances
-        </button>
+        </a>
       </div>
 
       {/* Decorative Element */}

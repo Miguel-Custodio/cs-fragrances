@@ -10,12 +10,25 @@ import Cart from "./components/Cart";
 import FloatingButtons from "./components/FloatingButtons";
 import Home from "./pages/Home";
 import Ingredients from "./pages/Ingredients";
+import Policy from "./pages/Policy";
+import OrderComplete from "./pages/OrderComplete";
+import Kits from "./pages/Kits";
+import { POLICIES } from "./data/policies";
+import { KITS_ENABLED } from "./lib/flags";
 
 function Router() {
   return (
     <Switch>
       <Route path={"/"} component={Home} />
       <Route path={"/ingredients"} component={Ingredients} />
+      <Route path={"/order-complete"} component={OrderComplete} />
+      {POLICIES.map((doc) => (
+        <Route key={doc.path} path={doc.path}>
+          <Policy doc={doc} />
+        </Route>
+      ))}
+      {/* Hidden until VITE_KITS_ENABLED=true (awaiting approval) */}
+      {KITS_ENABLED && <Route path={"/kits"} component={Kits} />}
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

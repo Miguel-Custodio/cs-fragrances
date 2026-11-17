@@ -254,3 +254,8 @@ html {
     transform: translateY(-0.25rem);
   }
 }
+
+/* Anchor links: keep section titles clear of the fixed navigation bar */
+section[id] {
+  scroll-margin-top: 5rem;
+}

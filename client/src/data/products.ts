@@ -1,7 +1,11 @@
+import { priceOf, type ProductCategory } from '@shared/catalog';
+
 export interface Product {
   id: string;
   name: string;
-  category: 'perfume' | 'soap';
+  /** 'kit' products are built from shared/kits.ts (see client/src/data/kits.ts). */
+  category: ProductCategory;
+  /** Price in CAD. Always read from shared/catalog.ts (the server-trusted catalog). */
   price: number;
   description: string;
   images: string[];
@@ -16,7 +20,7 @@ export const products: Product[] = [
     gender: 'masculino',
     name: 'CS Horizon',
     category: 'perfume',
-    price: 69.90,
+    price: priceOf('cs-horizon'),
     description: 'A captivating fragrance that captures the essence of endless horizons and new beginnings.',
     images: [
       '/images/CS HORIZON/18.png',
@@ -32,7 +36,7 @@ export const products: Product[] = [
     gender: 'masculino',
     name: 'CS Enigma',
     category: 'perfume',
-    price: 69.90,
+    price: priceOf('cs-enigma'),
     description: 'A mysterious and intriguing fragrance that reveals new layers with every wear.',
     images: [
       '/images/CS ENIGMA/25.png',
@@ -48,7 +52,7 @@ export const products: Product[] = [
     gender: 'feminino',
     name: 'CS Her',
     category: 'perfume',
-    price: 69.90,
+    price: priceOf('cs-her'),
     description: 'An elegant and sophisticated fragrance designed for the modern woman.',
     images: [
       '/images/CS HER/4.png',
@@ -65,7 +69,7 @@ export const products: Product[] = [
     gender: 'feminino',
     name: 'CS Origin',
     category: 'perfume',
-    price: 69.90,
+    price: priceOf('cs-origin'),
     description: 'A timeless fragrance that honors the roots of luxury perfumery.',
     images: [
       '/images/CS ORIGIN/11.png',
@@ -74,6 +78,17 @@ export const products: Product[] = [
       '/images/CS ORIGIN/14.png',
       '/images/CS ORIGIN/15.png',
     ],
+    featured: true,
+  },
+  // Soaps
+  {
+    id: 'cs-soap-christmas-magic',
+    gender: 'unissex',
+    name: 'CS Christmas Magic',
+    category: 'soap',
+    price: priceOf('cs-soap-christmas-magic'),
+    description: 'Luxury goat milk soap with festive seasonal scent. 90g with plantable seed paper packaging.',
+    images: ['/products/cs-soap-christmas-magic.png'],
     featured: true,
   },
 ];

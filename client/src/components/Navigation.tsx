@@ -2,6 +2,16 @@ import { useState } from 'react';
 import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useCart } from '@/contexts/CartContext';
 import { useCartUI } from '@/contexts/CartUIContext';
+import { KITS_ENABLED } from '@/lib/flags';
+
+const NAV_LINKS = [
+  { href: '/#fragrances', label: 'Fragrances' },
+  { href: '/#soaps', label: 'Soap' },
+  ...(KITS_ENABLED ? [{ href: '/kits', label: 'Christmas Kits' }] : []),
+  { href: '/#story', label: 'Our Story' },
+  { href: '#contact', label: 'Contact' },
+  { href: '/ingredients', label: 'Ingredients' },
+];
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,24 +30,17 @@ export default function Navigation() {
     <nav className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-primary-foreground/80 border-b border-border">
       <div className="container flex items-center justify-between h-20">
         {/* Logo */}
-        <div className="logo text-primary font-bold">
+        <a href="/" className="logo text-primary font-bold">
           CS Fragrances
-        </div>
+        </a>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 items-center">
-          <a href="#fragrances" className="text-primary hover:text-accent transition-colors">
-            Fragrances
-          </a>
-          <a href="#story" className="text-primary hover:text-accent transition-colors">
-            Our Story
-          </a>
-          <a href="#contact" className="text-primary hover:text-accent transition-colors">
-            Contact
-          </a>
-          <a href="/ingredients" className="text-primary hover:text-accent transition-colors">
-            Ingredients
-          </a>
+          {NAV_LINKS.map((l) => (
+            <a key={l.href} href={l.href} className="text-primary hover:text-accent transition-colors">
+              {l.label}
+            </a>
+          ))}
           <button
             onClick={handleCartClick}
             className="relative text-primary hover:text-accent transition-colors p-2"
@@ -66,34 +69,16 @@ export default function Navigation() {
       {isOpen && (
         <div className="md:hidden bg-primary-foreground border-t border-border">
           <div className="container py-4 flex flex-col gap-4">
-            <a
-              href="#fragrances"
-              className="text-primary hover:text-accent transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Fragrances
-            </a>
-            <a
-              href="#story"
-              className="text-primary hover:text-accent transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Our Story
-            </a>
-            <a
-              href="#contact"
-              className="text-primary hover:text-accent transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Contact
-            </a>
-            <a
-              href="/ingredients"
-              className="text-primary hover:text-accent transition-colors"
-              onClick={() => setIsOpen(false)}
-            >
-              Ingredients
-            </a>
+            {NAV_LINKS.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                className="text-primary hover:text-accent transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                {l.label}
+              </a>
+            ))}
             <button
               onClick={handleCartClick}
               className="relative text-primary hover:text-accent transition-colors flex items-center gap-2"

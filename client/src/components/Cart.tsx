@@ -2,10 +2,35 @@ import { useCart } from '@/contexts/CartContext';
 import { useCartUI } from '@/contexts/CartUIContext';
 import { Button } from '@/components/ui/button';
 import { X, ShoppingCart } from 'lucide-react';
+import { useState } from 'react';
+import { DELIVERY_RULES, getDeliveryRule } from '@shared/shipping';
+import { formatCad } from '@shared/catalog';
+import { buildWhatsAppOrderUrl } from '@shared/whatsapp';
+import { quoteForCart, startCheckout } from '@/lib/checkout';
 
 export default function Cart() {
-  const { items, removeItem, updateQuantity, total, clearCart } = useCart();
+  const { items, removeItem, updateQuantity, clearCart, deliveryOption, setDeliveryOption, city, setCity } =
+    useCart();
   const { isCartOpen, closeCart } = useCartUI();
+  const [busy, setBusy] = useState(false);
+  const [whatsAppUrl, setWhatsAppUrl] = useState<string | null>(null);
+
+  const quote = quoteForCart(items, deliveryOption);
+  const rule = getDeliveryRule(deliveryOption);
+
+  const handleCheckout = async () => {
+    if (!quote) return;
+    setBusy(true);
+    setWhatsAppUrl(null);
+    const result = await startCheckout(items, deliveryOption, city);
+    if (result.kind === 'redirect') {
+      window.location.href = result.url; // Square-hosted payment page
+      return;
+    }
+    // Online payment unavailable -> offer the pre-filled WhatsApp order instead.
+    setWhatsAppUrl(buildWhatsAppOrderUrl(quote, deliveryOption, city));
+    setBusy(false);
+  };
 
   if (!isCartOpen) {
     return null;
@@ -52,7 +77,7 @@ export default function Cart() {
                   >
                     {/* Product Image */}
                     <img
-                      src={item.product.images[0]}
+                      src={item.product.images[0] ?? '/favicon.svg'}
                       alt={item.product.name}
                       className="w-20 h-20 object-cover rounded-lg"
                     />
@@ -61,7 +86,7 @@ export default function Cart() {
                     <div className="flex-1">
                       <h3 className="font-semibold text-primary">{item.product.name}</h3>
                       <p className="text-sm text-gray-600 mb-2">
-                        CAD ${item.product.price.toFixed(2)}
+                        {formatCad(Math.round(item.product.price * 100))}
                       </p>
 
                       {/* Quantity Controls */}
@@ -96,23 +121,91 @@ export default function Cart() {
 
           {/* Footer */}
           {items.length > 0 && (
-            <div className="border-t p-6 space-y-4">
+            <div className="border-t p-6 space-y-4 max-h-[65vh] overflow-y-auto">
               {/* Total */}
-              <div className="flex justify-between items-center text-lg font-bold">
-                <span>Total:</span>
-                <span className="text-primary">CAD ${total.toFixed(2)}</span>
+              {/* Delivery */}
+              <div className="space-y-2">
+                <label htmlFor="delivery-option" className="text-sm font-medium text-primary">
+                  Delivery
+                </label>
+                <select
+                  id="delivery-option"
+                  value={deliveryOption}
+                  onChange={(e) => {
+                    setDeliveryOption(e.target.value as typeof deliveryOption);
+                    setWhatsAppUrl(null);
+                  }}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm"
+                >
+                  {DELIVERY_RULES.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.label}
+                    </option>
+                  ))}
+                </select>
+                {rule && <p className="text-xs text-gray-500">{rule.hint}</p>}
+                <input
+                  type="text"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  maxLength={80}
+                  placeholder="City"
+                  aria-label="City"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm"
+                />
               </div>
+
+              {/* Totals */}
+              {quote && (
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>Subtotal</span>
+                    <span>{formatCad(quote.subtotalCents)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Shipping</span>
+                    <span>{quote.shippingFree ? 'Free' : formatCad(quote.shippingCents)}</span>
+                  </div>
+                  {quote.taxes.map((t) => (
+                    <div key={t.id} className="flex justify-between">
+                      <span>
+                        {t.name} ({t.percentage}%)
+                      </span>
+                      <span>{formatCad(t.amountCents)}</span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between items-center text-lg font-bold pt-2 border-t">
+                    <span>Total:</span>
+                    <span className="text-primary">{formatCad(quote.totalCents)}</span>
+                  </div>
+                </div>
+              )}
 
               {/* Actions */}
               <Button
-                onClick={() => {
-                  // Handle checkout
-                  alert('Checkout functionality coming soon!');
-                }}
+                onClick={handleCheckout}
+                disabled={busy || !quote}
                 className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-colors"
               >
-                Proceed to Checkout
+                {busy ? 'Redirecting to secure payment...' : 'Proceed to Checkout'}
               </Button>
+
+              {whatsAppUrl && (
+                <div className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm text-amber-900 space-y-2">
+                  <p>
+                    Online payment isn&apos;t available right now. You can send your order by WhatsApp and
+                    we&apos;ll confirm it with you.
+                  </p>
+                  <a
+                    href={whatsAppUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-center rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold py-2 transition-colors"
+                  >
+                    Order via WhatsApp
+                  </a>
+                </div>
+              )}
 
               <Button
                 onClick={() => clearCart()}
