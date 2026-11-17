@@ -349,7 +349,16 @@ export const safetyNotice: PolicyDoc = {
     },
     {
       heading: 'Candles',
-      paragraphs: ['[PLACEHOLDER: candle burning and safety instructions from the product label]'],
+      paragraphs: [
+        '[PLACEHOLDER: draft to be checked against the supplier label]',
+        'Trim the wick to 6 mm (1/4 in) before each use.',
+        'On the first burn, let the candle burn until the entire surface has melted.',
+        'Do not burn for more than 4 hours at a time.',
+        'Never leave a burning candle unattended.',
+        'Keep away from children, pets, drafts and flammable materials.',
+        'Place on a stable, heat-resistant surface.',
+        'Stop using the candle when 1 cm (1/2 in) of wax remains.',
+      ],
     },
     {
       heading: 'Common fragrance allergens',
