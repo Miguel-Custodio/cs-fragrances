@@ -53,7 +53,7 @@ export const returnsPolicy: PolicyDoc = {
       heading: 'How to request a return',
       paragraphs: [
         `Contact us within [PLACEHOLDER: number of days] days of delivery. ${contactLine} Include your order number and, for damaged, defective, or incorrect items, a clear photo of the product and the packaging.`,
-        'Please do not send anything back before we confirm your return and give you instructions. [PLACEHOLDER: return address]',
+        'Please do not send anything back before we confirm your return and give you instructions. Returns mailing address: ${COMPANY.formattedAddress}.',
       ],
     },
     {
@@ -178,7 +178,7 @@ export const termsOfUse: PolicyDoc = {
     {
       heading: 'About us',
       paragraphs: [
-        `${COMPANY.legalName} (“CS Fragrances”, “we”, “us”) is based in ${COMPANY.region}. Legal business name and address: [PLACEHOLDER: registered legal name and mailing address]. Contact: ${COMPANY.email}, WhatsApp ${COMPANY.whatsappDisplay}.`,
+        `${COMPANY.legalName} (“CS Fragrances”, “we”, “us”) is based in ${COMPANY.region}. Legal business name and address: ${COMPANY.legalName}, ${COMPANY.formattedAddress}. Business Number: ${COMPANY.businessNumber}. Contact: ${COMPANY.email}, WhatsApp ${COMPANY.whatsappDisplay}.`,
       ],
     },
     {

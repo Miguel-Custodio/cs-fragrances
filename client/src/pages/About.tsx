@@ -67,8 +67,11 @@ const aboutJsonLd = {
       areaServed: ['CA', 'US'],
       address: {
         '@type': 'PostalAddress',
-        addressRegion: 'BC',
-        addressCountry: 'CA',
+        streetAddress: COMPANY.addressLine,
+        addressLocality: COMPANY.city,
+        addressRegion: COMPANY.regionCode,
+        postalCode: COMPANY.postalCode,
+        addressCountry: COMPANY.countryCode,
       },
       founder: [
         { '@type': 'Person', name: 'Miguel Custodio' },
