@@ -16,7 +16,10 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addItem } = useCart();
 
+  const soldOut = product.availability === 'sold-out';
+
   const handleAddToCart = () => {
+    if (soldOut) return;
     addItem(product, quantity);
     toast.success(`${product.name} added to cart!`);
     setQuantity(1);
@@ -37,16 +40,32 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
       {/* Image Gallery */}
       <div className="relative bg-gray-100 aspect-square overflow-hidden group cursor-pointer">
         {currentImage ? (
-          <img
-            src={currentImage}
-            alt={product.name}
-            loading="lazy"
-            decoding="async"
-            className={`w-full h-full transition-transform duration-300 group-hover:scale-105 ${
-              product.imageFit === 'contain' ? 'object-contain bg-white' : 'object-cover'
-            }`}
-            onClick={() => setIsModalOpen(true)}
-          />
+          <>
+            <img
+              src={currentImage}
+              alt={product.name}
+              width={800}
+              height={800}
+              loading="lazy"
+              decoding="async"
+              className={`w-full h-full transition-transform duration-300 group-hover:scale-105 ${
+                product.imageFit === 'contain' ? 'object-contain bg-white' : 'object-cover'
+              } ${soldOut ? 'opacity-60 grayscale' : ''}`}
+              onClick={() => setIsModalOpen(true)}
+            />
+            {/* Perfumes: the ingredients photo fades in on hover (or when the 2nd image is picked) */}
+            {product.ingredientImage && currentImageIndex === 0 && (
+              <img
+                src={product.ingredientImage}
+                alt={`${product.name} bottle with its ingredients`}
+                width={800}
+                height={800}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
+              />
+            )}
+          </>
         ) : (
           <div
             className="w-full h-full flex items-center justify-center text-6xl font-bold text-primary/20 bg-secondary"
@@ -54,6 +73,17 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
           >
             CS
           </div>
+        )}
+
+        {soldOut && (
+          <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-xs font-semibold tracking-wide uppercase px-3 py-1 rounded-full">
+            Sold out
+          </span>
+        )}
+        {product.imageCaption && currentImageIndex === 0 && (
+          <p className="absolute bottom-0 inset-x-0 bg-primary/75 text-primary-foreground text-xs text-center px-3 py-1.5 pointer-events-none">
+            {product.imageCaption}
+          </p>
         )}
 
         {/* Expand Button */}
@@ -113,9 +143,11 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
         {/* Price */}
         <div className="mb-4">
           <span className="text-2xl font-bold text-primary">CAD ${product.price.toFixed(2)}</span>
+          {product.priceNote && <span className="ml-2 text-sm text-gray-600">{product.priceNote}</span>}
         </div>
 
         {/* Quantity Selector */}
+        {!soldOut && (
         <div className="flex items-center gap-3 mb-4">
           <label htmlFor={`qty-${product.id}`} className="text-sm font-medium">
             Qty:
@@ -143,14 +175,17 @@ export default function ProductCardEnhanced({ product }: ProductCardEnhancedProp
             </button>
           </div>
         </div>
+        )}
 
         {/* Add to Cart Button */}
         <Button
           onClick={handleAddToCart}
-          className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2 rounded-lg flex items-center justify-center gap-2 transition-colors"
+          disabled={soldOut}
+          aria-disabled={soldOut}
+          className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
         >
           <ShoppingCart size={20} />
-          Add to Cart
+          {soldOut ? 'Sold out' : 'Add to Cart'}
         </Button>
       </div>
 

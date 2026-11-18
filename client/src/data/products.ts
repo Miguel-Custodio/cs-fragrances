@@ -22,8 +22,16 @@ export interface Product {
   images: string[];
   featured?: boolean;
   gender: 'masculino' | 'feminino' | 'unissex';
-  /** 'unconfirmed' = owner has not confirmed it is still sold. Shown on the card; does not block purchase. */
-  availability?: 'unconfirmed';
+  /** 'sold-out' = listed but not purchasable (button disabled, server rejects). 'unconfirmed' = flag only. */
+  availability?: 'unconfirmed' | 'sold-out';
+  /** Short text shown next to the price, e.g. 'per soap, assorted designs, 1 bar'. */
+  priceNote?: string;
+  /** Short caption laid over the first photo (e.g. when the photo shows more than one unit). */
+  imageCaption?: string;
+  /** Photo of the bottle with its ingredients (perfumes). Shown on card hover and in 'Discover the notes'. */
+  ingredientImage?: string;
+  /** Top / heart / base notes (perfumes). */
+  notes?: { top: string; heart: string; base: string };
   /** 'contain' for packaging/label art that must not be cropped. */
   imageFit?: 'cover' | 'contain';
 }
@@ -51,7 +59,7 @@ const HOME_SPRAY_NOTES: Record<string, string> = {
 /** Builds a Product from the shared catalog entry (name, price, availability always come from there). */
 function fromCatalog(
   id: string,
-  extra: Pick<Product, 'description' | 'images'> & Partial<Pick<Product, 'imageFit' | 'gender'>>,
+  extra: Pick<Product, 'description' | 'images'> & Partial<Pick<Product, 'imageFit' | 'gender' | 'imageCaption' | 'priceNote'>>,
 ): Product {
   const entry = findCatalogEntry(id);
   if (!entry) throw new Error(`Missing catalog entry: ${id}`);
@@ -67,6 +75,8 @@ function fromCatalog(
 }
 
 const img = (name: string) => `/shop/${name}.webp`;
+
+const SHEA_PHOTO_CAPTION = 'Example photo. Each bar carries its own scent name on the wrapper.';
 
 export const products: Product[] = [
   // Perfumes
@@ -85,6 +95,8 @@ export const products: Product[] = [
       '/images/CS HORIZON/22.webp',
     ],
     featured: true,
+    ingredientImage: '/images/CS HORIZON/19.webp',
+    notes: { top: 'Mint, Green Apple, Lemon', heart: 'Fava Tonka, Ambroxan, Geranium', base: 'Madagascar Vanilla, Virginia Cedar, Atlas Cedar, Vetiver, Oak Moss' },
   },
   {
     id: 'cs-enigma',
@@ -101,6 +113,8 @@ export const products: Product[] = [
       '/images/CS ENIGMA/29.webp',
     ],
     featured: true,
+    ingredientImage: '/images/CS ENIGMA/26.webp',
+    notes: { top: 'Calabrian Bergamot, Sichuan Pepper', heart: 'Lavender, Geranium, Patchouli, Vetiver', base: 'Ambroxan, Cedar, Labdanum' },
   },
   {
     id: 'cs-her',
@@ -118,6 +132,8 @@ export const products: Product[] = [
       '/images/CS HER/9.webp',
     ],
     featured: true,
+    ingredientImage: '/images/CS HER/5.webp',
+    notes: { top: 'Italian Mandarin', heart: 'Rose, Egyptian Jasmine', base: 'Patchouli, Musk' },
   },
   {
     id: 'cs-origin',
@@ -134,6 +150,8 @@ export const products: Product[] = [
       '/images/CS ORIGIN/15.webp',
     ],
     featured: true,
+    ingredientImage: '/images/CS ORIGIN/12.webp',
+    notes: { top: 'Ginger, Lemon, Green Mango, Red Berries', heart: 'Coumarin, Jasmine, Cedar', base: 'Musk, Agarwood (Oud), Amber, Cypriol Oil' },
   },
   // Body mists
   ...BODY_MIST_SCENTS.map(([slug]) =>
@@ -159,24 +177,30 @@ export const products: Product[] = [
   ),
   // Soaps
   fromCatalog('cs-soap-christmas-magic', {
-    description: 'Goat milk bar soap, 90 g, in plantable seed paper packaging.',
-    images: [img('cs-soap-christmas-magic')],
+    description: 'Artisanal shea butter bar soap, 90 g. Christmas scent.',
+    images: [img('soap-shea-generic')],
+    imageCaption: SHEA_PHOTO_CAPTION,
   }),
   ...SHEA_SOAP_SCENTS.map(([slug]) =>
     fromCatalog(`soap-shea-${slug}`, {
       description: 'Artisanal shea butter bar soap, 90 g.',
       images: [img('soap-shea-generic')], // generic example photo (not scent-specific)
+      imageCaption: slug === 'enigma' ? undefined : SHEA_PHOTO_CAPTION,
     }),
   ),
+  // Sold out: CS does not make goat milk soap (Miguel, 2026-11-17). No photos on purpose.
   ...GOAT_SOAP_SCENTS.map(([slug]) =>
     fromCatalog(`soap-goat-${slug}`, {
-      description: 'Artisanal goat milk bar soap, 90 g.',
-      images: slug === 'morning-dew' ? [img('soap-goat-morning-dew')] : [], // no photo yet for the others
+      description: 'Goat milk bar soap, 90 g. Sold out.',
+      images: [],
     }),
   ),
   fromCatalog('soap-decorative-christmas', {
-    description: 'Decorative bar soap in Christmas shapes.',
+    description:
+      'Decorative bar soap in Christmas shapes. Sold individually: CAD 14.90 buys 1 soap in an assorted design. The photo shows the whole range of designs, not a set.',
     images: [img('soap-decorative-christmas')],
+    priceNote: 'per soap, assorted designs, 1 bar',
+    imageCaption: 'Assorted designs, sold one by one',
   }),
   // Candles & ornaments (Christmas)
   ...CANDLE_SCENTS.map(([slug]) =>
@@ -201,6 +225,16 @@ export const products: Product[] = [
 export const perfumes = products.filter((p) => p.category === 'perfume');
 export const soaps = products.filter((p) => p.category === 'soap');
 
+/**
+ * Category card covers. To swap a cover (e.g. the new 3-candle photo), replace the file in
+ * client/public/shop/ (keep 4:5, WebP) or change the path here. Nothing else references them.
+ */
+export const CATEGORY_COVERS = {
+  perfumes: '/images/Studio_4 Fragrances.webp',
+  soaps: '/shop/cover-soaps.webp', // PROVISIONAL: CS Enigma shea mockup (wrapper says 100 g); replace with a real photo
+  candles: '/shop/cover-candles.webp', // PROVISIONAL: 2 candles (Harvest Glow, Christmas Memories); the 3 current candles are pending
+} as const;
+
 export interface CategoryGroup {
   slug: string;
   title: string;
@@ -211,12 +245,12 @@ export interface CategoryGroup {
 
 /** Shop-by-category groups, in display order. */
 export const CATEGORY_GROUPS: CategoryGroup[] = [
-  { slug: 'perfumes', title: 'Perfumes', categories: ['perfume'], cover: '/images/Studio_4 Fragrances.webp' },
+  { slug: 'perfumes', title: 'Perfumes', categories: ['perfume'], cover: CATEGORY_COVERS.perfumes },
   { slug: 'body-mists', title: 'Body Mists', categories: ['body-mist'], cover: img('bodymist-rose-blush') },
   { slug: 'home-sprays', title: 'Home Sprays', categories: ['home-spray'], cover: img('homespray-misty-moss') },
   { slug: 'sachets', title: 'Sachets', categories: ['sachet'], cover: img('sachet-golden-fig') },
-  { slug: 'soaps', title: 'Soaps', categories: ['soap'], cover: img('cs-soap-christmas-magic') },
-  { slug: 'candles-ornaments', title: 'Candles & Ornaments', categories: ['candle', 'ornament'], cover: img('candles-photo') },
+  { slug: 'soaps', title: 'Soaps', categories: ['soap'], cover: CATEGORY_COVERS.soaps },
+  { slug: 'candles-ornaments', title: 'Candles & Ornaments', categories: ['candle', 'ornament'], cover: CATEGORY_COVERS.candles },
 ];
 
 export const productsInGroup = (group: CategoryGroup) =>

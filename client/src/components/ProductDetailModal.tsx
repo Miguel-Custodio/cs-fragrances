@@ -24,6 +24,7 @@ export default function ProductDetailModal({
   if (!isOpen) return null;
 
   const currentImage = product.images[currentImageIndex];
+  const soldOut = product.availability === 'sold-out';
 
   const handleZoomIn = () => {
     setZoom((prev) => Math.min(prev + 0.2, 3));
@@ -46,6 +47,7 @@ export default function ProductDetailModal({
   };
 
   const handleAddToCart = () => {
+    if (soldOut) return;
     addItem(product, quantity);
     toast.success(`${product.name} added to cart!`);
     setQuantity(1);
@@ -173,7 +175,11 @@ export default function ProductDetailModal({
               <div>
                 <p className="text-3xl font-bold text-primary">
                   CAD ${product.price.toFixed(2)}
+                  {product.priceNote && (
+                    <span className="ml-2 text-base font-normal text-gray-600">{product.priceNote}</span>
+                  )}
                 </p>
+                {soldOut && <p className="mt-1 font-semibold text-primary">Sold out</p>}
               </div>
 
               {/* Description */}
@@ -184,7 +190,29 @@ export default function ProductDetailModal({
                 </p>
               </div>
 
+              {product.notes && (
+                <div>
+                  <h3 className="font-semibold text-primary mb-2">Discover the notes</h3>
+                  <dl className="text-sm text-gray-700 space-y-1">
+                    <div><dt className="inline font-semibold">Top: </dt><dd className="inline">{product.notes.top}</dd></div>
+                    <div><dt className="inline font-semibold">Heart: </dt><dd className="inline">{product.notes.heart}</dd></div>
+                    <div><dt className="inline font-semibold">Base: </dt><dd className="inline">{product.notes.base}</dd></div>
+                  </dl>
+                  {product.ingredientImage && (
+                    <img
+                      src={product.ingredientImage}
+                      alt={`${product.name} bottle surrounded by its ingredients`}
+                      width={320}
+                      height={320}
+                      loading="lazy"
+                      className="mt-3 w-40 h-40 rounded-lg object-cover"
+                    />
+                  )}
+                </div>
+              )}
+
               {/* Quantity Selector */}
+              {!soldOut && (
               <div>
                 <label className="block font-semibold text-primary mb-3">
                   Quantity
@@ -213,13 +241,16 @@ export default function ProductDetailModal({
                   </button>
                 </div>
               </div>
+              )}
 
               {/* Add to Cart Button */}
               <Button
                 onClick={handleAddToCart}
-                className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-colors"
+                disabled={soldOut}
+                aria-disabled={soldOut}
+                className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Add to Cart
+                {soldOut ? 'Sold out' : 'Add to Cart'}
               </Button>
 
               {/* Additional Info */}
@@ -235,7 +266,7 @@ export default function ProductDetailModal({
                     <strong>Available Images:</strong> {product.images.length}
                   </li>
                   <li>
-                    <strong>In Stock:</strong> Yes
+                    <strong>In Stock:</strong> {soldOut ? 'No (sold out)' : 'Yes'}
                   </li>
                 </ul>
               </div>
