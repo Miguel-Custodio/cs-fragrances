@@ -8,7 +8,7 @@ import { COMPANY } from '@shared/company';
 const ABOUT_TITLE = 'Our Story | Family-Owned Handmade Soap & Artisanal Perfume in Vancouver, BC';
 // Hook appends " | CS Fragrances" unless the title already includes the site name.
 const ABOUT_DESCRIPTION =
-  'Meet Miguel Custodio and Raquel Soncin, the family behind CS Fragrances. Handmade soap and artisanal perfume, crafted with care in British Columbia, Canada.';
+  'Meet Miguel Custodio and Ana Raquel Soncin, the family behind CS Fragrances. Handmade soap and artisanal perfume, crafted with care in British Columbia, Canada.';
 const OG_IMAGE = '/videos/making-soap.webp';
 const OG_IMAGE_ALT = 'Handmade soap being made at the CS Fragrances studio in British Columbia';
 
@@ -24,9 +24,9 @@ const CATEGORY_LINKS = [
 const TEAM = [
   {
     id: 'raquel',
-    name: 'Raquel Soncin',
+    name: 'Ana Raquel Soncin',
     role: 'Co-founder',
-    alt: 'Portrait of Raquel Soncin, co-founder of CS Fragrances, who began by making handmade soap',
+    alt: 'Portrait of Ana Raquel Soncin, co-founder of CS Fragrances, who began by making handmade soap',
     note: '[PLACEHOLDER: photo of Raquel]',
   },
   {
@@ -46,7 +46,7 @@ const TEAM = [
 ] as const;
 
 const FAMILY_PHOTO = {
-  alt: 'Miguel Custodio, Raquel Soncin and their two children, the family behind CS Fragrances',
+  alt: 'Miguel Custodio, Ana Raquel Soncin and their two children, the family behind CS Fragrances',
   note: '[PLACEHOLDER: family photo of Miguel, Raquel and their two children]',
 };
 
@@ -69,7 +69,7 @@ const aboutJsonLd = {
       },
       founder: [
         { '@type': 'Person', name: 'Miguel Custodio' },
-        { '@type': 'Person', name: 'Raquel Soncin' },
+        { '@type': 'Person', name: 'Ana Raquel Soncin' },
       ],
       sameAs: ['https://instagram.com/bycsfragrances'],
     },
