@@ -22,11 +22,11 @@ describe('storefront vs server catalog', () => {
   it('has the confirmed prices', () => {
     const price = (id: string) => findCatalogEntry(id)!.priceCents;
     expect(price('cs-her')).toBe(6990);
-    expect(price('bodymist-amber-aura')).toBe(2490);
-    expect(price('homespray-golden-fig')).toBe(2990);
+    expect(price('bodymist-amber-aura')).toBe(2990);
+    expect(price('homespray-golden-fig')).toBe(3490);
     expect(price('sachet-rose-blush')).toBe(590);
-    expect(price('soap-shea-her')).toBe(990);
-    expect(price('soap-decorative-christmas')).toBe(1290);
+    expect(price('soap-shea-her')).toBe(1290);
+    expect(price('soap-decorative-christmas')).toBe(1490);
     expect(price('ornament-jade-infusion')).toBe(690);
     expect(price('candle-modern-ritual')).toBe(890);
   });

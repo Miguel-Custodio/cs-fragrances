@@ -6,7 +6,7 @@ import { findCatalogEntry } from './catalog.js';
 describe('catalog', () => {
   it('has the confirmed prices', () => {
     expect(findCatalogEntry('cs-her')?.priceCents).toBe(6990);
-    expect(findCatalogEntry('cs-soap-christmas-magic')?.priceCents).toBe(990);
+    expect(findCatalogEntry('cs-soap-christmas-magic')?.priceCents).toBe(1290);
   });
   it('sells only kits with a confirmed price, and validates kit options', () => {
     expect(findCatalogEntry('kit-sachet-soap')).toBeUndefined(); // price TODO

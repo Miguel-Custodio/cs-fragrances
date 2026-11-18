@@ -37,10 +37,10 @@ export interface CatalogEntry {
 }
 
 export const PERFUME_PRICE_CENTS = 6990; // CAD 69.90 (50 ml)
-export const SOAP_PRICE_CENTS = 990; // CAD 9.90 (90 g bar, confirmed by Miguel)
-export const DECORATIVE_SOAP_PRICE_CENTS = 1290; // CAD 12.90 (Christmas decorative bar)
-export const BODY_MIST_PRICE_CENTS = 2490; // CAD 24.90 (100 ml)
-export const HOME_SPRAY_PRICE_CENTS = 2990; // CAD 29.90 (250 ml)
+export const SOAP_PRICE_CENTS = 1290; // CAD 12.90 online (90 g bar; Miguel 2026-11-17)
+export const DECORATIVE_SOAP_PRICE_CENTS = 1490; // CAD 14.90 online (Christmas decorative bar; Miguel 2026-11-17)
+export const BODY_MIST_PRICE_CENTS = 2990; // CAD 29.90 online (100 ml; fair price 24.90)
+export const HOME_SPRAY_PRICE_CENTS = 3490; // CAD 34.90 online (250 ml; fair price 29.90)
 // CSV conflict: current price list says 5.90; older art / pop-up page says 6.90. 5.90 is used.
 export const SACHET_PRICE_CENTS = 590; // CAD 5.90 (30 g)
 export const ORNAMENT_PRICE_CENTS = 690; // CAD 6.90 (each)
