@@ -44,6 +44,26 @@ export default function Footer() {
                 </a>
               </li>
               <li>
+                <a href="/business" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                  For Business
+                </a>
+              </li>
+              <li>
+                <a href="/business/scent-marketing" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                  Scent Marketing
+                </a>
+              </li>
+              <li>
+                <a href="/business/private-label" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                  Private Label
+                </a>
+              </li>
+              <li>
+                <a href="/business/fragrance-oils" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                  Fragrance Oils
+                </a>
+              </li>
+              <li>
                 <a href="/ingredients" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Ingredients
                 </a>

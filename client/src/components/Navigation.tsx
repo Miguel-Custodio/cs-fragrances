@@ -9,6 +9,7 @@ const NAV_LINKS = [
   { href: '/shop', label: 'Shop' },
   ...(KITS_ENABLED ? [{ href: '/kits', label: 'Christmas Kits' }] : []),
   { href: '/about', label: 'Our Story' },
+  { href: '/business', label: 'For Business' },
   { href: '#contact', label: 'Contact' },
   { href: '/ingredients', label: 'Ingredients' },
 ];
@@ -35,7 +36,7 @@ export default function Navigation() {
         </a>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 items-center">
+        <div className="hidden md:flex gap-4 lg:gap-8 items-center text-sm lg:text-base">
           {NAV_LINKS.map((l) => (
             <a key={l.href} href={l.href} className="text-primary hover:text-accent transition-colors">
               {l.label}

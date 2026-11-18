@@ -1,60 +1,56 @@
 import Navigation from '@/components/Navigation';
 import HeroCarousel from '@/components/HeroCarousel';
-import HeroSection from '@/components/HeroSection';
-import PerfumesSection from '@/components/PerfumesSection';
+import BenefitsBar from '@/components/BenefitsBar';
 import CategoriesSection from '@/components/CategoriesSection';
+import PerfumesSection from '@/components/PerfumesSection';
+import DiscoverNotes from '@/components/DiscoverNotes';
 import KitsBanner from '@/components/KitsBanner';
-import FragranceDetailsSection from '@/components/FragranceDetailsSection';
-import InstagramFeedSection from '@/components/InstagramFeedSection';
-import IngredientsSection from '@/components/IngredientsSection';
-import StorySection from '@/components/StorySection';
 import HandmadeWithCare from '@/components/HandmadeWithCare';
-import FeaturesSection from '@/components/FeaturesSection';
+import StorySection from '@/components/StorySection';
+import ForBusinessSection from '@/components/ForBusinessSection';
+import StayInTouch from '@/components/StayInTouch';
 import Footer from '@/components/Footer';
+import { usePageMeta, SITE_URL } from '@/hooks/usePageMeta';
+
+const HOME_TITLE = 'CS Fragrances | Artisanal Perfumes & Handmade Shea Butter Soap | British Columbia, Canada';
+const HOME_DESCRIPTION =
+  'Artisanal eau de parfum, handmade shea butter soap, body mists, home sprays and gifts, made by hand in small batches in British Columbia. Shipping across Canada and the US.';
+
+const homeJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'CS Fragrances',
+  url: `${SITE_URL}/`,
+  inLanguage: 'en-CA',
+  publisher: { '@type': 'Organization', name: 'CS Fragrances', url: `${SITE_URL}/` },
+};
 
 export default function Home() {
+  usePageMeta(HOME_TITLE, HOME_DESCRIPTION, {
+    path: '/',
+    ogImage: '/images/Studio_4 Fragrances.webp',
+    ogImageAlt: 'CS Horizon, CS Enigma, CS Her and CS Origin eau de parfum bottles',
+    jsonLd: homeJsonLd,
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-primary-foreground">
-      {/* Navigation */}
       <Navigation />
-
-      {/* Main Content */}
       <main className="flex-1">
-        {/* Hero Carousel */}
+        {/* Full-width hero carousel with production-video background */}
         <HeroCarousel />
-
-        {/* Hero Section */}
-        <HeroSection />
-
-        {/* Perfumes Section */}
-        <PerfumesSection />
-
-        {/* Shop by category (links to /shop/:category) */}
+        <BenefitsBar />
         <CategoriesSection />
-
+        {/* Best sellers: perfumes, ingredients photo on hover */}
+        <PerfumesSection />
+        <DiscoverNotes />
         {/* Christmas kits banner (hidden unless VITE_KITS_ENABLED=true) */}
         <KitsBanner />
-
-        {/* Fragrance Details Section */}
-        <FragranceDetailsSection />
-
-        {/* Instagram Feed Section */}
-        <InstagramFeedSection />
-
-        {/* Ingredients Section */}
-        <IngredientsSection />
-
-        {/* Handmade production videos */}
         <HandmadeWithCare />
-
-        {/* Story Section */}
         <StorySection />
-
-        {/* Features Section */}
-        <FeaturesSection />
+        <ForBusinessSection />
+        <StayInTouch />
       </main>
-
-      {/* Footer */}
       <Footer />
     </div>
   );

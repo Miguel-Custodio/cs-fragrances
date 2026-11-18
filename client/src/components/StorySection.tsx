@@ -1,27 +1,33 @@
+/** Home teaser for /about. */
 export default function StorySection() {
   return (
-    <section id="story" className="py-24 md:py-32 bg-secondary">
-      <div className="container max-w-4xl mx-auto">
-        <h2 className="section-title text-primary text-center mb-12 md:mb-16">Our Story</h2>
-
-        <div className="space-y-6 md:space-y-8 text-center">
-          <p className="text-lg md:text-xl text-primary leading-relaxed md:leading-loose">
-            Every fragrance begins with a story. Ours began with two names: Custódio and Soncin.
+    <section id="story" className="py-16 md:py-24 bg-primary-foreground">
+      <div className="container max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-10 md:gap-14 items-center">
+        <img
+          src="/about/family.webp"
+          alt="Miguel Custodio, Ana Raquel Soncin and their two sons, the family behind CS Fragrances"
+          width={960}
+          height={1200}
+          loading="lazy"
+          decoding="async"
+          className="w-full max-w-sm mx-auto aspect-[4/5] object-cover rounded-lg shadow-sm"
+        />
+        <div>
+          <p className="font-display tracking-[0.3em] uppercase text-xs md:text-sm text-muted-foreground mb-3">
+            Our story
           </p>
-          <p className="text-lg md:text-xl text-primary leading-relaxed md:leading-loose">
-            When Miguel and Raquel first met, she was already making soap. He sold those soaps
-            during college to help her pay for her Chemistry studies. Today, CS Fragrances is their
-            family-owned studio in British Columbia, where science meets artistry — handmade with
-            care in Canada.
+          <h2 className="text-3xl md:text-4xl text-primary mb-5">Ours began with two names</h2>
+          <p className="text-lg text-primary/85 leading-relaxed mb-4">
+            When Miguel met Raquel, she was making handmade soap and he sold it during college to
+            help pay for her Chemistry studies. Today the two of us are building CS Fragrances
+            together with our family: science meets artistry, made by hand in British Columbia.
           </p>
-          <p>
-            <a
-              href="/about"
-              className="inline-block mt-4 px-6 py-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-            >
-              Read our story
-            </a>
-          </p>
+          <a
+            href="/about"
+            className="inline-block px-7 py-3 rounded-full bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-colors"
+          >
+            Read our story
+          </a>
         </div>
       </div>
     </section>

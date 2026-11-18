@@ -4,6 +4,7 @@ import Footer from '@/components/Footer';
 import ProductCardEnhanced from '@/components/ProductCardEnhanced';
 import NotFound from '@/pages/NotFound';
 import { CATEGORY_GROUPS, productsInGroup } from '@/data/products';
+import DiscoverNotes from '@/components/DiscoverNotes';
 import { usePageMeta } from '@/hooks/usePageMeta';
 
 /** /shop (all categories) and /shop/:slug (one category). */
@@ -66,6 +67,7 @@ export default function Shop() {
           ))}
         </div>
       </main>
+      {group?.slug === 'perfumes' && <DiscoverNotes heading="h2" />}
       <Footer />
     </div>
   );

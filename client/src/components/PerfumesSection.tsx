@@ -8,10 +8,11 @@ export default function PerfumesSection() {
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
-            Our Fragrances
+            Our Perfumes
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover our exquisite collection of luxury fragrances, each crafted with precision and passion.
+            Four signature eaux de parfum, 50 ml, handcrafted in British Columbia. Hover over a
+            bottle to see its ingredients.
           </p>
         </div>
 

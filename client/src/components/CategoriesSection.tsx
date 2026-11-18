@@ -18,10 +18,12 @@ export default function CategoriesSection() {
               href={`/shop/${group.slug}`}
               className="group block bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow"
             >
-              <div className="aspect-square bg-secondary overflow-hidden">
+              <div className="aspect-[4/5] bg-secondary overflow-hidden">
                 <img
                   src={group.cover}
-                  alt={group.title}
+                  alt={`${group.title} by CS Fragrances`}
+                  width={600}
+                  height={750}
                   loading="lazy"
                   decoding="async"
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
