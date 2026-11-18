@@ -28,6 +28,7 @@ const TEAM = [
     role: 'Co-founder',
     alt: 'Portrait of Ana Raquel Soncin, co-founder of CS Fragrances, who began by making handmade soap',
     note: '[PLACEHOLDER: photo of Raquel]',
+    image: '/about/raquel.webp' as string | null,
   },
   {
     id: 'miguel',
@@ -35,6 +36,7 @@ const TEAM = [
     role: 'Co-founder',
     alt: 'Portrait of Miguel Custodio, co-founder of CS Fragrances',
     note: '[PLACEHOLDER: photo of Miguel]',
+    image: '/about/miguel.webp' as string | null,
   },
   {
     id: 'reza',
@@ -42,6 +44,7 @@ const TEAM = [
     role: 'Team member',
     alt: 'Portrait of Reza, a member of the CS Fragrances team',
     note: '[PLACEHOLDER: photo of Reza]',
+    image: null as string | null,
   },
 ] as const;
 
@@ -171,21 +174,37 @@ export default function About() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 mb-10">
               {TEAM.map((person) => (
                 <div key={person.id} className="text-center">
-                  <PhotoPlaceholder label={person.note} alt={person.alt} />
+                  {person.image ? (
+                    <img
+                      src={person.image}
+                      alt={person.alt}
+                      width={960}
+                      height={1200}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full aspect-[4/5] object-cover rounded-lg shadow-sm"
+                    />
+                  ) : (
+                    <PhotoPlaceholder label={person.note} alt={person.alt} />
+                  )}
                   <h3 className="mt-4 text-xl text-primary">{person.name}</h3>
                   <p className="text-muted-foreground">{person.role}</p>
                 </div>
               ))}
             </div>
             <div className="max-w-3xl mx-auto">
-              <PhotoPlaceholder
-                label={FAMILY_PHOTO.note}
-                alt={FAMILY_PHOTO.alt}
-                className="w-full"
-                aspect="aspect-[4/3]"
+              {/* Provisional: couple photo until Miguel authorizes the family photo with the children. */}
+              <img
+                src="/about/couple.webp"
+                alt="Miguel Custodio and Ana Raquel Soncin, the couple behind CS Fragrances"
+                width={960}
+                height={1200}
+                loading="lazy"
+                decoding="async"
+                className="w-full max-w-md mx-auto aspect-[4/5] object-cover rounded-lg shadow-sm"
               />
               <p className="mt-4 text-center text-muted-foreground">
-                Miguel, Raquel and their two children
+                Miguel and Raquel
               </p>
             </div>
           </div>
