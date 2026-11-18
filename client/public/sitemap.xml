@@ -3,6 +3,10 @@
   <!-- /kits is intentionally NOT listed until the kits are approved and VITE_KITS_ENABLED=true -->
   <url><loc>https://www.csfragrances.ca/</loc></url>
   <url><loc>https://www.csfragrances.ca/about</loc></url>
+  <url><loc>https://www.csfragrances.ca/business</loc></url>
+  <url><loc>https://www.csfragrances.ca/business/scent-marketing</loc></url>
+  <url><loc>https://www.csfragrances.ca/business/private-label</loc></url>
+  <url><loc>https://www.csfragrances.ca/business/fragrance-oils</loc></url>
   <url><loc>https://www.csfragrances.ca/ingredients</loc></url>
   <url><loc>https://www.csfragrances.ca/shop</loc></url>
   <url><loc>https://www.csfragrances.ca/shop/perfumes</loc></url>

@@ -15,6 +15,9 @@ import OrderComplete from "./pages/OrderComplete";
 import Kits from "./pages/Kits";
 import Shop from "./pages/Shop";
 import About from "./pages/About";
+import Business from "./pages/Business";
+import BusinessPage from "./pages/BusinessPage";
+import { BUSINESS_PAGES } from "./data/business";
 import { POLICIES } from "./data/policies";
 import { KITS_ENABLED } from "./lib/flags";
 
@@ -24,6 +27,12 @@ function Router() {
       <Route path={"/"} component={Home} />
       <Route path={"/ingredients"} component={Ingredients} />
       <Route path={"/about"} component={About} />
+      <Route path={"/business"} component={Business} />
+      {BUSINESS_PAGES.map((page) => (
+        <Route key={page.slug} path={page.path}>
+          <BusinessPage page={page} />
+        </Route>
+      ))}
       <Route path={"/shop"} component={Shop} />
       <Route path={"/shop/:slug"} component={Shop} />
       <Route path={"/order-complete"} component={OrderComplete} />
