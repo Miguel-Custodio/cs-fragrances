@@ -21,37 +21,20 @@ const CATEGORY_LINKS = [
   { href: '/shop/candles-ornaments', label: 'Candles & ornaments' },
 ];
 
-const TEAM = [
-  {
-    id: 'raquel',
-    name: 'Ana Raquel Soncin',
-    role: 'Co-founder',
-    alt: 'Portrait of Ana Raquel Soncin, co-founder of CS Fragrances, who began by making handmade soap',
-    note: '[PLACEHOLDER: photo of Raquel]',
-    image: '/about/raquel.webp' as string | null,
+const PHOTOS = {
+  raquel: {
+    src: '/about/raquel.webp',
+    alt: 'Ana Raquel Soncin, co-founder of CS Fragrances, at the CS Fragrances holiday market stand',
   },
-  {
-    id: 'miguel',
-    name: 'Miguel Custodio',
-    role: 'Co-founder',
-    alt: 'Portrait of Miguel Custodio, co-founder of CS Fragrances',
-    note: '[PLACEHOLDER: photo of Miguel]',
-    image: '/about/miguel.webp' as string | null,
+  miguel: {
+    src: '/about/miguel.webp',
+    alt: 'Miguel Custodio, co-founder of CS Fragrances, serving customers at the CS Fragrances market stand',
   },
-  {
-    id: 'reza',
-    name: 'Reza',
-    role: 'Team member',
-    alt: 'Portrait of Reza, a member of the CS Fragrances team',
-    note: '[PLACEHOLDER: photo of Reza]',
-    image: null as string | null,
+  family: {
+    src: '/about/family.webp',
+    alt: 'Miguel Custodio, Ana Raquel Soncin and their two sons, the family behind CS Fragrances',
   },
-] as const;
-
-const FAMILY_PHOTO = {
-  alt: 'Miguel Custodio, Ana Raquel Soncin and their two children, the family behind CS Fragrances',
-  note: '[PLACEHOLDER: family photo of Miguel, Raquel and their two children]',
-};
+} as const;
 
 const aboutJsonLd = {
   '@context': 'https://schema.org',
@@ -93,27 +76,25 @@ const aboutJsonLd = {
   ],
 };
 
-function PhotoPlaceholder({
-  label,
-  alt,
-  className = '',
-  aspect = 'aspect-square',
-}: {
-  label: string;
-  alt: string;
-  className?: string;
-  aspect?: string;
-}) {
+function Photo({ photo, className = '' }: { photo: { src: string; alt: string }; className?: string }) {
   return (
-    <figure className={className}>
-      <div
-        className={`flex ${aspect} w-full items-center justify-center rounded-lg border-2 border-dashed border-primary/30 bg-primary-foreground px-4 text-center`}
-        role="img"
-        aria-label={alt}
-      >
-        <span className="text-sm md:text-base text-muted-foreground leading-relaxed">{label}</span>
-      </div>
-    </figure>
+    <img
+      src={photo.src}
+      alt={photo.alt}
+      width={960}
+      height={1200}
+      loading="lazy"
+      decoding="async"
+      className={`w-full aspect-[4/5] object-cover rounded-lg shadow-sm ${className}`}
+    />
+  );
+}
+
+function PullQuote({ children }: { children: React.ReactNode }) {
+  return (
+    <blockquote className="my-2 border-l-4 border-accent pl-6 md:pl-8 py-2 font-display text-2xl md:text-3xl leading-snug text-primary">
+      {children}
+    </blockquote>
   );
 }
 
@@ -130,86 +111,127 @@ export default function About() {
     <div className="min-h-screen flex flex-col bg-primary-foreground">
       <Navigation />
       <main className="flex-1 pt-28">
-        <header className="container max-w-4xl mx-auto px-4 pb-16 md:pb-20 text-center">
-          <h1 className="section-title text-primary mb-6">Our Story</h1>
-          <p className="text-lg md:text-xl text-primary/80 leading-relaxed">
-            Family-owned artisanal perfume and handmade soap, crafted with care in British
-            Columbia, Canada.
+        <header className="container max-w-4xl mx-auto px-4 pb-14 md:pb-20 text-center">
+          <p className="tracking-[0.3em] uppercase text-sm text-muted-foreground mb-4">Our Story</p>
+          <h1 className="section-title text-primary mb-6">Every fragrance begins with a story</h1>
+          <p className="text-xl md:text-2xl text-primary/80 leading-relaxed">
+            Ours began with two names, a handmade bar of soap and a family willing to build
+            something together.
           </p>
         </header>
 
         <section className="bg-secondary py-16 md:py-24">
-          <div className="container max-w-3xl mx-auto px-4 space-y-6">
-            <h2 className="text-3xl md:text-4xl text-primary text-center mb-10">How we began</h2>
-            <p className="text-lg md:text-xl text-primary leading-relaxed">
-              Every fragrance begins with a story. Ours began with two names: Custódio and Soncin.
-            </p>
-            <p className="text-lg md:text-xl text-primary leading-relaxed">
-              When Miguel and Raquel first met, she was already making soap. He sold those soaps
-              during college to help her pay for her Chemistry studies. That partnership — her craft
-              and his care — is still at the heart of everything we make.
-            </p>
+          <div className="container max-w-5xl mx-auto px-4 grid md:grid-cols-5 gap-10 md:gap-14 items-center">
+            <div className="md:col-span-3 space-y-5 text-lg md:text-xl text-primary leading-relaxed">
+              <h2 className="text-3xl md:text-4xl text-primary">It started with a bar of soap</h2>
+              <p>
+                Long before there was a perfume, there was soap. When Miguel met Raquel, she was
+                already making artisanal soap by hand. He sold it during college, bar by bar, to help
+                pay her tuition in Chemistry.
+              </p>
+              <p>
+                She had the craft. He had the care. Together they proved that something made with
+                love can carry a dream a long way.
+              </p>
+              <p>
+                Those first bars were never just a product. They were a promise between two people,
+                and the beginning of everything that followed.
+              </p>
+            </div>
+            <div className="md:col-span-2">
+              <Photo photo={PHOTOS.raquel} />
+            </div>
           </div>
         </section>
 
         <section className="py-16 md:py-24">
-          <div className="container max-w-3xl mx-auto px-4 space-y-6">
-            <h2 className="text-3xl md:text-4xl text-primary text-center mb-10">
-              Born from love, family, and craftsmanship
-            </h2>
-            <p className="text-lg md:text-xl text-primary leading-relaxed">
-              Born from a passion for alchemy and the art of scent, CS Fragrances blends knowledge
-              and craft to create perfumes and soaps that awaken memories and emotions. Each
-              fragrance carries more than scent — it carries warmth, elegance, and the beauty of
-              everyday life.
+          <div className="container max-w-3xl mx-auto px-4 space-y-6 text-lg md:text-xl text-primary leading-relaxed">
+            <h2 className="text-3xl md:text-4xl text-primary">Two names. One brand.</h2>
+            <p>
+              CS stands for <strong>Custodio</strong> and <strong>Soncin</strong>, our two family
+              names, side by side on every label. It is a small reminder of who stands behind what you
+              hold in your hands.
             </p>
-            <p className="text-lg md:text-xl text-primary leading-relaxed">
-              Where science meets artistry, we make luxury fragrances and handmade soaps to elevate
-              everyday moments. Accessible sophistication with an artisanal heart. Handmade with
-              care in Canada.
+            <p>
+              From that first soap grew a collection of artisanal perfumes, body mists, home
+              sprays and sachets, each one blended and finished by us.
             </p>
+            <p>
+              It is born from a passion for alchemy and the art of scent: knowledge and craft,
+              blended to create fragrances that carry warmth, elegance and the beauty of everyday
+              life.
+            </p>
+            <PullQuote>Born from love, family, and craftsmanship.</PullQuote>
           </div>
         </section>
 
         <section className="bg-secondary py-16 md:py-24">
-          <div className="container max-w-5xl mx-auto px-4">
-            <h2 className="text-3xl md:text-4xl text-primary text-center mb-12">Meet the family</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8 mb-10">
-              {TEAM.map((person) => (
-                <div key={person.id} className="text-center">
-                  {person.image ? (
-                    <img
-                      src={person.image}
-                      alt={person.alt}
-                      width={960}
-                      height={1200}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full aspect-[4/5] object-cover rounded-lg shadow-sm"
-                    />
-                  ) : (
-                    <PhotoPlaceholder label={person.note} alt={person.alt} />
-                  )}
-                  <h3 className="mt-4 text-xl text-primary">{person.name}</h3>
-                  <p className="text-muted-foreground">{person.role}</p>
-                </div>
-              ))}
+          <div className="container max-w-5xl mx-auto px-4 grid md:grid-cols-5 gap-10 md:gap-14 items-center">
+            <div className="md:col-span-2 order-2 md:order-1">
+              <Photo photo={PHOTOS.miguel} />
             </div>
-            <div className="max-w-3xl mx-auto">
-              {/* Family photo: confirm Miguel authorization before merge */}
-              <img
-                src="/about/family.webp"
-                alt={FAMILY_PHOTO.alt}
-                width={960}
-                height={1200}
-                loading="lazy"
-                decoding="async"
-                className="w-full max-w-md mx-auto aspect-[4/5] object-cover rounded-lg shadow-sm"
-              />
-              <p className="mt-4 text-center text-muted-foreground">
-                Miguel, Raquel and their two children
+            <div className="md:col-span-3 order-1 md:order-2 space-y-5 text-lg md:text-xl text-primary leading-relaxed">
+              <h2 className="text-3xl md:text-4xl text-primary">Where science meets artistry</h2>
+              <p>
+                Raquel&rsquo;s Chemistry background brings the science. Our hands bring the artistry.
+                Every perfume, body mist, home spray, soap and sachet is made by hand, in small
+                batches, here in British Columbia.
+              </p>
+              <p>
+                We craft each scent to awaken memories and emotions, with accessible sophistication
+                and an artisanal heart. Small batches let us give every detail our full attention,
+                from blending the scent to wrapping the final package.
               </p>
             </div>
+          </div>
+        </section>
+
+        <section className="py-16 md:py-24">
+          <div className="container max-w-5xl mx-auto px-4 grid md:grid-cols-5 gap-10 md:gap-14 items-center">
+            <div className="md:col-span-3 space-y-5 text-lg md:text-xl text-primary leading-relaxed">
+              <h2 className="text-3xl md:text-4xl text-primary">A family business, in every sense</h2>
+              <p>
+                Today we are building CS Fragrances together, with our two sons by our side and
+                Reza on the team. You can meet us at local fairs and holiday markets, and you can
+                find us online and on Amazon.
+              </p>
+              <p>
+                We are building this brand the way we are raising our family: together, with patience
+                and a lot of heart. Every order is packed with the same care as that first bar of
+                soap.
+              </p>
+            </div>
+            <div className="md:col-span-2">
+              <Photo photo={PHOTOS.family} />
+              <p className="mt-3 text-center text-muted-foreground">Miguel, Raquel and our two sons</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="bg-secondary py-16 md:py-24">
+          <div className="container max-w-4xl mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl text-primary text-center mb-10">The people behind CS</h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
+              <li>
+                <h3 className="text-xl text-primary">Ana Raquel Soncin</h3>
+                <p className="text-muted-foreground">Co-founder</p>
+              </li>
+              <li>
+                <h3 className="text-xl text-primary">Miguel Custodio</h3>
+                <p className="text-muted-foreground">Co-founder</p>
+              </li>
+              <li>
+                {/* Reza: no photo yet (a real photo has been requested). Monogram until then. */}
+                <div
+                  aria-hidden="true"
+                  className="mx-auto mb-2 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground font-display text-xl"
+                >
+                  R
+                </div>
+                <h3 className="text-xl text-primary">Reza</h3>
+                <p className="text-muted-foreground">Team member</p>
+              </li>
+            </ul>
           </div>
         </section>
 
@@ -217,10 +239,11 @@ export default function About() {
 
         <section className="bg-secondary py-16 md:py-24">
           <div className="container max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-3xl md:text-4xl text-primary mb-6">Shop our collection</h2>
+            <h2 className="text-3xl md:text-4xl text-primary mb-6">Bring a piece of our story home</h2>
             <p className="text-lg text-primary/80 mb-10 leading-relaxed">
-              Explore our handmade soaps, artisanal perfumes and home fragrances, made with care in
-              British Columbia.
+              Accessible sophistication with an artisanal heart: that is the promise behind every
+              bottle, bar and sachet. Explore our handmade soaps, artisanal perfumes and home
+              fragrances, made with care in British Columbia.
             </p>
             <ul className="flex flex-wrap justify-center gap-3">
               <li>
@@ -241,6 +264,14 @@ export default function About() {
                   </a>
                 </li>
               ))}
+              <li>
+                <a
+                  href="/business"
+                  className="inline-block px-5 py-2 rounded-full border border-primary/30 text-primary hover:bg-primary/10 transition-colors"
+                >
+                  For business
+                </a>
+              </li>
             </ul>
           </div>
         </section>

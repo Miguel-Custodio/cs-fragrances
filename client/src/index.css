@@ -177,7 +177,7 @@
   }
 
 /* CS Fragrances Typography */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Lora:wght@400;500;600&display=swap');
+/* Fonts (Cinzel Decorative + Lora) are loaded from client/index.html (preconnect + display=swap). */
 
 @layer base {
   body {
@@ -258,4 +258,9 @@ html {
 /* Anchor links: keep section titles clear of the fixed navigation bar */
 section[id] {
   scroll-margin-top: 5rem;
+}
+
+/* Brand display font for non-heading text (pull quotes, monograms, hero kickers) */
+.font-display {
+  font-family: 'Cinzel Decorative', serif;
 }
