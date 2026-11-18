@@ -193,10 +193,10 @@ export default function About() {
               ))}
             </div>
             <div className="max-w-3xl mx-auto">
-              {/* Provisional: couple photo until Miguel authorizes the family photo with the children. */}
+              {/* Family photo: confirm Miguel authorization before merge */}
               <img
-                src="/about/couple.webp"
-                alt="Miguel Custodio and Ana Raquel Soncin, the couple behind CS Fragrances"
+                src="/about/family.webp"
+                alt={FAMILY_PHOTO.alt}
                 width={960}
                 height={1200}
                 loading="lazy"
@@ -204,7 +204,7 @@ export default function About() {
                 className="w-full max-w-md mx-auto aspect-[4/5] object-cover rounded-lg shadow-sm"
               />
               <p className="mt-4 text-center text-muted-foreground">
-                Miguel and Raquel
+                Miguel, Raquel and their two children
               </p>
             </div>
           </div>
