@@ -1,5 +1,4 @@
 import { formatCad } from './catalog.js';
-import { getDeliveryRule } from './shipping.js';
 import { WHATSAPP_BASE_URL } from './company.js';
 import type { Quote } from './pricing.js';
 
@@ -7,8 +6,7 @@ import type { Quote } from './pricing.js';
  * Pre-filled WhatsApp order message, used when online payment (Square) is not
  * configured or fails.
  */
-export function buildWhatsAppOrderUrl(quote: Quote, option: string, city: string): string {
-  const rule = getDeliveryRule(option);
+export function buildWhatsAppOrderUrl(quote: Quote, city: string): string {
   const lines = [
     'Hello CS Fragrances! I would like to place an order:',
     '',
@@ -17,10 +15,11 @@ export function buildWhatsAppOrderUrl(quote: Quote, option: string, city: string
     ),
     '',
     `Subtotal: ${formatCad(quote.subtotalCents)}`,
-    `Delivery: ${rule?.label ?? option}`,
+    `Delivery: ${quote.shippingLabel}`,
     `Shipping: ${quote.shippingFree ? 'Free' : formatCad(quote.shippingCents)}`,
     ...quote.taxes.map((t) => `${t.name} (${t.percentage}%): ${formatCad(t.amountCents)}`),
     `Total: ${formatCad(quote.totalCents)}`,
+    `Postal / ZIP: ${quote.postalNormalized ?? (quote.shippingZone === 'pickup' ? 'Local pickup' : '(please ask me)')}`,
     `City: ${city.trim() || '(please ask me)'}`,
     '',
     'Please confirm availability and how to pay. Thank you!',

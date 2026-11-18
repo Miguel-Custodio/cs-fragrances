@@ -3,32 +3,48 @@ import { useCartUI } from '@/contexts/CartUIContext';
 import { Button } from '@/components/ui/button';
 import { X, ShoppingCart } from 'lucide-react';
 import { useState } from 'react';
-import { DELIVERY_RULES, getDeliveryRule } from '@shared/shipping';
+import { parsePostalCode, resolveDestination, ShippingError, type ShippingSelection } from '@shared/shipping';
 import { formatCad } from '@shared/catalog';
 import { buildWhatsAppOrderUrl } from '@shared/whatsapp';
 import { quoteForCart, startCheckout } from '@/lib/checkout';
 
 export default function Cart() {
-  const { items, removeItem, updateQuantity, clearCart, deliveryOption, setDeliveryOption, city, setCity } =
+  const { items, removeItem, updateQuantity, clearCart, shippingMethod, setShippingMethod, postalCode, setPostalCode, city, setCity } =
     useCart();
   const { isCartOpen, closeCart } = useCartUI();
   const [busy, setBusy] = useState(false);
   const [whatsAppUrl, setWhatsAppUrl] = useState<string | null>(null);
 
-  const quote = quoteForCart(items, deliveryOption);
-  const rule = getDeliveryRule(deliveryOption);
+  const selection: ShippingSelection =
+    shippingMethod === 'pickup' ? { method: 'pickup' } : { method: 'ship', postalCode };
+  const quote = quoteForCart(items, selection);
+  let dest = null;
+  let destError: string | null = null;
+  if (shippingMethod === 'ship') {
+    if (!postalCode.trim()) {
+      destError = 'Enter a Canadian postal code (A1A 1A1) or a US ZIP code (12345) to calculate shipping.';
+    } else {
+      try {
+        dest = resolveDestination(selection);
+      } catch (err) {
+        destError = err instanceof ShippingError ? err.message : 'Invalid postal code.';
+      }
+    }
+  } else {
+    dest = resolveDestination({ method: 'pickup' });
+  }
 
   const handleCheckout = async () => {
     if (!quote) return;
     setBusy(true);
     setWhatsAppUrl(null);
-    const result = await startCheckout(items, deliveryOption, city);
+    const result = await startCheckout(items, selection, city);
     if (result.kind === 'redirect') {
       window.location.href = result.url; // Square-hosted payment page
       return;
     }
     // Online payment unavailable -> offer the pre-filled WhatsApp order instead.
-    setWhatsAppUrl(buildWhatsAppOrderUrl(quote, deliveryOption, city));
+    setWhatsAppUrl(buildWhatsAppOrderUrl(quote, city));
     setBusy(false);
   };
 
@@ -125,34 +141,77 @@ export default function Cart() {
               {/* Total */}
               {/* Delivery */}
               <div className="space-y-2">
-                <label htmlFor="delivery-option" className="text-sm font-medium text-primary">
-                  Delivery
-                </label>
-                <select
-                  id="delivery-option"
-                  value={deliveryOption}
-                  onChange={(e) => {
-                    setDeliveryOption(e.target.value as typeof deliveryOption);
-                    setWhatsAppUrl(null);
-                  }}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm"
-                >
-                  {DELIVERY_RULES.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.label}
-                    </option>
-                  ))}
-                </select>
-                {rule && <p className="text-xs text-gray-500">{rule.hint}</p>}
-                <input
-                  type="text"
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  maxLength={80}
-                  placeholder="City"
-                  aria-label="City"
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm"
-                />
+                <p className="text-sm font-medium text-primary">Delivery</p>
+                <div className="flex flex-col gap-2 text-sm">
+                  <label className="flex items-start gap-2">
+                    <input
+                      type="radio"
+                      name="delivery-method"
+                      checked={shippingMethod === 'pickup'}
+                      onChange={() => {
+                        setShippingMethod('pickup');
+                        setWhatsAppUrl(null);
+                      }}
+                      className="mt-1"
+                    />
+                    <span>
+                      <span className="font-medium">Local pickup (free)</span>
+                      <span className="block text-xs text-gray-500">
+                        Pickup location and time are confirmed by email/WhatsApp after your order.
+                      </span>
+                    </span>
+                  </label>
+                  <label className="flex items-start gap-2">
+                    <input
+                      type="radio"
+                      name="delivery-method"
+                      checked={shippingMethod === 'ship'}
+                      onChange={() => {
+                        setShippingMethod('ship');
+                        setWhatsAppUrl(null);
+                      }}
+                      className="mt-1"
+                    />
+                    <span className="font-medium">Ship to an address</span>
+                  </label>
+                </div>
+                {shippingMethod === 'ship' && (
+                  <>
+                    <label htmlFor="postal-code" className="text-sm font-medium text-primary">
+                      Postal / ZIP code
+                    </label>
+                    <input
+                      id="postal-code"
+                      type="text"
+                      value={postalCode}
+                      onChange={(e) => {
+                        setPostalCode(e.target.value);
+                        setWhatsAppUrl(null);
+                      }}
+                      maxLength={12}
+                      placeholder="V4N 6Y1 or 90210"
+                      autoComplete="postal-code"
+                      aria-invalid={Boolean(postalCode.trim() && destError)}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm"
+                    />
+                    {destError && <p className="text-xs text-red-600">{destError}</p>}
+                    {dest && !destError && (
+                      <p className="text-xs text-gray-500">
+                        {dest.rule.label}. {dest.rule.hint}
+                        {parsePostalCode(postalCode) ? ` Code: ${dest.postal?.normalized}.` : ''}
+                      </p>
+                    )}
+                    <input
+                      type="text"
+                      value={city}
+                      onChange={(e) => setCity(e.target.value)}
+                      maxLength={80}
+                      placeholder="City (optional)"
+                      aria-label="City"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm"
+                    />
+                  </>
+                )}
               </div>
 
               {/* Totals */}
@@ -184,7 +243,7 @@ export default function Cart() {
               {/* Actions */}
               <Button
                 onClick={handleCheckout}
-                disabled={busy || !quote}
+                disabled={busy || !quote || Boolean(destError)}
                 className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-3 rounded-lg transition-colors"
               >
                 {busy ? 'Redirecting to secure payment...' : 'Proceed to Checkout'}

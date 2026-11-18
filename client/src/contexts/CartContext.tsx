@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product } from '@/data/products';
 import { resolveCartProduct } from '@/data/kits';
-import { DEFAULT_DELIVERY_OPTION, getDeliveryRule, type DeliveryOption } from '@shared/shipping';
+import { type ShippingMethod } from '@shared/shipping';
 
 export interface CartItem {
   product: Product;
@@ -17,8 +17,10 @@ interface CartContextType {
   /** Merchandise subtotal in CAD (before shipping/tax). */
   total: number;
   itemCount: number;
-  deliveryOption: DeliveryOption;
-  setDeliveryOption: (option: DeliveryOption) => void;
+  shippingMethod: ShippingMethod;
+  setShippingMethod: (method: ShippingMethod) => void;
+  postalCode: string;
+  setPostalCode: (postalCode: string) => void;
   city: string;
   setCity: (city: string) => void;
 }
@@ -40,15 +42,18 @@ function loadSavedItems(): CartItem[] {
   }
 }
 
-function loadSavedDelivery(): { option: DeliveryOption; city: string } {
+function loadSavedDelivery(): { method: ShippingMethod; postalCode: string; city: string } {
   try {
     const saved = JSON.parse(localStorage.getItem('cart-delivery') || '{}');
+    const method: ShippingMethod =
+      saved.method === 'pickup' || saved.option === 'pickup' ? 'pickup' : 'ship';
     return {
-      option: getDeliveryRule(saved.option) ? saved.option : DEFAULT_DELIVERY_OPTION,
+      method,
+      postalCode: typeof saved.postalCode === 'string' ? saved.postalCode.slice(0, 12) : '',
       city: typeof saved.city === 'string' ? saved.city.slice(0, 80) : '',
     };
   } catch {
-    return { option: DEFAULT_DELIVERY_OPTION, city: '' };
+    return { method: 'ship', postalCode: '', city: '' };
   }
 }
 
@@ -113,8 +118,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         clearCart,
         total,
         itemCount,
-        deliveryOption: delivery.option,
-        setDeliveryOption: (option) => setDelivery((d) => ({ ...d, option })),
+        shippingMethod: delivery.method,
+        setShippingMethod: (method) => setDelivery((d) => ({ ...d, method })),
+        postalCode: delivery.postalCode,
+        setPostalCode: (postalCode) => setDelivery((d) => ({ ...d, postalCode })),
         city: delivery.city,
         setCity: (city) => setDelivery((d) => ({ ...d, city })),
       }}>

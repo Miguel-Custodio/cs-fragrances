@@ -1,13 +1,12 @@
 /**
  * Gift kits (Christmas). Hidden behind the KITS_ENABLED flag until Raquel / Miguel approve.
  *
- * priceCents:
- *   - number -> confirmed ONLINE price; the kit can be bought.
- *   - null   -> TODO: online price not confirmed yet; the kit is shown as
- *               "price to be confirmed" and CANNOT be added to the cart or sold
- *               through checkout (it is not in the server catalog).
- * fairPriceCents is the in-person (fair / pop-up) price, kept ONLY as a reference
- * for whoever sets the online price. It is never shown or charged.
+ * priceCents is the confirmed ONLINE price (fair price + 15%, rounded up to
+ * the next amount ending in ,90), except Perfume + Soap which Miguel confirmed
+ * at CAD 75.00. fairPriceCents is the in-person (fair / pop-up) price, kept as
+ * a reference only; it is never shown or charged.
+ *
+ * Kits stay hidden behind KITS_ENABLED until Raquel / Miguel approve.
  *
  * The individual items inside (sachets, candles, sprays...) are NOT registered
  * as separate products yet (awaiting approval); kits are sold as whole units.
@@ -31,6 +30,20 @@ export interface KitDef {
   option?: KitOption;
 }
 
+
+/**
+ * Online kit price: fair price + 15%, rounded up to the next amount ending in ,90
+ * (e.g. CAD 15.00 × 1.15 = 17.25 → 17.90). Integer math on cents.
+ * Decision by Miguel, 2026-11-17. Exception: Perfume + Soap stays at CAD 75.00.
+ */
+export function onlinePriceFromFairCents(fairPriceCents: number): number {
+  const rawCents = Math.ceil((fairPriceCents * 115) / 100);
+  const rem = rawCents % 100;
+  if (rem === 90) return rawCents;
+  if (rem < 90) return rawCents - rem + 90;
+  return rawCents - rem + 190;
+}
+
 export const PERFUME_CHOICES = [
   { id: 'cs-horizon', label: 'CS Horizon' },
   { id: 'cs-enigma', label: 'CS Enigma' },
@@ -43,7 +56,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-sachet-soap',
     name: 'Sachet + Soap',
     contents: '1 scented sachet (30 g) + 1 handmade soap, in a gift box.',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(1500),
     fairPriceCents: 1500,
     image: '/kits/sachet-soap.webp',
   },
@@ -51,7 +64,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-two-candles',
     name: '2 Candles',
     contents: '2 Limited Christmas Edition glass candles.',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(1500),
     fairPriceCents: 1500,
     image: '/kits/two-candles.webp',
   },
@@ -59,7 +72,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-five-sachets',
     name: '5 Sachets',
     contents: '5 scented sachets (30 g each).',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(2500),
     fairPriceCents: 2500,
     // Provisional photo from Marketing (Canva); may be replaced after the Nov 28 photo shoot.
     image: '/kits/five-sachets.webp',
@@ -68,7 +81,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-five-wax-ornaments',
     name: '5 Wax Ornaments',
     contents: '5 scented wax hanging ornaments.',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(3000),
     fairPriceCents: 3000,
     image: '/kits/five-wax-ornaments.webp',
   },
@@ -76,7 +89,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-three-decorative-soaps',
     name: '3 Decorative Soaps',
     contents: '3 decorative Christmas soaps.',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(3400),
     fairPriceCents: 3400,
     image: '/kits/three-decorative-soaps.webp',
   },
@@ -84,7 +97,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-homespray-sachet',
     name: 'Home Spray + Sachet',
     contents: '1 home & linen spray (250 ml) + 1 scented sachet (30 g), in a gift box.',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(3500),
     fairPriceCents: 3500,
     image: '/kits/homespray-sachet.webp',
   },
@@ -92,7 +105,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-four-soaps-one-free',
     name: '4 Soaps + 1 Free',
     contents: 'Buy 4 handmade soaps and get a 5th one free (5 soaps in total).',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(3900),
     fairPriceCents: 3900,
     // Provisional photo from Marketing (Canva); soap labels in the photo still say 100 g, real weight is 90 g.
     image: '/kits/four-soaps-one-free.webp',
@@ -112,7 +125,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-bodymist-sachet',
     name: 'Body Mist + Sachet',
     contents: '1 body mist (100 ml) + 1 scented sachet (30 g), in a gift box.',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(3200),
     fairPriceCents: 3200,
     image: '/kits/bodymist-sachet.webp',
   },
@@ -120,7 +133,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-bodymist-soap',
     name: 'Body Mist + Soap',
     contents: '1 body mist (100 ml) + 1 handmade soap, in a gift box.',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(3500),
     fairPriceCents: 3500,
     image: '/kits/bodymist-soap.webp',
   },
@@ -128,7 +141,7 @@ export const KITS: readonly KitDef[] = [
     id: 'kit-homespray-soap',
     name: 'Home Spray + Soap',
     contents: '1 home & linen spray (250 ml) + 1 handmade soap, in a gift box.',
-    priceCents: null, // TODO confirm online price
+    priceCents: onlinePriceFromFairCents(3900),
     fairPriceCents: 3900,
     image: '/kits/homespray-soap.webp',
   },

@@ -129,7 +129,7 @@ export const shippingPolicy: PolicyDoc = {
     {
       heading: 'Shipping costs',
       paragraphs: [
-        'Shipping costs depend on your delivery option and the value of your order. The cost is shown in your cart before you pay. Free shipping applies to eligible orders over [PLACEHOLDER: amount and regions].',
+        'Shipping costs are calculated from the postal or ZIP code you enter in the cart, or are free for local pickup. The cost is shown in your cart before you pay. The amount charged is the one calculated from that code. Free shipping applies to eligible orders over [PLACEHOLDER: amount and regions].',
       ],
     },
     {

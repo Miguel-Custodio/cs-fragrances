@@ -16,7 +16,7 @@
 import { CURRENCY } from './catalog.js';
 import { COMPANY } from './company.js';
 import { buildQuote, QuoteError, type QuoteInputItem } from './pricing.js';
-import { getDeliveryRule, type DeliveryOption } from './shipping.js';
+import { resolveDestination, ShippingError, type ShippingSelection } from './shipping.js';
 import { getApplicableTaxes, TAX_SHIPPING } from './tax.js';
 
 export interface CheckoutEnv {
@@ -58,7 +58,7 @@ function unavailable(reason: string, status = 503): Response {
 
 interface ParsedBody {
   items: QuoteInputItem[];
-  option: DeliveryOption;
+  selection: ShippingSelection;
   city: string;
 }
 
@@ -75,11 +75,20 @@ function parseBody(raw: unknown): ParsedBody {
     }
     return { id: it.id, quantity: it.quantity };
   });
-  if (typeof b.option !== 'string' || !getDeliveryRule(b.option)) {
-    throw new QuoteError('Invalid delivery option');
+  if (b.method !== 'pickup' && b.method !== 'ship') {
+    throw new QuoteError('Invalid delivery method');
+  }
+  const postalCode = typeof b.postalCode === 'string' ? b.postalCode : '';
+  const selection: ShippingSelection =
+    b.method === 'pickup' ? { method: 'pickup' } : { method: 'ship', postalCode };
+  try {
+    resolveDestination(selection);
+  } catch (err) {
+    if (err instanceof ShippingError) throw new QuoteError(err.message);
+    throw err;
   }
   const city = typeof b.city === 'string' ? b.city.trim().slice(0, 80) : '';
-  return { items, option: b.option as DeliveryOption, city };
+  return { items, selection, city };
 }
 
 function resolveSiteUrl(request: Request, env: CheckoutEnv): string {
@@ -111,9 +120,9 @@ export async function handleCheckout(
   const taxEnabled = env.TAX_ENABLED === 'true';
   try {
     parsed = parseBody(await request.json());
-    quote = buildQuote(parsed.items, parsed.option, taxEnabled);
+    quote = buildQuote(parsed.items, parsed.selection, taxEnabled);
   } catch (err) {
-    if (err instanceof QuoteError || err instanceof SyntaxError) {
+    if (err instanceof QuoteError || err instanceof ShippingError || err instanceof SyntaxError) {
       return json({ error: 'invalid_request', message: err.message }, 400);
     }
     throw err;
@@ -121,13 +130,14 @@ export async function handleCheckout(
   if (env.KITS_ENABLED !== 'true' && quote.lines.some((l) => l.category === 'kit')) {
     return json({ error: 'invalid_request', message: 'Kits are not available yet' }, 400);
   }
-  const rule = getDeliveryRule(parsed.option)!;
+  const dest = resolveDestination(parsed.selection);
+  const rule = dest.rule;
 
   // 3. Build the Square order.
   const environment = env.SQUARE_ENVIRONMENT === 'production' ? 'production' : 'sandbox';
   const orderRef = `CS-${Date.now().toString(36).toUpperCase()}`;
   const siteUrl = resolveSiteUrl(request, env);
-  const applicableTaxes = getApplicableTaxes(parsed.option, taxEnabled);
+  const applicableTaxes = getApplicableTaxes(dest.zone, taxEnabled);
 
   const order: Record<string, unknown> = {
     location_id: locationId,
@@ -165,17 +175,25 @@ export async function handleCheckout(
     checkout_options: {
       redirect_url: `${siteUrl}/order-complete?ref=${encodeURIComponent(orderRef)}`,
       merchant_support_email: COMPANY.email,
-      ask_for_shipping_address: parsed.option !== 'pickup',
+      ask_for_shipping_address: parsed.selection.method !== 'pickup',
       allow_tipping: false,
     },
+    // Shipping is charged from the postal code entered in the cart (recalculated
+    // here). The Square form is pre-filled to reduce a different address being typed.
     pre_populated_data:
-      parsed.option === 'pickup'
+      parsed.selection.method === 'pickup'
         ? undefined
-        : { buyer_address: { country: rule.country } },
-    payment_note: `Web order ${orderRef} | ${rule.label}${parsed.city ? ` | City: ${parsed.city}` : ''}`.slice(
-      0,
-      500,
-    ),
+        : {
+            buyer_address: {
+              country: rule.country,
+              postal_code: dest.postal?.normalized,
+              ...(dest.regionCode ? { administrative_district_level_1: dest.regionCode } : {}),
+              ...(parsed.city ? { locality: parsed.city } : {}),
+            },
+          },
+    payment_note: `Web order ${orderRef} | ${rule.label}${
+      dest.postal ? ` | Postal: ${dest.postal.normalized}` : ''
+    }${parsed.city ? ` | City: ${parsed.city}` : ''}`.slice(0, 500),
   };
 
   // 4. Create the payment link.

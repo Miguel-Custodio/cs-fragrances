@@ -1,14 +1,14 @@
 import type { CartItem } from '@/contexts/CartContext';
 import { buildQuote, type Quote } from '@shared/pricing';
-import type { DeliveryOption } from '@shared/shipping';
+import type { ShippingSelection } from '@shared/shipping';
 import { TAX_ENABLED } from '@/lib/flags';
 
-export function quoteForCart(items: CartItem[], option: DeliveryOption): Quote | null {
+export function quoteForCart(items: CartItem[], selection: ShippingSelection): Quote | null {
   if (items.length === 0) return null;
   try {
     return buildQuote(
       items.map((i) => ({ id: i.product.id, quantity: i.quantity })),
-      option,
+      selection,
       TAX_ENABLED,
     );
   } catch {
@@ -27,7 +27,7 @@ export type CheckoutResult =
  */
 export async function startCheckout(
   items: CartItem[],
-  option: DeliveryOption,
+  selection: ShippingSelection,
   city: string,
 ): Promise<CheckoutResult> {
   try {
@@ -36,7 +36,8 @@ export async function startCheckout(
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
         items: items.map((i) => ({ id: i.product.id, quantity: i.quantity })),
-        option,
+        method: selection.method,
+        postalCode: selection.method === 'ship' ? selection.postalCode : undefined,
         city,
       }),
     });

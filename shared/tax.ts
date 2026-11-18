@@ -10,6 +10,7 @@
  * Both must be set to the same value. The server is authoritative: Square
  * calculates the real tax from the percentages we send.
  */
+import { isBcTaxZone, type ShippingZoneId } from './shipping.js';
 
 export interface TaxRate {
   id: 'gst' | 'pst';
@@ -32,9 +33,6 @@ export const BC_TAXES: readonly TaxRate[] = [
  */
 export const TAX_SHIPPING = true; // TODO confirm
 
-/** Delivery options that are taxed with BC GST/PST when taxes are enabled. */
-const TAXED_OPTIONS = new Set(['pickup', 'bc']);
-
 export interface TaxLine {
   id: string;
   name: string;
@@ -42,17 +40,17 @@ export interface TaxLine {
   amountCents: number;
 }
 
-export function getApplicableTaxes(option: string, taxEnabled: boolean): readonly TaxRate[] {
+export function getApplicableTaxes(zone: ShippingZoneId, taxEnabled: boolean): readonly TaxRate[] {
   if (!taxEnabled) return [];
-  return TAXED_OPTIONS.has(option) ? BC_TAXES : [];
+  return isBcTaxZone(zone) ? BC_TAXES : [];
 }
 
 export function calcTaxes(
-  option: string,
+  zone: ShippingZoneId,
   taxableBaseCents: number,
   taxEnabled: boolean,
 ): TaxLine[] {
-  return getApplicableTaxes(option, taxEnabled).map((t) => ({
+  return getApplicableTaxes(zone, taxEnabled).map((t) => ({
     id: t.id,
     name: t.name,
     percentage: t.percentage,

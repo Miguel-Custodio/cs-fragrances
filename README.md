@@ -17,7 +17,7 @@ pnpm build      # static site -> dist/public
 | Prices (single source of truth, integer cents CAD) | `shared/catalog.ts` |
 | Product catalog by category (storefront data) | `client/src/data/products.ts`, pages `client/src/pages/Shop.tsx` (`/shop`, `/shop/:category`) |
 | Gift kits (hidden behind a flag) | `shared/kits.ts`, `client/src/pages/Kits.tsx` |
-| Shipping rates / free-shipping rules (**placeholders - TODO**) | `shared/shipping.ts` |
+| Shipping rates by postal / ZIP zone (**placeholders - TODO**) | `shared/shipping.ts` |
 | GST 5% / PST 7% (OFF by default) | `shared/tax.ts` |
 | Square checkout (portable core) | `shared/checkout.ts` |
 | Vercel adapter | `api/checkout.ts` |
@@ -28,8 +28,8 @@ pnpm build      # static site -> dist/public
 ## Checkout (Square)
 
 1. The cart (`client/src/components/Cart.tsx`) shows subtotal, shipping, and (only if enabled) taxes.
-2. "Proceed to Checkout" calls `POST /api/checkout` with item ids + quantities, the delivery option and city.
-   **Prices are never taken from the browser**: the server re-prices every line from `shared/catalog.ts`.
+2. "Proceed to Checkout" calls `POST /api/checkout` with item ids + quantities, the delivery method, postal/ZIP code and city.
+   **Prices and shipping are never taken from the browser**: the server re-prices every line from `shared/catalog.ts` and recalculates shipping from the postal code.
 3. The function creates a Square **payment link** (Checkout API `CreatePaymentLink`, order with `line_items`,
    a shipping `service_charge`, optional `taxes`) and returns its URL; the browser redirects to Square's hosted page.
    After payment Square sends the customer to `/order-complete`.
@@ -70,10 +70,10 @@ a store requires Pro (see the PR description).
 
 ### Option B - Cloudflare Pages (free tier)
 
-1. Cloudflare Pages -> Create project -> connect the GitHub repo.
-2. Build command `pnpm build`, output directory `dist/public`, Node 20+.
-3. Add the environment variables above under Settings -> Variables and Secrets.
-4. `functions/api/checkout.ts` is picked up automatically as `/api/checkout`; Pages serves `index.html`
-   for unknown routes (SPA). The core logic (`shared/checkout.ts`) uses only Web-standard APIs
-   (`Request`, `Response`, `fetch`, `crypto.randomUUID`), so it runs unchanged on Workers.
-5. In GoDaddy, point the domain to Cloudflare (change nameservers, or add the CNAME Cloudflare gives you).
+Step-by-step in Portuguese (account, GitHub, build, env vars, custom domain, how to test first):
+see `GUIA_CLOUDFLARE_PAGES.md` (also saved as `/workspace/GUIA_CLOUDFLARE_PAGES.md`).
+
+Short version: Workers & Pages -> Create application -> Pages -> Connect to Git. Build command
+`pnpm build`, output directory `dist/public`. Node is pinned in `.node-version` (`22`). Functions in
+`functions/api/checkout.ts` become `POST /api/checkout`. Set secrets under Settings -> Variables and
+Secrets. Test on the `*.pages.dev` URL before pointing the GoDaddy domain.

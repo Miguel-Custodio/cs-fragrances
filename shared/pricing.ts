@@ -1,5 +1,10 @@
 import { findCatalogEntry, type ProductCategory } from './catalog.js';
-import { calcShipping, getDeliveryRule, type DeliveryOption } from './shipping.js';
+import {
+  calcShipping,
+  ShippingError,
+  type ShippingSelection,
+  type ShippingZoneId,
+} from './shipping.js';
 import { calcTaxes, TAX_SHIPPING, type TaxLine } from './tax.js';
 
 export interface QuoteInputItem {
@@ -21,6 +26,9 @@ export interface Quote {
   subtotalCents: number;
   shippingCents: number;
   shippingFree: boolean;
+  shippingZone: ShippingZoneId;
+  shippingLabel: string;
+  postalNormalized: string | null;
   taxes: TaxLine[];
   totalCents: number;
 }
@@ -35,10 +43,9 @@ export class QuoteError extends Error {}
  */
 export function buildQuote(
   items: readonly QuoteInputItem[],
-  option: DeliveryOption,
+  selection: ShippingSelection,
   taxEnabled: boolean,
 ): Quote {
-  if (!getDeliveryRule(option)) throw new QuoteError('Unknown delivery option');
   if (items.length === 0) throw new QuoteError('Cart is empty');
 
   const lines: QuoteLine[] = items.map((item) => {
@@ -58,9 +65,15 @@ export function buildQuote(
   });
 
   const subtotalCents = lines.reduce((sum, l) => sum + l.totalCents, 0);
-  const shipping = calcShipping(option, subtotalCents);
+  let shipping;
+  try {
+    shipping = calcShipping(selection, subtotalCents);
+  } catch (err) {
+    if (err instanceof ShippingError) throw new QuoteError(err.message);
+    throw err;
+  }
   const taxBase = subtotalCents + (TAX_SHIPPING ? shipping.cents : 0);
-  const taxes = calcTaxes(option, taxBase, taxEnabled);
+  const taxes = calcTaxes(shipping.zone, taxBase, taxEnabled);
   const totalCents = subtotalCents + shipping.cents + taxes.reduce((s, t) => s + t.amountCents, 0);
 
   return {
@@ -68,6 +81,9 @@ export function buildQuote(
     subtotalCents,
     shippingCents: shipping.cents,
     shippingFree: shipping.free,
+    shippingZone: shipping.zone,
+    shippingLabel: shipping.rule.label,
+    postalNormalized: shipping.postal?.normalized ?? null,
     taxes,
     totalCents,
   };
