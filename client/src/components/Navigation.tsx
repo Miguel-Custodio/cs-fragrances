@@ -8,7 +8,7 @@ const NAV_LINKS = [
   { href: '/#fragrances', label: 'Fragrances' },
   { href: '/shop', label: 'Shop' },
   ...(KITS_ENABLED ? [{ href: '/kits', label: 'Christmas Kits' }] : []),
-  { href: '/#story', label: 'Our Story' },
+  { href: '/about', label: 'Our Story' },
   { href: '#contact', label: 'Contact' },
   { href: '/ingredients', label: 'Ingredients' },
 ];

@@ -8,6 +8,7 @@ import FragranceDetailsSection from '@/components/FragranceDetailsSection';
 import InstagramFeedSection from '@/components/InstagramFeedSection';
 import IngredientsSection from '@/components/IngredientsSection';
 import StorySection from '@/components/StorySection';
+import HandmadeWithCare from '@/components/HandmadeWithCare';
 import FeaturesSection from '@/components/FeaturesSection';
 import Footer from '@/components/Footer';
 
@@ -42,6 +43,9 @@ export default function Home() {
 
         {/* Ingredients Section */}
         <IngredientsSection />
+
+        {/* Handmade production videos */}
+        <HandmadeWithCare />
 
         {/* Story Section */}
         <StorySection />

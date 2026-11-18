@@ -39,7 +39,7 @@ export default function Footer() {
                 </li>
               )}
               <li>
-                <a href="/#story" className="text-primary-foreground/80 hover:text-accent transition-colors">
+                <a href="/about" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Our Story
                 </a>
               </li>
