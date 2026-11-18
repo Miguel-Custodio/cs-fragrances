@@ -35,7 +35,7 @@ function loadSavedItems(): CartItem[] {
     return saved.flatMap((entry) => {
       const product = entry.product?.id ? resolveCartProduct(entry.product.id) : null;
       const quantity = Number(entry.quantity);
-      return product && Number.isInteger(quantity) && quantity > 0 ? [{ product, quantity }] : [];
+      return product && product.availability !== 'sold-out' && Number.isInteger(quantity) && quantity > 0 ? [{ product, quantity }] : [];
     });
   } catch {
     return [];
@@ -73,6 +73,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items]);
 
   const addItem = (product: Product, quantity: number) => {
+    if (product.availability === 'sold-out') return;
     setItems((prevItems) => {
       const existingItem = prevItems.find((item) => item.product.id === product.id);
       if (existingItem) {

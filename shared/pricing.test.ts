@@ -38,6 +38,11 @@ describe('buildQuote', () => {
   it('gives free shipping above the threshold', () => {
     expect(calcShipping({ method: 'ship', postalCode: 'V4N 6Y1' }, 1_000_000).free).toBe(true);
   });
+  it('rejects sold-out goat milk soaps but sells the shea butter soap of the same scent', () => {
+    const sel = { method: 'ship', postalCode: 'V4N 6Y1' } as const;
+    expect(() => buildQuote([{ id: 'soap-goat-morning-dew', quantity: 1 }], sel, false)).toThrow(/Sold out/);
+    expect(buildQuote([{ id: 'soap-shea-morning-dew', quantity: 1 }], sel, false).subtotalCents).toBe(1290);
+  });
   it('rejects unknown products, bad quantities and empty carts', () => {
     expect(() => buildQuote([{ id: 'nope', quantity: 1 }], { method: 'ship', postalCode: 'V4N 6Y1' }, false)).toThrow(QuoteError);
     expect(() => buildQuote([{ id: 'cs-her', quantity: 0 }], { method: 'ship', postalCode: 'V4N 6Y1' }, false)).toThrow(QuoteError);

@@ -30,8 +30,8 @@ describe('storefront vs server catalog', () => {
     expect(price('ornament-jade-infusion')).toBe(690);
     expect(price('candle-modern-ritual')).toBe(890);
   });
-  it('flags only the five goat milk soaps as unconfirmed', () => {
-    const flagged = CATALOG.filter((c) => c.availability === 'unconfirmed').map((c) => c.id);
+  it('marks only the five goat milk soaps as sold out', () => {
+    const flagged = CATALOG.filter((c) => c.availability === 'sold-out').map((c) => c.id);
     expect(flagged).toEqual([
       'soap-goat-coastal-breeze',
       'soap-goat-warm-apple',

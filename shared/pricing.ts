@@ -51,6 +51,7 @@ export function buildQuote(
   const lines: QuoteLine[] = items.map((item) => {
     const entry = findCatalogEntry(item.id);
     if (!entry) throw new QuoteError(`Unknown product: ${item.id}`);
+    if (entry.availability === 'sold-out') throw new QuoteError(`Sold out: ${entry.name}`);
     if (!Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > MAX_QTY_PER_ITEM) {
       throw new QuoteError(`Invalid quantity for ${item.id}`);
     }

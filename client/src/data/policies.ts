@@ -334,7 +334,7 @@ export const safetyNotice: PolicyDoc = {
       heading: 'Soap',
       bullets: [
         'For external use only. Avoid contact with eyes; if contact occurs, rinse with water.',
-        'Our soaps are made with goat milk or shea butter (see the product name). Do not use a soap if you are allergic to any of its ingredients, including milk.',
+        'Our soaps are made with shea butter. Do not use a soap if you are allergic to any of its ingredients, including shea butter and fragrance ingredients.',
         'Stop use and consult a healthcare professional if irritation occurs.',
         'Keep out of reach of young children.',
       ],

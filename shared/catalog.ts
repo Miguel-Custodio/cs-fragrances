@@ -30,10 +30,11 @@ export interface CatalogEntry {
   category: ProductCategory;
   priceCents: number;
   /**
-   * 'unconfirmed' = the owner has not yet confirmed the product is still for sale.
-   * It does NOT block the purchase; it is only flagged on the product card.
+   * 'sold-out' = listed on the site but NOT sellable: the quote builder (client and checkout
+   * function) rejects it. 'unconfirmed' = owner has not confirmed it is still for sale; it does
+   * NOT block the purchase and is only flagged on the product card.
    */
-  availability?: 'unconfirmed';
+  availability?: 'unconfirmed' | 'sold-out';
 }
 
 export const PERFUME_PRICE_CENTS = 6990; // CAD 69.90 (50 ml)
@@ -85,7 +86,10 @@ export const SHEA_SOAP_SCENTS: Scent[] = [
   ['golden-fig', 'CS Golden Fig'],
 ];
 
-/** Goat milk bar soaps (90 g). Raquel has not confirmed these are still sold -> availability 'unconfirmed'. */
+/**
+ * Goat milk bar soaps. Miguel (2026-11-17): CS does NOT make goat milk soap, every soap is shea butter.
+ * They stay listed only as SOLD OUT (not purchasable; the server rejects them).
+ */
 export const GOAT_SOAP_SCENTS: Scent[] = [
   ['coastal-breeze', 'CS Coastal Breeze'],
   ['warm-apple', 'CS Warm Apple'],
@@ -143,11 +147,11 @@ export const CATALOG: readonly CatalogEntry[] = [
       priceCents: SACHET_PRICE_CENTS,
     }),
   ),
-  // Legacy site product (goat milk, 90 g on its photo). The CSV lists Christmas Magic as a shea butter
-  // soap: data conflict, to be confirmed by Raquel. Kept as the single Christmas Magic soap.
+  // Legacy site id, kept so saved carts keep working. Miguel (2026-11-17): all soaps are shea butter
+  // (the Canva price list also lists Christmas Magic as shea butter).
   {
     id: 'cs-soap-christmas-magic',
-    name: 'CS Christmas Magic Goat Milk Soap (90 g)',
+    name: 'CS Christmas Magic Shea Butter Soap (90 g)',
     category: 'soap',
     priceCents: SOAP_PRICE_CENTS,
   },
@@ -165,7 +169,7 @@ export const CATALOG: readonly CatalogEntry[] = [
       name: `${label} Goat Milk Soap (90 g)`,
       category: 'soap',
       priceCents: SOAP_PRICE_CENTS,
-      availability: 'unconfirmed',
+      availability: 'sold-out',
     }),
   ),
   {
