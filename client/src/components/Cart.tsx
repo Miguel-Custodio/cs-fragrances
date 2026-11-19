@@ -189,7 +189,7 @@ export default function Cart() {
                         setWhatsAppUrl(null);
                       }}
                       maxLength={12}
-                      placeholder="V4N 6Y1 or 90210"
+                      placeholder="V6B 1A1 or 90210"
                       autoComplete="postal-code"
                       aria-invalid={Boolean(postalCode.trim() && destError)}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-white text-sm"

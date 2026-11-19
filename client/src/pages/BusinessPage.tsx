@@ -80,12 +80,19 @@ export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
             <h1 className="text-3xl md:text-5xl text-primary mb-5 leading-tight">{p.h1}</h1>
             <p className="text-lg md:text-xl text-primary/85 leading-relaxed mb-7">{p.intro}</p>
             <div className="flex flex-wrap gap-3">
-              <a href="#quote" className="inline-block rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90">
-                Request a quote
-              </a>
-              <a href="#samples" className="inline-block rounded-full border border-primary/40 px-8 py-3 font-semibold text-primary hover:bg-primary/10">
-                Request samples
-              </a>
+              {(p.ctas ?? [{ label: 'Request a quote', href: '#quote' }, { label: 'Request samples', href: '#samples' }]).map((c, i) => (
+                <a
+                  key={c.href}
+                  href={c.href}
+                  className={
+                    i === 0
+                      ? 'inline-block rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90'
+                      : 'inline-block rounded-full border border-primary/40 px-8 py-3 font-semibold text-primary hover:bg-primary/10'
+                  }
+                >
+                  {c.label}
+                </a>
+              ))}
             </div>
             <p className="mt-4 text-sm text-muted-foreground">{p.trustLine}</p>
           </div>
@@ -174,6 +181,9 @@ export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
 
         <RequestForms
           idPrefix={p.slug}
+          tabs={p.formTabs}
+          heading={p.formHeading}
+          intro={p.formIntro}
           prefill={p.prefill}
           businessTypes={p.formOptions?.businessTypes}
           interests={p.formOptions?.interests}

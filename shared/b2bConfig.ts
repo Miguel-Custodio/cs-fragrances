@@ -36,9 +36,6 @@ export const B2B_CONFIG = {
   customizationOptions: null as string | null,
   // TODO(Miguel): wholesale / consignment terms for salons, barbershops and boutiques.
   resaleTerms: null as string | null,
-  // TODO(Miguel): decision A2. Can the Surrey address be public? While false, JSON-LD and B2B pages
-  // show only "Surrey, BC" (service-area business), never the street address.
-  publicAddressEnabled: false,
   // TODO(Miguel/Raquel): Google Business Profile URL, once verified. Added to schema `sameAs`.
   googleBusinessProfileUrl: null as string | null,
   // TODO(Raquel): real fairs/markets we attended, shown as proof only when listed here and true.

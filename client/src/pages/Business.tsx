@@ -7,6 +7,7 @@ import { usePageMeta } from '@/hooks/usePageMeta';
 import { breadcrumbNode, ORG_ID, SITE_URL } from '@/lib/seo';
 import { PUBLIC_BUSINESS_PAGES } from '@/data/business';
 import { B2B_CONFIG, detail } from '@shared/b2bConfig';
+import { SCENT_MARKETING_COPY } from '@/data/scentMarketingCopy';
 
 // Copy: /workspace/gestao/b2b-storytelling-seo.md, parts B1 and B2.
 const TITLE = 'Scent Marketing & Private Label in Vancouver';
@@ -15,11 +16,7 @@ const DESCRIPTION =
 
 const TEST_TERMS = B2B_CONFIG.freeSamples ? 'free of charge and with no obligation' : 'with no obligation';
 
-const STEPS = [
-  { title: 'Tell us about your space', text: 'Type of business, size of the space and the feeling you want guests to have. A short call or a form is enough.' },
-  { title: 'Try it in your space', text: `We bring a small selection of scent samples and do a scent test on site, ${TEST_TERMS}. You smell it where your guests will.` },
-  { title: 'Get a tailored quote and your signature scent', text: 'You get a written quote built around your space and your scent, then delivery and simple repeat orders so the scent stays consistent.' },
-];
+const STEPS = SCENT_MARKETING_COPY.steps;
 
 const OFFERS = [
   {
@@ -146,7 +143,10 @@ export default function Business() {
                 Request samples
               </a>
             </div>
-            <p className="mt-5 text-sm text-primary-foreground/70">On-site scent test, {TEST_TERMS} · Tailored quote</p>
+            <p className="mt-5 text-sm">
+              <a href="#briefing" className="text-primary-foreground underline underline-offset-4">Start a scent briefing for your space</a>
+            </p>
+            <p className="mt-3 text-sm text-primary-foreground/70">On-site scent test, {TEST_TERMS} · Tailored quote</p>
           </div>
         </header>
 
@@ -184,8 +184,8 @@ export default function Business() {
 
         <section className="bg-secondary py-14 md:py-20" aria-labelledby="how-title">
           <div className="container max-w-5xl mx-auto px-4">
-            <h2 id="how-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">How scent marketing works</h2>
-            <ol className="grid md:grid-cols-3 gap-6">
+            <h2 id="how-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">How scent marketing works: 5 steps</h2>
+            <ol className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
               {STEPS.map((s, i) => (
                 <li key={s.title} className="rounded-lg bg-card p-6 shadow-sm">
                   <span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground font-display mb-3">{i + 1}</span>
@@ -278,7 +278,7 @@ export default function Business() {
           </div>
         </section>
 
-        <RequestForms idPrefix="hub" />
+        <RequestForms idPrefix="hub" tabs={['quote', 'samples', 'briefing']} />
       </main>
       <Footer />
     </div>

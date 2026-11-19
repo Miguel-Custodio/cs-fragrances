@@ -6,19 +6,23 @@ import {
   INTERESTS,
   SAMPLE_WAYS,
   SCENT_DIRECTIONS,
+  briefingSubject,
+  buildBriefingMessage,
   buildQuoteMessage,
   buildSampleMessage,
   mailtoUrl,
   quoteSubject,
   sampleSubject,
   whatsappUrl,
+  type BriefingValues,
   type QuoteValues,
   type SampleValues,
 } from '@shared/requestMessages';
 import { B2B_CONFIG } from '@shared/b2bConfig';
 import { COMPANY } from '@shared/company';
+import { SCENT_FAMILIES, SCENT_MOODS, SCENT_MARKETING_COPY, SPACE_TYPES } from '@/data/scentMarketingCopy';
 
-type Tab = 'quote' | 'samples';
+export type Tab = 'briefing' | 'quote' | 'samples';
 
 export interface FormPrefill {
   /** One of BUSINESS_TYPES (or a custom list passed in businessTypes). */
@@ -187,6 +191,119 @@ export function QuoteRequestForm({
   );
 }
 
+/** Scent briefing (first step of scent marketing). No backend: opens an email or WhatsApp message. */
+export function ScentBriefingForm({ idPrefix = 'briefing' }: { idPrefix?: string }) {
+  const ref = useRef<HTMLFormElement>(null);
+  const [f, setF] = useState<BriefingValues>({
+    name: '',
+    business: '',
+    email: '',
+    phone: '',
+    city: '',
+    spaceType: SPACE_TYPES[0],
+    families: [],
+    likes: '',
+    dislikes: '',
+    moods: [],
+    spaceSize: '',
+    message: '',
+    consent: false,
+  });
+  const set =
+    (k: keyof BriefingValues) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+      setF((p) => ({ ...p, [k]: e.target.value }));
+  const toggle = (k: 'families' | 'moods', value: string) =>
+    setF((p) => ({ ...p, [k]: p[k].includes(value) ? p[k].filter((x) => x !== value) : [...p[k], value] }));
+  const body = buildBriefingMessage(f);
+  const id = (k: string) => `${idPrefix}-${k}`;
+
+  return (
+    <form
+      ref={ref}
+      aria-label="Scent briefing"
+      className="grid gap-4 md:grid-cols-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        window.location.href = mailtoUrl(briefingSubject(f), body);
+      }}
+    >
+      <fieldset className="md:col-span-2">
+        <legend className={labelCls}>Scent families you like</legend>
+        <div className="flex flex-wrap gap-x-5 gap-y-2">
+          {SCENT_FAMILIES.map((s) => (
+            <label key={s} className="inline-flex items-center gap-2 text-primary/90">
+              <input type="checkbox" checked={f.families.includes(s)} onChange={() => toggle('families', s)} className="h-4 w-4" /> {s}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div>
+        <label className={labelCls} htmlFor={id('likes')}>Scents or notes you like</label>
+        <textarea id={id('likes')} rows={3} className={field} placeholder="e.g. lavender, vanilla, fresh linen" value={f.likes} onChange={set('likes')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('dislikes')}>Scents or notes you dislike</label>
+        <textarea id={id('dislikes')} rows={3} className={field} placeholder="e.g. too sweet, heavy musk" value={f.dislikes} onChange={set('dislikes')} />
+      </div>
+      <fieldset className="md:col-span-2">
+        <legend className={labelCls}>Mood you want guests to feel</legend>
+        <div className="flex flex-wrap gap-x-5 gap-y-2">
+          {SCENT_MOODS.map((s) => (
+            <label key={s} className="inline-flex items-center gap-2 text-primary/90">
+              <input type="checkbox" checked={f.moods.includes(s)} onChange={() => toggle('moods', s)} className="h-4 w-4" /> {s}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <div>
+        <label className={labelCls} htmlFor={id('space')}>Type of space *</label>
+        <select id={id('space')} required className={field} value={f.spaceType} onChange={set('spaceType')}>
+          {SPACE_TYPES.map((t) => (
+            <option key={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('size')}>Approximate size (sq ft), optional</label>
+        <input id={id('size')} inputMode="numeric" className={field} value={f.spaceSize} onChange={set('spaceSize')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('name')}>Name *</label>
+        <input id={id('name')} required autoComplete="name" className={field} value={f.name} onChange={set('name')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('business')}>Business name *</label>
+        <input id={id('business')} required autoComplete="organization" className={field} value={f.business} onChange={set('business')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('email')}>Email *</label>
+        <input id={id('email')} type="email" required autoComplete="email" className={field} value={f.email} onChange={set('email')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('phone')}>Phone / WhatsApp</label>
+        <input id={id('phone')} type="tel" autoComplete="tel" className={field} value={f.phone} onChange={set('phone')} />
+      </div>
+      <div className="md:col-span-2">
+        <label className={labelCls} htmlFor={id('city')}>City *</label>
+        <input id={id('city')} required autoComplete="address-level2" className={field} value={f.city} onChange={set('city')} />
+      </div>
+      <div className="md:col-span-2">
+        <label className={labelCls} htmlFor={id('message')}>Anything else we should know</label>
+        <textarea id={id('message')} rows={3} className={field} value={f.message} onChange={set('message')} />
+      </div>
+      <Consent id={id('consent')} checked={f.consent} onChange={(consent) => setF((p) => ({ ...p, consent }))} />
+      <Actions
+        emailLabel="Send briefing by email"
+        onWhatsApp={() => {
+          if (ref.current?.reportValidity()) window.open(whatsappUrl(body), '_blank', 'noopener,noreferrer');
+        }}
+      />
+      <Note />
+    </form>
+  );
+}
+
 /** Sample / scent-test request. No backend: opens an email or WhatsApp message with all the details. */
 export function SampleRequestForm({
   idPrefix = 'samples',
@@ -308,8 +425,15 @@ export function SampleRequestForm({
  * Two separate forms in tabs. Links to #quote or #samples open the matching tab. Both forms are in
  * the HTML (the inactive one is hidden), so nothing depends on JavaScript for crawlers.
  */
+const TAB_LABEL: Record<Tab, string> = {
+  briefing: SCENT_MARKETING_COPY.briefingTab,
+  quote: 'Request a quote',
+  samples: 'Request samples',
+};
+
 export default function RequestForms({
-  initialTab = 'quote',
+  tabs = ['quote', 'samples'],
+  initialTab = tabs[0],
   prefill,
   businessTypes,
   interests,
@@ -317,6 +441,8 @@ export default function RequestForms({
   heading = 'Let’s find the scent of your business',
   intro,
 }: {
+  /** Which forms to offer, in tab order. */
+  tabs?: Tab[];
   initialTab?: Tab;
   prefill?: FormPrefill;
   businessTypes?: string[];
@@ -331,7 +457,7 @@ export default function RequestForms({
   useEffect(() => {
     const apply = (scroll: boolean) => {
       const h = window.location.hash.replace('#', '');
-      if (h === 'quote' || h === 'samples') {
+      if ((h === 'briefing' || h === 'quote' || h === 'samples') && tabs.includes(h)) {
         setTab(h);
         if (scroll) sectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
@@ -340,6 +466,7 @@ export default function RequestForms({
     const onHash = () => apply(true);
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const tabCls = (active: boolean) =>
@@ -349,28 +476,38 @@ export default function RequestForms({
 
   return (
     <section ref={sectionRef} className="bg-secondary py-14 md:py-20 scroll-mt-20" aria-labelledby={`${idPrefix}-title`}>
-      <span id="quote" className="block" aria-hidden="true" />
-      <span id="samples" className="block" aria-hidden="true" />
+      {tabs.map((t) => (
+        <span key={t} id={t} className="block" aria-hidden="true" />
+      ))}
       <div className="container max-w-3xl mx-auto px-4">
         <h2 id={`${idPrefix}-title`} className="text-2xl md:text-3xl text-primary mb-2 text-center">{heading}</h2>
         <p className="text-center text-primary/80 mb-8">
           {intro ??
             `A scent test in your space, no obligation${B2B_CONFIG.freeSamples ? ', free of charge' : ''}. Then a tailored quote, and a real person who answers.`}
         </p>
-        <div role="tablist" aria-label="Type of request" className="flex justify-center gap-3 mb-8">
-          <button type="button" role="tab" id={`${idPrefix}-tab-quote`} aria-selected={tab === 'quote'} aria-controls={`${idPrefix}-panel-quote`} className={tabCls(tab === 'quote')} onClick={() => setTab('quote')}>
-            Request a quote
-          </button>
-          <button type="button" role="tab" id={`${idPrefix}-tab-samples`} aria-selected={tab === 'samples'} aria-controls={`${idPrefix}-panel-samples`} className={tabCls(tab === 'samples')} onClick={() => setTab('samples')}>
-            Request samples
-          </button>
+        <div role="tablist" aria-label="Type of request" className="flex flex-wrap justify-center gap-3 mb-8">
+          {tabs.map((t) => (
+            <button
+              key={t}
+              type="button"
+              role="tab"
+              id={`${idPrefix}-tab-${t}`}
+              aria-selected={tab === t}
+              aria-controls={`${idPrefix}-panel-${t}`}
+              className={tabCls(tab === t)}
+              onClick={() => setTab(t)}
+            >
+              {TAB_LABEL[t]}
+            </button>
+          ))}
         </div>
-        <div role="tabpanel" id={`${idPrefix}-panel-quote`} aria-labelledby={`${idPrefix}-tab-quote`} hidden={tab !== 'quote'}>
-          <QuoteRequestForm idPrefix={`${idPrefix}-q`} prefill={prefill} businessTypes={businessTypes} interests={interests} />
-        </div>
-        <div role="tabpanel" id={`${idPrefix}-panel-samples`} aria-labelledby={`${idPrefix}-tab-samples`} hidden={tab !== 'samples'}>
-          <SampleRequestForm idPrefix={`${idPrefix}-s`} prefill={prefill} businessTypes={businessTypes} />
-        </div>
+        {tabs.map((t) => (
+          <div key={t} role="tabpanel" id={`${idPrefix}-panel-${t}`} aria-labelledby={`${idPrefix}-tab-${t}`} hidden={tab !== t}>
+            {t === 'briefing' && <ScentBriefingForm idPrefix={`${idPrefix}-b`} />}
+            {t === 'quote' && <QuoteRequestForm idPrefix={`${idPrefix}-q`} prefill={prefill} businessTypes={businessTypes} interests={interests} />}
+            {t === 'samples' && <SampleRequestForm idPrefix={`${idPrefix}-s`} prefill={prefill} businessTypes={businessTypes} />}
+          </div>
+        ))}
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Or write to us at <a className="underline" href={`mailto:${B2B_CONFIG.email}`}>{B2B_CONFIG.email}</a> or on{' '}
           <a className="underline" href={`https://wa.me/${B2B_CONFIG.whatsappNumber}`} target="_blank" rel="noopener noreferrer">

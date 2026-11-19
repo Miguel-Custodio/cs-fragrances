@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  briefingSubject,
+  buildBriefingMessage,
   buildQuoteMessage,
   buildSampleMessage,
   mailtoUrl,
@@ -61,6 +63,26 @@ describe('quote and sample requests (no backend)', () => {
   });
   it('does not leave empty values as blanks', () => {
     expect(buildQuoteMessage(quote)).toContain('Phone / WhatsApp: -');
+  });
+});
+
+describe('scent briefing', () => {
+  it('collects preferences, space type and an optional size, with consent', () => {
+    const m = buildBriefingMessage({
+      name: 'Ana', business: 'Test Spa', email: 'a@example.com', phone: '', city: 'Surrey', spaceType: 'Spa or wellness',
+      families: ['Floral', 'Woody'], likes: 'lavender', dislikes: 'heavy musk', moods: ['Calm'], spaceSize: '', message: '', consent: true,
+    });
+    expect(m).toContain('Scent families I like: Floral, Woody');
+    expect(m).toContain('Scents or notes I dislike: heavy musk');
+    expect(m).toContain('Mood I want: Calm');
+    expect(m).toContain('Approximate size of space (sq ft, optional): -');
+    expect(m).toContain('I agree to be contacted by CS Fragrances');
+    expect(briefingSubject({ business: 'Test Spa' })).toBe('Scent briefing: Test Spa');
+  });
+  it('scent-marketing page uses the briefing form and the 5-step flow', () => {
+    const p = BUSINESS_PAGES.find((x) => x.slug === 'scent-marketing')!;
+    expect(p.formTabs?.[0]).toBe('briefing');
+    expect(p.steps).toHaveLength(5);
   });
 });
 

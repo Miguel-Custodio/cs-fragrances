@@ -76,6 +76,8 @@ export const SHIPPING_RATES: {
  * Rural V0N (Bowen Island, Lions Bay, Squamish, Whistler, Sunshine Coast)
  * is treated as rest of BC.
  */
+const fsaRange = (prefix: string, letters: string) => letters.split("").map((l) => `${prefix}${l}`);
+
 export const LOWER_MAINLAND_FSAS: ReadonlySet<string> = new Set([
   // Langley Township / City
   'V1M',
@@ -107,19 +109,9 @@ export const LOWER_MAINLAND_FSAS: ReadonlySet<string> = new Set([
   // New Westminster
   'V3L',
   'V3M',
-  // Surrey, White Rock, Pitt Meadows
-  'V3R',
-  'V3S',
-  'V3T',
-  'V3V',
-  'V3W',
-  'V3X',
-  'V3Y',
-  'V3Z',
-  'V4A',
-  'V4B',
-  'V4N',
-  'V4P',
+  // Surrey, White Rock, Pitt Meadows (generated from prefix + letters, same codes as before)
+  ...fsaRange('V3', 'RSTVWXYZ'),
+  ...fsaRange('V4', 'ABNP'),
   // Delta
   'V4C',
   'V4E',

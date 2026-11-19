@@ -37,7 +37,7 @@ export function pageTitle(title: string): string {
 
 type Node = Record<string, unknown>;
 
-/** Sitewide Organization / LocalBusiness node. Street address only when the config allows it. */
+/** Sitewide Organization / LocalBusiness node. Service-area business: city and region only, never a street address or postal code. */
 export function organizationNode(): Node {
   const address: Node = {
     '@type': 'PostalAddress',
@@ -45,10 +45,6 @@ export function organizationNode(): Node {
     addressRegion: COMPANY.regionCode,
     addressCountry: COMPANY.countryCode,
   };
-  if (B2B_CONFIG.publicAddressEnabled) {
-    address.streetAddress = COMPANY.addressLine;
-    address.postalCode = COMPANY.postalCode;
-  }
   const sameAs = ['https://instagram.com/bycsfragrances'];
   if (B2B_CONFIG.googleBusinessProfileUrl) sameAs.push(B2B_CONFIG.googleBusinessProfileUrl);
   return {

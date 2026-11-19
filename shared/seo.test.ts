@@ -6,6 +6,7 @@ import { BUSINESS_PAGES } from '../client/src/data/business';
 import { buildGraph, buildRobots, buildSitemap, renderHeadTags, organizationNode } from '../client/src/lib/seo';
 import { productReviewSchema } from '../client/src/lib/reviewSchema';
 import { REVIEWS } from '../client/src/data/reviews';
+import { COMPANY } from './company';
 import { B2B_CONFIG, CONTACT_FOR_DETAILS, detail } from './b2bConfig';
 
 describe('sitemap and robots (generated from the route list)', () => {
@@ -51,7 +52,10 @@ describe('structured data', () => {
     const text = JSON.stringify(g);
     expect(g['@graph'].map((n) => n['@id'])).toContain('https://www.csfragrances.ca/#organization');
     expect(text).toContain('Comfyshop E-Commerce');
-    expect(B2B_CONFIG.publicAddressEnabled).toBe(false);
+    expect('publicAddressEnabled' in B2B_CONFIG).toBe(false);
+    expect(Object.keys(COMPANY)).not.toEqual(expect.arrayContaining(['addressLine']));
+    expect(text).not.toContain('postalCode');
+    expect(text).toContain('Lower Mainland');
     expect(text).not.toContain('streetAddress');
     expect(text).not.toContain('85 Ave');
     expect(organizationNode()['@type']).toEqual(['Organization', 'LocalBusiness']);
@@ -133,6 +137,11 @@ describe.skipIf(!fs.existsSync(path.join(dist, 'sitemap.xml')))('build output', 
   it('has a real 404 page and a robots.txt file', () => {
     expect(fs.readFileSync(path.join(dist, '404.html'), 'utf8')).toContain('noindex');
     expect(fs.readFileSync(path.join(dist, 'robots.txt'), 'utf8')).toContain('Sitemap:');
+  });
+  it('never shows the street address or its postal code anywhere in the build output', () => {
+    for (const f of walk(dist).filter((x) => /\.(html|js|css|xml|txt|json)$/.test(x))) {
+      expect(/15738|V4N|85 Ave/i.test(fs.readFileSync(f, 'utf8')), f).toBe(false);
+    }
   });
   it('never names the barbershop in any page, script or asset text', () => {
     for (const f of walk(dist).filter((x) => /\.(html|js|css|xml|txt|json)$/.test(x))) {

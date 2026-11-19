@@ -1,5 +1,6 @@
 import { SCENTEC_BRANDING_ENABLED } from '@/lib/flags';
 import { B2B_CONFIG, detail } from '@shared/b2bConfig';
+import { SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
 
 /**
  * For Business (B2B) content. English (Canadian) only. Copy comes from
@@ -27,6 +28,8 @@ export type BusinessSlug =
   | 'corporate-gifts'
   | 'private-label'
   | 'fragrance-oils';
+
+export type FormTab = 'briefing' | 'quote' | 'samples';
 
 export interface FaqItem {
   q: string;
@@ -63,6 +66,12 @@ export interface BusinessPageDef {
   related: { label: string; href: string }[];
   /** Pre-selected values of the request forms. */
   prefill: { businessType: string; interest: string };
+  /** Forms offered on the page, in tab order (default: quote and samples). */
+  formTabs?: FormTab[];
+  formHeading?: string;
+  formIntro?: string;
+  /** Replaces the two default hero buttons (label and anchor). */
+  ctas?: { label: string; href: string }[];
   /** Replaces the default business types / interests of the forms. */
   formOptions?: { businessTypes: string[]; interests: string[] };
   serviceType: string;
@@ -98,14 +107,19 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   {
     slug: 'scent-marketing',
     path: '/business/scent-marketing',
-    title: 'Scent Marketing for Business in Vancouver',
-    description:
-      'A signature scent for your store, hotel, clinic or office, tested in your space first. Handcrafted in BC. Request a quote.',
-    h1: 'Scent marketing: give your space a signature scent',
-    kicker: 'For business',
-    trustLine: TRUST_LINE,
-    intro:
-      'People remember how a place feels. A carefully chosen scent turns a store, hotel, clinic or office into an experience and becomes part of your brand. We help businesses in Vancouver and the Lower Mainland choose a signature scent, try it in their own space, and keep it consistent order after order.',
+    title: SM.title,
+    description: SM.description,
+    h1: SM.h1,
+    kicker: SM.headline,
+    trustLine: SM.trustLine,
+    formTabs: ['briefing', 'quote'],
+    formHeading: SM.formHeading,
+    formIntro: SM.formIntro,
+    ctas: [
+      { label: SM.primaryCta, href: '#briefing' },
+      { label: SM.secondaryCta, href: '#quote' },
+    ],
+    intro: SM.intro,
     image: {
       src: '/videos/making-sachets.webp',
       alt: 'Handmade scent sachets being weighed at the CS Fragrances studio in British Columbia',
@@ -134,14 +148,10 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       'Retail stores and boutiques',
       'Offices, showrooms and boutique gyms',
     ],
-    steps: [
-      { title: 'Tell us about your space', text: 'Type of business, size of the space and the feeling you want guests to have. A short call or a form is enough.' },
-      { title: 'Try it in your space', text: `We bring a small selection of scent samples and do a scent test on site, ${TEST_TERMS}. You smell it where your guests will.` },
-      { title: 'Get a tailored quote', text: 'You receive a written quote built around your space and your scent, then delivery and simple repeat orders so the scent stays consistent.' },
-    ],
+    steps: [...SM.steps],
     facts: [
       { label: 'Where we work', value: B2B_CONFIG.serviceAreaText },
-      { label: 'Formats and equipment', value: detail(B2B_CONFIG.diffuserEquipment ?? 'Home and linen sprays and sachets from our collection. Diffusion equipment is chosen together at your scent test.') },
+      { label: 'Formats and equipment', value: detail(B2B_CONFIG.diffuserEquipment ?? `Home and linen sprays and sachets from our collection. Diffusion equipment: ${SM.equipmentFact.toLowerCase()}`) },
       { label: 'Minimum order', value: detail(B2B_CONFIG.minimumOrder) },
       { label: 'Lead time', value: detail(B2B_CONFIG.leadTime) },
     ],
@@ -150,7 +160,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
         q: 'What is scent marketing?',
         a: 'Scent marketing is the use of a consistent fragrance in a physical space to support how people feel about your brand. It can be as simple as a signature room spray and scented amenities, or a diffusion service tuned to the size of your space.',
       },
-      { q: 'How does the scent test work?', a: SCENT_TEST_ANSWER },
+      { q: SM.faqFlow.q, a: SM.faqFlow.a },
       { q: 'How much does it cost?', a: COST_ANSWER },
       {
         q: 'Can you create a scent just for my brand?',

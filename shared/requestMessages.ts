@@ -112,3 +112,45 @@ export const quoteSubject = (f: Pick<QuoteValues, 'business'>) =>
   `Quote request${f.business.trim() ? `: ${f.business.trim()}` : ''}`;
 export const sampleSubject = (f: Pick<SampleValues, 'business'>) =>
   `Sample request${f.business.trim() ? `: ${f.business.trim()}` : ''}`;
+
+export interface BriefingValues {
+  name: string;
+  business: string;
+  email: string;
+  phone: string;
+  city: string;
+  spaceType: string;
+  families: string[];
+  likes: string;
+  dislikes: string;
+  moods: string[];
+  /** Optional at the briefing stage. */
+  spaceSize: string;
+  message: string;
+  consent: boolean;
+}
+
+export function buildBriefingMessage(f: BriefingValues): string {
+  return [
+    'Hello CS Fragrances! Here is my scent briefing for my space.',
+    '',
+    `Name: ${v(f.name)}`,
+    `Business: ${v(f.business)}`,
+    `Email: ${v(f.email)}`,
+    `Phone / WhatsApp: ${v(f.phone)}`,
+    `City: ${v(f.city)}`,
+    `Type of space: ${v(f.spaceType)}`,
+    `Scent families I like: ${f.families.length ? f.families.join(', ') : '-'}`,
+    `Scents or notes I like: ${v(f.likes)}`,
+    `Scents or notes I dislike: ${v(f.dislikes)}`,
+    `Mood I want: ${f.moods.length ? f.moods.join(', ') : '-'}`,
+    `Approximate size of space (sq ft, optional): ${v(f.spaceSize)}`,
+    '',
+    `Message: ${v(f.message)}`,
+    '',
+    `Consent: ${f.consent ? CONSENT_TEXT : '-'}`,
+  ].join('\n');
+}
+
+export const briefingSubject = (f: Pick<BriefingValues, 'business'>) =>
+  `Scent briefing${f.business.trim() ? `: ${f.business.trim()}` : ''}`;
