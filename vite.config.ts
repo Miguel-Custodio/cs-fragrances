@@ -6,10 +6,9 @@ import path from "path";
 import { defineConfig } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime()];
-
-export default defineConfig({
-  plugins,
+export default defineConfig(({ command }) => ({
+  // The Manus runtime (about 300 kB inlined into every HTML page) and the JSX locator are dev-only tools.
+  plugins: [react(), tailwindcss(), ...(command === "serve" ? [jsxLocPlugin(), vitePluginManusRuntime()] : [])],
   resolve: {
     alias: {
       "@": path.resolve(import.meta.dirname, "client", "src"),
@@ -41,4 +40,4 @@ export default defineConfig({
       deny: ["**/.*"],
     },
   },
-});
+}));

@@ -33,8 +33,8 @@ function jsonLd(p: BusinessPageDef) {
           },
         },
         areaServed: [
-          { '@type': 'Country', name: 'Canada' },
-          { '@type': 'Country', name: 'United States' },
+          { '@type': 'City', name: 'Vancouver' },
+          { '@type': 'AdministrativeArea', name: 'Lower Mainland, British Columbia' },
         ],
         audience: { '@type': 'BusinessAudience', name: 'Businesses' },
       },
@@ -63,9 +63,10 @@ export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
     path: p.path,
     ogImage: p.image.src,
     ogImageAlt: p.image.alt,
+    noindex: p.noindex,
     jsonLd: jsonLd(p),
   });
-  const others = BUSINESS_PAGES.filter((x) => x.slug !== p.slug);
+  const others = BUSINESS_PAGES.filter((x) => x.slug !== p.slug && x.inSitemap);
 
   return (
     <div className="min-h-screen flex flex-col bg-primary-foreground">

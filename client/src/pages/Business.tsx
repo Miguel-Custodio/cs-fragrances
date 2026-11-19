@@ -2,21 +2,24 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import QuoteForm from '@/components/QuoteForm';
 import { usePageMeta, SITE_URL } from '@/hooks/usePageMeta';
-import { BUSINESS_PAGES } from '@/data/business';
+import { BUSINESS_PAGES as ALL_BUSINESS_PAGES } from '@/data/business';
 import { COMPANY } from '@shared/company';
+import { B2B_CONFIG } from '@shared/b2bConfig';
 
-const TITLE = 'For Business: Scent Marketing, Private Label & Fragrance Oils';
+const BUSINESS_PAGES = ALL_BUSINESS_PAGES.filter((p) => p.inSitemap);
+
+const TITLE = 'Scent Marketing & Private Label in Vancouver';
 const DESCRIPTION =
-  'Scent marketing, private label perfume and soap manufacturing, and fragrance oil supply for businesses in Vancouver, across Canada and in the USA. Handcrafted in British Columbia.';
+  'Scent marketing and private label perfume and soap for businesses in Vancouver and the Lower Mainland. Handcrafted in BC. Request a quote or samples.';
 
 const HUB_FAQ = [
   {
     q: 'What does CS Fragrances offer to businesses?',
-    a: 'Three services: scent marketing for physical spaces, private label manufacturing of fragrance and bath products, and fragrance and essential oils for makers and manufacturers.',
+    a: 'Two services: scent marketing for physical spaces, and private label manufacturing of fragrance and bath products.',
   },
   {
-    q: 'Which countries do you serve?',
-    a: 'We work with businesses in Canada and in the USA.',
+    q: 'Where do you work?',
+    a: `We are based in Surrey and serve ${B2B_CONFIG.serviceAreaText}.`,
   },
   {
     q: 'How do I get a quote?',
@@ -67,8 +70,6 @@ const SUMMARY: Record<string, string> = {
     'A signature scent for your store, hotel, clinic or office, so your space is remembered.',
   'private-label':
     'Perfumes, body mists, home sprays, soaps and sachets made by us and sold under your brand.',
-  'fragrance-oils':
-    'Professional-grade fragrance and essential oils for candle, soap and cosmetics makers in Canada and the USA.',
 };
 
 export default function Business() {
@@ -90,8 +91,8 @@ export default function Business() {
               Fragrance solutions for your business
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/85 leading-relaxed mb-8">
-              Scent marketing in Vancouver and beyond, private label perfume and soap made in British
-              Columbia, and fragrance oils for makers across Canada and the USA.
+              Scent marketing in Vancouver and the Lower Mainland, and private label perfume and soap
+              made by hand in British Columbia.
             </p>
             <a
               href="#quote"
@@ -103,7 +104,7 @@ export default function Business() {
         </header>
 
         <section className="py-14 md:py-20">
-          <div className="container max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-6">
+          <div className="container max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-6">
             {BUSINESS_PAGES.map((p) => (
               <a
                 key={p.slug}
@@ -124,7 +125,7 @@ export default function Business() {
             <ul className="space-y-4 text-lg text-primary/90">
               <li><strong>Handcrafted in small batches</strong> in British Columbia, with the same care as our own collection.</li>
               <li><strong>Science meets artistry:</strong> a family business led by a Chemistry-trained co-founder.</li>
-              <li><strong>One small team</strong> from your first message to delivery in Canada or the USA.</li>
+              <li><strong>One small team</strong> from your first message to delivery.</li>
             </ul>
           </div>
         </section>

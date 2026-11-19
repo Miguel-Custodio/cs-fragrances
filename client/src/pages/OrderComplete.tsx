@@ -15,7 +15,7 @@ export default function OrderComplete() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const ref = new URLSearchParams(window.location.search).get('ref');
+  const ref = typeof window === 'undefined' ? null : new URLSearchParams(window.location.search).get('ref');
 
   return (
     <div className="min-h-screen flex flex-col bg-primary-foreground">

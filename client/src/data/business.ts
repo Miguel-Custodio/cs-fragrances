@@ -1,4 +1,5 @@
 import { SCENTEC_BRANDING_ENABLED } from '@/lib/flags';
+import { B2B_CONFIG, detail } from '@shared/b2bConfig';
 
 /**
  * For Business (B2B) content. English only. No invented numbers: MOQ, lead times and prices are
@@ -48,19 +49,23 @@ export interface BusinessPageDef {
   serviceType: string;
   /** Keywords/search phrases rendered naturally in the copy are listed here for the maintainers. */
   seoKeywords: string[];
+  /** Listed in sitemap.xml, the hub and the menus. false for pages kept out of the public structure. */
+  inSitemap: boolean;
+  /** Adds <meta name="robots" content="noindex">. */
+  noindex?: boolean;
 }
 
 export const BUSINESS_PAGES: BusinessPageDef[] = [
   {
     slug: 'scent-marketing',
     path: '/business/scent-marketing',
-    title: 'Scent Marketing in Vancouver, Canada & the USA',
+    title: 'Scent Marketing for Business in Vancouver',
     description:
       'Scent marketing for stores, hotels, clinics and offices. Give your space a signature scent that people remember. Handcrafted in British Columbia. Request a quote.',
     h1: 'Scent marketing: give your space a signature scent',
     kicker: 'For business',
     intro:
-      'People remember how a place feels. A carefully chosen scent turns a store, hotel, clinic or office into an experience, and becomes part of your brand. We design and supply scent for businesses in Vancouver, across Canada and in the USA.',
+      'People remember how a place feels. A carefully chosen scent turns a store, hotel, clinic or office into an experience, and becomes part of your brand. We design and supply scent for businesses in Vancouver and the Lower Mainland.',
     image: {
       src: '/videos/making-sachets.webp',
       alt: 'Handmade scent sachets being weighed at the CS Fragrances studio in British Columbia',
@@ -96,10 +101,10 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       { title: 'Delivery and refills', text: 'We supply your scent in the formats agreed in your quote, with simple repeat orders.' },
     ],
     facts: [
-      { label: 'Service area', value: 'Vancouver, British Columbia, all of Canada and the USA' },
-      { label: 'Formats and equipment', value: '[PLACEHOLDER: confirm formats offered, e.g. sprays, sachets, diffuser oils]' },
-      { label: 'Minimum order', value: '[PLACEHOLDER: MOQ]' },
-      { label: 'Lead time', value: '[PLACEHOLDER: lead time]' },
+      { label: 'Service area', value: B2B_CONFIG.serviceAreaText },
+      { label: 'Formats and equipment', value: detail(B2B_CONFIG.diffuserEquipment) },
+      { label: 'Minimum order', value: detail(B2B_CONFIG.minimumOrder) },
+      { label: 'Lead time', value: detail(B2B_CONFIG.leadTime) },
     ],
     faq: [
       {
@@ -116,13 +121,14 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       },
       {
         q: 'Do you serve businesses outside Vancouver?',
-        a: 'Yes. We work with businesses across Canada and in the USA. Request a quote and tell us where you are located.',
+        a: `We are based in Surrey and serve ${B2B_CONFIG.serviceAreaText}. For other locations: ${detail(B2B_CONFIG.deliveryOutsideBC)}.`,
       },
     ],
     businessTypes: ['Retail store', 'Hotel / lodging', 'Clinic / spa / wellness', 'Office / showroom', 'Restaurant / venue', 'Other'],
     topic: 'Scent marketing',
     serviceType: 'Scent marketing and ambient fragrance design',
-    seoKeywords: ['scent marketing Vancouver', 'scent marketing Canada', 'scent marketing USA', 'ambient scenting', 'signature scent for business'],
+    inSitemap: true,
+    seoKeywords: ['scent marketing Vancouver', 'scent marketing Canada', 'ambient scenting', 'signature scent for business'],
   },
   {
     slug: 'private-label',
@@ -151,7 +157,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       },
       {
         title: 'One partner, start to finish',
-        text: 'From scent selection and samples to production and delivery across Canada and the USA, you deal with the same small team.',
+        text: 'From scent selection and samples to production and delivery, you deal with the same small team.',
       },
     ],
     audienceTitle: 'Who private label is for',
@@ -170,8 +176,8 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     ],
     facts: [
       { label: 'Products', value: 'Perfumes, body mists, home sprays, soaps, sachets' },
-      { label: 'Minimum order quantity', value: '[PLACEHOLDER: MOQ per product]' },
-      { label: 'Production and delivery time', value: '[PLACEHOLDER: lead time]' },
+      { label: 'Minimum order quantity', value: detail(B2B_CONFIG.minimumOrder) },
+      { label: 'Production and delivery time', value: detail(B2B_CONFIG.leadTime) },
       { label: 'Pricing', value: 'Quoted per project' },
     ],
     faq: [
@@ -188,8 +194,8 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
         a: 'Yes. We will suggest fragrance directions based on your brand and share samples before you decide.',
       },
       {
-        q: 'Do you ship to the USA?',
-        a: 'Yes, we deliver across Canada and to the USA. Tell us your location when you request a quote.',
+        q: 'Where do you deliver?',
+        a: `We are based in Surrey and serve ${B2B_CONFIG.serviceAreaText}. Delivery elsewhere: ${detail(B2B_CONFIG.deliveryOutsideBC)}.`,
       },
       {
         q: 'What are the minimum order quantities and lead times?',
@@ -199,6 +205,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     businessTypes: ['Boutique / retail', 'Hotel / spa / wellness', 'Gift / corporate gifting', 'Brand or influencer', 'Online store', 'Other'],
     topic: 'Private label',
     serviceType: 'Private label manufacturing of fragrance and bath products',
+    inSitemap: true,
     seoKeywords: ['private label perfume Canada', 'white label fragrance', 'private label soap Canada', 'contract manufacturing fragrance'],
   },
   {
@@ -247,8 +254,8 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     facts: [
       { label: 'Product types', value: 'Fragrance oils and essential oils' },
       { label: 'Markets', value: 'Canada and the USA' },
-      { label: 'Minimum order and sizes', value: '[PLACEHOLDER: MOQ and sizes]' },
-      { label: 'Catalogue and pricing', value: '[PLACEHOLDER: catalogue and price list, on request]' },
+      { label: 'Minimum order and sizes', value: detail(B2B_CONFIG.minimumOrder) },
+      { label: 'Catalogue and pricing', value: 'Catalogue and quote on request' },
     ],
     faq: [
       {
@@ -271,6 +278,8 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     businessTypes: ['Candle maker', 'Soap / bath products', 'Cosmetics / personal care', 'Home fragrance / aromatization', 'Hobbyist scaling up', 'Other'],
     topic: 'Fragrance oils',
     serviceType: 'Wholesale supply of fragrance oils and essential oils',
+    inSitemap: false,
+    noindex: true,
     seoKeywords: ['fragrance oil supplier Canada', 'fragrance oil supplier USA', 'candle fragrance oil Canada', 'soap fragrance oil wholesale'],
   },
 ];

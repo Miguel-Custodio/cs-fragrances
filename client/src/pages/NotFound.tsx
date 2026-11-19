@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { AlertCircle, Home } from "lucide-react";
 import { useLocation } from "wouter";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function NotFound() {
+  usePageMeta('Page not found', 'This page does not exist. Browse the CS Fragrances collection or our business services.', { noindex: true });
   const [, setLocation] = useLocation();
 
   const handleGoHome = () => {

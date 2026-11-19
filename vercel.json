@@ -3,10 +3,9 @@
   "outputDirectory": "dist/public",
   "installCommand": "pnpm install",
   "framework": "vite",
-  "rewrites": [
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
-    }
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/b2b", "destination": "/business", "permanent": true },
+    { "source": "/b2b/:path*", "destination": "/business/:path*", "permanent": true }
   ]
 }

@@ -1,4 +1,4 @@
-import { Sparkles, Package, FlaskConical } from 'lucide-react';
+import { Sparkles, Package } from 'lucide-react';
 
 const CARDS = [
   {
@@ -13,12 +13,6 @@ const CARDS = [
     text: 'Perfumes, body mists, home sprays, soaps and sachets under your brand.',
     href: '/business/private-label',
   },
-  {
-    icon: FlaskConical,
-    title: 'Fragrance oils',
-    text: 'Professional-grade fragrance oils for makers and manufacturers in Canada and the US.',
-    href: '/business/fragrance-oils',
-  },
 ];
 
 /** Home teaser for the B2B section (/business). */
@@ -30,11 +24,11 @@ export default function ForBusinessSection() {
           <p className="font-display tracking-[0.3em] uppercase text-xs md:text-sm text-accent mb-3">For business</p>
           <h2 className="text-3xl md:text-5xl text-primary-foreground mb-4">Fragrance for your brand</h2>
           <p className="text-lg text-primary-foreground/80 max-w-2xl mx-auto">
-            Beyond our own collection, we create scent solutions for businesses and supply fragrance
-            to those who make.
+            Beyond our own collection, we create scent solutions for businesses and private label
+            products made by hand in British Columbia.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {CARDS.map(({ icon: Icon, title, text, href }) => (
             <a
               key={href}

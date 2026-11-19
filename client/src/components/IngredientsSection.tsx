@@ -7,9 +7,9 @@ export default function IngredientsSection() {
       <div className="container max-w-4xl mx-auto px-4">
         {/* Section Header */}
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-primary mb-4">
             {ingredientInfo.title}
-          </h2>
+          </h1>
           <p className="text-lg text-gray-600">
             {ingredientInfo.description}
           </p>

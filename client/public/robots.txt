@@ -1,6 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /api/
-Disallow: /order-complete
-
-Sitemap: https://www.csfragrances.ca/sitemap.xml

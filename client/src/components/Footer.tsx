@@ -58,11 +58,7 @@ export default function Footer() {
                   Private Label
                 </a>
               </li>
-              <li>
-                <a href="/business/fragrance-oils" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                  Fragrance Oils
-                </a>
-              </li>
+              
               <li>
                 <a href="/ingredients" className="text-primary-foreground/80 hover:text-accent transition-colors">
                   Ingredients

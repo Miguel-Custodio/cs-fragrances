@@ -1,23 +1,28 @@
 import { useEffect } from 'react';
 
-export const SITE_NAME = 'CS Fragrances';
-export const SITE_URL = 'https://www.csfragrances.ca';
+import {
+  SITE_NAME,
+  SITE_URL,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_OG_ALT,
+  absoluteUrl,
+  buildGraph,
+  pageTitle as resolveTitle,
+  type PageMeta,
+} from '@/lib/seo';
+import { recordPageMeta } from '@/lib/ssrMeta';
+
+export { SITE_NAME, SITE_URL };
 
 export type PageMetaOpts = {
   noindex?: boolean;
-  /** Path beginning with /, used for canonical, og:url and twitter tags. */
+  /** Path beginning with /, used for canonical, og:url and twitter tags. Defaults to the current path. */
   path?: string;
   ogImage?: string;
   ogImageAlt?: string;
   ogType?: string;
   jsonLd?: unknown;
 };
-
-function absoluteUrl(url: string): string {
-  if (url.startsWith('http://') || url.startsWith('https://')) return url;
-  const path = url.startsWith('/') ? url : `/${url}`;
-  return `${SITE_URL}${path}`;
-}
 
 function upsertNamedMeta(name: string, content: string): () => void {
   let el = document.querySelector<HTMLMetaElement>(`meta[name="${name}"]`);
@@ -89,16 +94,18 @@ function upsertJsonLd(data: unknown): () => void {
   };
 }
 
-/** Sets the document title, description, and optional Open Graph, Twitter, canonical and JSON-LD tags. */
+/** Sets the document title, description, canonical, Open Graph, Twitter and JSON-LD tags. Also records them during the build-time prerender. */
 export function usePageMeta(title: string, description: string, opts: PageMetaOpts = {}) {
-  const pageTitle =
-    title === SITE_NAME || title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
-  const path = opts.path;
+  const pageTitle = resolveTitle(title);
+  const { ogImageAlt, ogType, jsonLd, noindex } = opts;
   const ogImage = opts.ogImage;
-  const ogImageAlt = opts.ogImageAlt;
-  const ogType = opts.ogType;
-  const jsonLd = opts.jsonLd;
-  const noindex = opts.noindex;
+  const explicitPath = opts.path;
+
+  const meta: PageMeta = { title, description, path: explicitPath, ogImage, ogImageAlt, ogType, noindex, jsonLd };
+  // Server render (prerender): record synchronously, effects do not run here.
+  if (typeof document === 'undefined') recordPageMeta(meta);
+
+  const path = explicitPath ?? (typeof window !== 'undefined' ? currentPath() : undefined);
 
   useEffect(() => {
     const cleanups: Array<() => void> = [];
@@ -110,12 +117,13 @@ export function usePageMeta(title: string, description: string, opts: PageMetaOp
 
     cleanups.push(upsertNamedMeta('description', description));
 
-    if (noindex) {
-      cleanups.push(upsertNamedMeta('robots', 'noindex'));
-    }
+    // Always set robots so a noindex page never leaks its tag to the next page.
+    cleanups.push(upsertNamedMeta('robots', noindex ? 'noindex, follow' : 'index, follow'));
 
     if (path) {
-      const url = `${SITE_URL}${path}`;
+      const url = path === '/' ? `${SITE_URL}/` : `${SITE_URL}${path}`;
+      const image = absoluteUrl(ogImage ?? DEFAULT_OG_IMAGE);
+      const alt = ogImageAlt ?? (ogImage ? undefined : DEFAULT_OG_ALT);
       cleanups.push(upsertCanonical(url));
       cleanups.push(upsertPropMeta('og:title', pageTitle));
       cleanups.push(upsertPropMeta('og:description', description));
@@ -124,23 +132,23 @@ export function usePageMeta(title: string, description: string, opts: PageMetaOp
       cleanups.push(upsertNamedMeta('twitter:card', 'summary_large_image'));
       cleanups.push(upsertNamedMeta('twitter:title', pageTitle));
       cleanups.push(upsertNamedMeta('twitter:description', description));
-      if (ogImage) {
-        const abs = absoluteUrl(ogImage);
-        cleanups.push(upsertPropMeta('og:image', abs));
-        cleanups.push(upsertNamedMeta('twitter:image', abs));
-        if (ogImageAlt) {
-          cleanups.push(upsertPropMeta('og:image:alt', ogImageAlt));
-          cleanups.push(upsertNamedMeta('twitter:image:alt', ogImageAlt));
-        }
+      cleanups.push(upsertPropMeta('og:image', image));
+      cleanups.push(upsertNamedMeta('twitter:image', image));
+      if (alt) {
+        cleanups.push(upsertPropMeta('og:image:alt', alt));
+        cleanups.push(upsertNamedMeta('twitter:image:alt', alt));
       }
     }
 
-    if (jsonLd) {
-      cleanups.push(upsertJsonLd(jsonLd));
-    }
+    cleanups.push(upsertJsonLd(buildGraph(jsonLd)));
 
     return () => {
       cleanups.forEach((fn) => fn());
     };
   }, [pageTitle, description, path, ogImage, ogImageAlt, ogType, jsonLd, noindex]);
+}
+
+function currentPath(): string {
+  const p = window.location.pathname.replace(/\/+$/, '');
+  return p === '' ? '/' : p;
 }

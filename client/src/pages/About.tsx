@@ -40,29 +40,6 @@ const aboutJsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
-      '@type': ['Organization', 'LocalBusiness'],
-      '@id': `${SITE_URL}/#organization`,
-      name: COMPANY.name,
-      legalName: COMPANY.legalName,
-      url: `${SITE_URL}/`,
-      email: COMPANY.email,
-      telephone: '+1-604-518-6863',
-      areaServed: ['CA', 'US'],
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: COMPANY.addressLine,
-        addressLocality: COMPANY.city,
-        addressRegion: COMPANY.regionCode,
-        postalCode: COMPANY.postalCode,
-        addressCountry: COMPANY.countryCode,
-      },
-      founder: [
-        { '@type': 'Person', name: 'Miguel Custodio' },
-        { '@type': 'Person', name: 'Ana Raquel Soncin' },
-      ],
-      sameAs: ['https://instagram.com/bycsfragrances'],
-    },
-    {
       '@type': 'AboutPage',
       '@id': `${SITE_URL}/about#webpage`,
       name: ABOUT_TITLE,

@@ -6,6 +6,31 @@ import NotFound from '@/pages/NotFound';
 import { CATEGORY_GROUPS, productsInGroup } from '@/data/products';
 import DiscoverNotes from '@/components/DiscoverNotes';
 import { usePageMeta } from '@/hooks/usePageMeta';
+import { absoluteUrl, breadcrumbNode, ORG_ID, SITE_URL } from '@/lib/seo';
+import { productReviewSchema } from '@/lib/reviewSchema';
+import type { Product } from '@/data/products';
+
+function productNode(p: Product, pagePath: string) {
+  return {
+    '@type': 'Product',
+    '@id': `${SITE_URL}${pagePath}#${p.id}`,
+    name: p.name,
+    description: p.description,
+    image: p.images.map((i) => absoluteUrl(i)),
+    brand: { '@type': 'Brand', name: 'CS Fragrances' },
+    manufacturer: { '@id': ORG_ID },
+    offers: {
+      '@type': 'Offer',
+      url: `${SITE_URL}${pagePath}`,
+      priceCurrency: 'CAD',
+      price: p.price.toFixed(2),
+      // Stock counts are not confirmed yet, so only "sold out" is stated.
+      ...(p.availability === 'sold-out' ? { availability: 'https://schema.org/OutOfStock' } : {}),
+    },
+    // Only real reviews of this product (data/reviews.ts is empty today, so nothing is emitted).
+    ...productReviewSchema(p),
+  };
+}
 
 /** /shop (all categories) and /shop/:slug (one category). */
 export default function Shop() {
@@ -19,6 +44,22 @@ export default function Shop() {
     group
       ? `Shop ${group.title.toLowerCase()} from CS Fragrances, handcrafted in British Columbia, Canada.`
       : 'Shop all CS Fragrances products: perfumes, body mists, home sprays, sachets, soaps, candles and ornaments.',
+    {
+      path: group ? `/shop/${group.slug}` : '/shop',
+      jsonLd: group
+        ? [
+            breadcrumbNode([
+              { name: 'Home', path: '/' },
+              { name: 'Shop', path: '/shop' },
+              { name: group.title, path: `/shop/${group.slug}` },
+            ]),
+            ...productsInGroup(group).map((p) => productNode(p, `/shop/${group.slug}`)),
+          ]
+        : breadcrumbNode([
+            { name: 'Home', path: '/' },
+            { name: 'Shop', path: '/shop' },
+          ]),
+    },
   );
 
   if (invalid) return <NotFound />;

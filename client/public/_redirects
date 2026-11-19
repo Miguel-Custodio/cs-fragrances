@@ -1,0 +1,3 @@
+# Cloudflare Pages redirects (Vercel reads vercel.json instead). Keep both in sync.
+/b2b        /business        301
+/b2b/*      /business/:splat 301
