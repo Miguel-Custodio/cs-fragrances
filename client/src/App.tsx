@@ -17,6 +17,8 @@ import Shop from "./pages/Shop";
 import About from "./pages/About";
 import Business from "./pages/Business";
 import BusinessPage from "./pages/BusinessPage";
+import BusinessRequest from "./pages/BusinessRequest";
+
 import { BUSINESS_PAGES } from "./data/business";
 import { POLICIES } from "./data/policies";
 import { KITS_ENABLED } from "./lib/flags";
@@ -33,6 +35,12 @@ function Router() {
           <BusinessPage page={page} />
         </Route>
       ))}
+      <Route path={"/business/request-quote"}>
+        <BusinessRequest kind="quote" />
+      </Route>
+      <Route path={"/business/request-samples"}>
+        <BusinessRequest kind="samples" />
+      </Route>
       <Route path={"/shop"} component={Shop} />
       <Route path={"/shop/:slug"} component={Shop} />
       <Route path={"/order-complete"} component={OrderComplete} />

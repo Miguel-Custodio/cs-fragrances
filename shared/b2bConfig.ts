@@ -24,6 +24,10 @@ export const B2B_CONFIG = {
   deliveryOutsideBC: null as string | null,
   // TODO(Miguel): confirm B2B delivery to the USA. While null, NO page mentions the USA.
   usDelivery: null as string | null,
+  // TODO(Miguel): set true only when the on-site scent test and samples are confirmed as free of charge
+  // (Commercial: policy still open, "courtesy or credit on the first order"). While false, copy says
+  // "no obligation" and never "free".
+  freeSamples: false,
   // TODO(Miguel): how fast we answer a quote / sample request (e.g. "within 1-2 business days").
   replyTime: null as string | null,
   // TODO(Miguel/Raquel): diffuser model/equipment (none in stock yet). Pages say "defined at the visit".

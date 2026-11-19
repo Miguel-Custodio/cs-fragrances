@@ -1,61 +1,44 @@
 import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
-import QuoteForm from '@/components/QuoteForm';
-import { usePageMeta, SITE_URL } from '@/hooks/usePageMeta';
-import { BUSINESS_PAGES, type BusinessPageDef } from '@/data/business';
-import { COMPANY } from '@shared/company';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import RequestForms from '@/components/RequestForms';
+import Reviews from '@/components/Reviews';
+import { usePageMeta } from '@/hooks/usePageMeta';
+import { breadcrumbNode, ORG_ID, SITE_URL } from '@/lib/seo';
+import { PUBLIC_BUSINESS_PAGES, type BusinessPageDef } from '@/data/business';
 import { Check } from 'lucide-react';
 
 function jsonLd(p: BusinessPageDef) {
   const url = `${SITE_URL}${p.path}`;
-  return {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Service',
-        '@id': `${url}#service`,
-        name: p.h1,
-        serviceType: p.serviceType,
-        description: p.description,
-        url,
-        provider: {
-          '@type': ['Organization', 'LocalBusiness'],
-          '@id': `${SITE_URL}/#organization`,
-          name: COMPANY.name,
-          url: `${SITE_URL}/`,
-          email: COMPANY.email,
-          telephone: '+1-604-518-6863',
-          address: {
-            '@type': 'PostalAddress',
-            addressLocality: COMPANY.city,
-            addressRegion: COMPANY.regionCode,
-            addressCountry: COMPANY.countryCode,
-          },
-        },
-        areaServed: [
-          { '@type': 'City', name: 'Vancouver' },
-          { '@type': 'AdministrativeArea', name: 'Lower Mainland, British Columbia' },
-        ],
-        audience: { '@type': 'BusinessAudience', name: 'Businesses' },
-      },
-      {
-        '@type': 'FAQPage',
-        mainEntity: p.faq.map((f) => ({
-          '@type': 'Question',
-          name: f.q,
-          acceptedAnswer: { '@type': 'Answer', text: f.a },
-        })),
-      },
-      {
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-          { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
-          { '@type': 'ListItem', position: 2, name: 'For Business', item: `${SITE_URL}/business` },
-          { '@type': 'ListItem', position: 3, name: p.h1, item: url },
-        ],
-      },
-    ],
-  };
+  return [
+    {
+      '@type': 'Service',
+      '@id': `${url}#service`,
+      name: p.h1,
+      serviceType: p.serviceType,
+      description: p.description,
+      url,
+      provider: { '@id': ORG_ID },
+      areaServed: [
+        { '@type': 'City', name: 'Vancouver' },
+        { '@type': 'AdministrativeArea', name: 'Lower Mainland, British Columbia' },
+      ],
+      audience: { '@type': 'BusinessAudience', name: 'Businesses' },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: p.faq.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+    breadcrumbNode([
+      { name: 'Home', path: '/' },
+      { name: 'For Business', path: '/business' },
+      { name: p.topic, path: p.path },
+    ]),
+  ];
 }
 
 export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
@@ -66,28 +49,34 @@ export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
     noindex: p.noindex,
     jsonLd: jsonLd(p),
   });
-  const others = BUSINESS_PAGES.filter((x) => x.slug !== p.slug && x.inSitemap);
+  const others = PUBLIC_BUSINESS_PAGES.filter((x) => x.slug !== p.slug);
 
   return (
     <div className="min-h-screen flex flex-col bg-primary-foreground">
       <Navigation />
       <main className="flex-1 pt-20">
-        <nav aria-label="Breadcrumb" className="container max-w-6xl mx-auto px-4 pt-6 text-sm text-muted-foreground">
-          <a href="/" className="hover:underline">Home</a> / <a href="/business" className="hover:underline">For Business</a> /{' '}
-          <span className="text-primary">{p.h1.split(':')[0]}</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { name: 'Home', path: '/' },
+            { name: 'For Business', path: '/business' },
+            { name: p.topic, path: p.path },
+          ]}
+        />
 
         <header className="container max-w-6xl mx-auto px-4 py-12 md:py-16 grid md:grid-cols-3 gap-10 items-center">
           <div className="md:col-span-2">
             <p className="font-display tracking-[0.3em] uppercase text-xs md:text-sm text-muted-foreground mb-3">{p.kicker}</p>
             <h1 className="text-3xl md:text-5xl text-primary mb-5 leading-tight">{p.h1}</h1>
             <p className="text-lg md:text-xl text-primary/85 leading-relaxed mb-7">{p.intro}</p>
-            <a
-              href="#quote"
-              className="inline-block rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90"
-            >
-              Request a quote or samples
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <a href="#quote" className="inline-block rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90">
+                Request a quote
+              </a>
+              <a href="#samples" className="inline-block rounded-full border border-primary/40 px-8 py-3 font-semibold text-primary hover:bg-primary/10">
+                Request samples
+              </a>
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground">{p.trustLine}</p>
           </div>
           <img
             src={p.image.src}
@@ -156,6 +145,8 @@ export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
           </div>
         </section>
 
+        <Reviews />
+
         <section className="py-14 md:py-20">
           <div className="container max-w-3xl mx-auto px-4">
             <h2 className="text-2xl md:text-3xl text-primary mb-6 text-center">Frequently asked questions</h2>
@@ -170,35 +161,51 @@ export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
           </div>
         </section>
 
-        <section className="bg-secondary py-14 md:py-20" aria-labelledby={`${p.slug}-quote-title`}>
-          <div className="container max-w-3xl mx-auto px-4">
-            <h2 id={`${p.slug}-quote-title`} className="text-2xl md:text-3xl text-primary mb-2 text-center">
-              Request a quote or samples
-            </h2>
-            <p className="text-center text-primary/80 mb-8">Tell us about your business and we will get back to you.</p>
-            <QuoteForm topic={p.topic} businessTypes={p.businessTypes} idPrefix={p.slug} />
-          </div>
-        </section>
+        <RequestForms
+          idPrefix={p.slug}
+          prefill={p.prefill}
+          businessTypes={p.formOptions?.businessTypes}
+          interests={p.formOptions?.interests}
+        />
 
-        <section className="py-12">
-          <div className="container max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-xl text-primary mb-4">More for business</h2>
-            <ul className="flex flex-wrap justify-center gap-3">
-              {others.map((o) => (
-                <li key={o.slug}>
-                  <a href={o.path} className="inline-block rounded-full border border-primary/30 px-5 py-2 text-primary hover:bg-primary/10">
-                    {o.topic}
+        {p.related.length > 0 && (
+          <section className="py-12">
+            <div className="container max-w-4xl mx-auto px-4 text-center">
+              <h2 className="text-xl text-primary mb-4">Related</h2>
+              <ul className="flex flex-wrap justify-center gap-3">
+                {p.related.map((r) => (
+                  <li key={r.href}>
+                    <a href={r.href} className="inline-block rounded-full border border-primary/30 px-5 py-2 text-primary hover:bg-primary/10">
+                      {r.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </section>
+        )}
+
+        {p.inSitemap && (
+          <section className="pb-14">
+            <div className="container max-w-4xl mx-auto px-4 text-center">
+              <h2 className="text-xl text-primary mb-4">More for business</h2>
+              <ul className="flex flex-wrap justify-center gap-3">
+                {others.map((o) => (
+                  <li key={o.slug}>
+                    <a href={o.path} className="inline-block rounded-full border border-primary/30 px-5 py-2 text-primary hover:bg-primary/10">
+                      {o.topic}
+                    </a>
+                  </li>
+                ))}
+                <li>
+                  <a href="/business" className="inline-block rounded-full border border-primary/30 px-5 py-2 text-primary hover:bg-primary/10">
+                    All business services
                   </a>
                 </li>
-              ))}
-              <li>
-                <a href="/business" className="inline-block rounded-full border border-primary/30 px-5 py-2 text-primary hover:bg-primary/10">
-                  All business services
-                </a>
-              </li>
-            </ul>
-          </div>
-        </section>
+              </ul>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
     </div>
