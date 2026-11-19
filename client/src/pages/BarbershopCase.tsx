@@ -5,16 +5,19 @@ import RequestForms from '@/components/RequestForms';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { breadcrumbNode, ORG_ID, SITE_URL } from '@/lib/seo';
 import { B2B_CONFIG } from '@shared/b2bConfig';
+import { BRIEFING_PATH, SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
 
 /*
- * Anonymous case (public wording from the Marketing document): "a premium barbershop in Vancouver".
- * NEVER add the name of the business, sales numbers, results or a quote without the written OK of
- * the business (see B2B_CONFIG.caseQuote). No aromatization result exists yet.
+ * Anonymous case, Marketing v3 B4.1: "a premium barbershop in downtown Vancouver". NEVER add the name of
+ * the business, sales numbers, results, a quote or details about its scenting request (no "lounge", no
+ * washrooms, no size, no dates) without the written OK of the business (see B2B_CONFIG.caseQuote).
+ * No aromatization result exists. Skipped on purpose until confirmed: "What they were looking for" and
+ * "Agreed a simple arrangement" (B4.1 marks them for confirmation), and "What's next".
  */
 const PATH = '/business/barbershop-case-study';
-const TITLE = 'Case: Perfumes on a Barbershop Cologne Bar';
+const TITLE = "Perfumes on a Barbershop's Cologne Bar";
 const DESCRIPTION =
-  'A premium barbershop in Vancouver carries CS Fragrances perfumes in its cologne bar. A short, honest case from a small family maker in BC.';
+  'How a premium barbershop in downtown Vancouver carries CS Fragrances perfumes on its cologne bar. Made in BC. Send your scent briefing.';
 
 const jsonLd = [
   {
@@ -56,12 +59,15 @@ export default function BarbershopCase() {
         <header className="container max-w-6xl mx-auto px-4 py-12 md:py-16 grid md:grid-cols-3 gap-10 items-center">
           <div className="md:col-span-2">
             <p className="font-display tracking-[0.3em] uppercase text-xs md:text-sm text-muted-foreground mb-3">Case</p>
-            <h1 className="text-3xl md:text-5xl text-primary mb-5 leading-tight">
-              A premium barbershop in Vancouver carries our perfumes in its cologne bar
-            </h1>
+            <h1 className="text-3xl md:text-5xl text-primary mb-5 leading-tight">A cologne bar with a local story</h1>
             <p className="text-lg md:text-xl text-primary/85 leading-relaxed">
-              A short and honest case. We are a small family maker, and this is where we are today.
+              How a premium barbershop in downtown Vancouver carries our perfumes.
             </p>
+            <ul className="mt-6 flex flex-wrap gap-2 text-sm text-primary" aria-label="At a glance">
+              {['Premium barbershop', 'Downtown Vancouver', 'Perfumes on the cologne bar'].map((t) => (
+                <li key={t} className="rounded-full border border-primary/30 px-4 py-1.5">{t}</li>
+              ))}
+            </ul>
           </div>
           <img
             src="/images/Studio_4 Fragrances.webp"
@@ -77,27 +83,17 @@ export default function BarbershopCase() {
         <section className="bg-secondary py-14 md:py-20">
           <div className="container max-w-3xl mx-auto px-4 space-y-10">
             <div>
-              <h2 className="text-2xl md:text-3xl text-primary mb-3">The setting</h2>
+              <h2 className="text-2xl md:text-3xl text-primary mb-3">The business</h2>
               <p className="text-lg text-primary/90 leading-relaxed">
-                A cologne bar lets a barbershop&rsquo;s clients try a fragrance in the chair and take it home.
-                It turns a visit into a small ritual, and it gives the shop something to sell that fits its
-                style. Our eau de parfum is on the cologne bar of a premium barbershop in Vancouver.
+                A premium barbershop and lounge in downtown Vancouver, where clients come for the haircut and stay for the experience.
               </p>
             </div>
             <div>
-              <h2 className="text-2xl md:text-3xl text-primary mb-3">What we supply</h2>
-              <p className="text-lg text-primary/90 leading-relaxed">
-                Our own eau de parfum (50 ml), handcrafted in small batches in British Columbia. The team talks
-                directly to the people who make it.
-              </p>
-            </div>
-            <div>
-              <h2 className="text-2xl md:text-3xl text-primary mb-3">What comes next</h2>
-              <p className="text-lg text-primary/90 leading-relaxed">
-                The same team has asked us about a scent for the lounge and the washrooms. That conversation is
-                open and there are no results to report yet. When there are, with the shop&rsquo;s permission,
-                we will add them here.
-              </p>
+              <h2 className="text-2xl md:text-3xl text-primary mb-3">What we did</h2>
+              <ul className="list-disc pl-6 space-y-2 text-lg text-primary/90 leading-relaxed">
+                <li>Supplied our eau de parfum in 50 ml bottles for their cologne bar, with pouches, bags and small testers for clients to try.</li>
+                <li>Stayed in touch with the team, who have also asked about scenting.</li>
+              </ul>
             </div>
             {B2B_CONFIG.caseQuote && (
               <figure>
@@ -114,9 +110,17 @@ export default function BarbershopCase() {
           <div className="container max-w-3xl mx-auto px-4 text-center">
             <h2 className="text-2xl md:text-3xl text-primary mb-4">Want the same for your shop?</h2>
             <p className="text-lg text-primary/85 mb-6">
-              Perfumes for your shelf or cologne bar, and a signature scent for your space. Start with samples
-              and a scent test.
+              Perfumes for your shelf or cologne bar, and a signature scent for your space. Send us a short
+              scent briefing and we will send samples. No obligation.
             </p>
+            <div className="mb-6 flex flex-wrap justify-center gap-3">
+              <a href={BRIEFING_PATH} className="inline-block rounded-full bg-primary px-8 py-3 font-semibold text-primary-foreground hover:bg-primary/90">
+                {SM.primaryCta}
+              </a>
+              <a href="#quote" className="inline-block rounded-full border border-primary/40 px-8 py-3 font-semibold text-primary hover:bg-primary/10">
+                {SM.secondaryCta}
+              </a>
+            </div>
             <ul className="flex flex-wrap justify-center gap-3">
               <li>
                 <a href="/business/salons-barbershops" className="inline-block rounded-full border border-primary/30 px-5 py-2 text-primary hover:bg-primary/10">
@@ -137,7 +141,7 @@ export default function BarbershopCase() {
           </div>
         </section>
 
-        <RequestForms idPrefix="case" prefill={{ businessType: 'Salon or barbershop', interest: 'Perfumes for resale' }} initialTab="samples" />
+        <RequestForms idPrefix="case" tabs={['quote', 'briefing']} prefill={{ businessType: 'Salon or barbershop', interest: 'Perfumes for resale' }} />
       </main>
       <Footer />
     </div>

@@ -1,6 +1,7 @@
 import { SCENTEC_BRANDING_ENABLED } from '@/lib/flags';
 import { B2B_CONFIG, detail } from '@shared/b2bConfig';
-import { SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
+import { BRIEFING_PATH, SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
+import { SCENT_INTEREST } from '@shared/requestMessages';
 
 /**
  * For Business (B2B) content. English (Canadian) only. Copy comes from
@@ -84,8 +85,14 @@ export interface BusinessPageDef {
 }
 
 /** "No obligation", plus "free of charge" only when the policy is confirmed (b2bConfig.freeSamples). */
-const TEST_TERMS = B2B_CONFIG.freeSamples ? 'free of charge and with no obligation' : 'with no obligation';
-const TRUST_LINE = `On-site scent test and samples, ${TEST_TERMS}. Then a tailored quote.`;
+const SAMPLE_TERMS = B2B_CONFIG.freeSamples ? 'free of charge and with no obligation' : 'with no obligation';
+/** Marketing v3, B2: line under the CTAs. */
+const TRUST_LINE = SM.underCtas;
+/** Hero buttons of the scent pages (B6): briefing page + quote form. */
+const BRIEFING_CTAS = [
+  { label: SM.primaryCta, href: BRIEFING_PATH },
+  { label: SM.secondaryCta, href: '#quote' },
+];
 
 const PRIVATE_LABEL_TIMING = B2B_CONFIG.privateLabelStart
   ? `Private label projects start from ${B2B_CONFIG.privateLabelStart}.`
@@ -96,9 +103,9 @@ const WHERE_WE_SERVE = `We are based in Surrey, British Columbia, and serve ${B2
 const RESALE_TERMS_TEXT = B2B_CONFIG.resaleTerms ?? 'contact us for details';
 
 const COST_ANSWER =
-  'It depends on the size of your space, the scent and the products you choose, so we quote each project individually. Request a quote and we will reply with a clear proposal after the scent test.';
+  'It depends on the size of your space, the scent and the products you choose, so we quote each project individually. After you have chosen your scent and shared your square footage, we send a proposal.';
 
-const SCENT_TEST_ANSWER = `Tell us about your space and we bring a small selection of scents to try on site. You smell them in the real room, with real airflow, and decide what fits. It is ${TEST_TERMS}. After that we send a tailored written quote.`;
+const SCENT_FLOW_ANSWER = SM.faqFlow.a;
 
 const MADE_LOCALLY_ANSWER =
   'Yes. Our perfumes, body mists, home sprays, soaps and sachets are handcrafted in small batches in British Columbia by our family team. Ingredient lists are on each product page.';
@@ -115,10 +122,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     formTabs: ['briefing', 'quote'],
     formHeading: SM.formHeading,
     formIntro: SM.formIntro,
-    ctas: [
-      { label: SM.primaryCta, href: '#briefing' },
-      { label: SM.secondaryCta, href: '#quote' },
-    ],
+    ctas: BRIEFING_CTAS,
     intro: SM.intro,
     image: {
       src: '/videos/making-sachets.webp',
@@ -151,33 +155,33 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     steps: [...SM.steps],
     facts: [
       { label: 'Where we work', value: B2B_CONFIG.serviceAreaText },
-      { label: 'Formats and equipment', value: detail(B2B_CONFIG.diffuserEquipment ?? `Home and linen sprays and sachets from our collection. Diffusion equipment: ${SM.equipmentFact.toLowerCase()}`) },
+      { label: 'Formats and equipment', value: detail(B2B_CONFIG.diffuserEquipment ?? `Home and linen sprays and sachets from our collection. ${SM.equipmentFact}`) },
       { label: 'Minimum order', value: detail(B2B_CONFIG.minimumOrder) },
       { label: 'Lead time', value: detail(B2B_CONFIG.leadTime) },
     ],
     faq: [
       {
         q: 'What is scent marketing?',
-        a: 'Scent marketing is the use of a consistent fragrance in a physical space to support how people feel about your brand. It can be as simple as a signature room spray and scented amenities, or a diffusion service tuned to the size of your space.',
+        a: 'Scent marketing is the use of a consistent fragrance in a physical space to support how people feel about your brand. It can be as simple as a signature room spray and scented amenities, or a diffusion setup selected for your room, with regular refills.',
       },
       { q: SM.faqFlow.q, a: SM.faqFlow.a },
       { q: 'How much does it cost?', a: COST_ANSWER },
       {
         q: 'Can you create a scent just for my brand?',
-        a: 'We start from your brand and your space, suggest fragrance directions and share samples, then refine the one you prefer.',
+        a: 'We start from what you like and from your space, select a few scents and send you samples, and you choose the one that feels like your brand.',
       },
       { q: 'Where do you deliver?', a: WHERE_WE_SERVE },
       { q: 'Are your products made locally?', a: MADE_LOCALLY_ANSWER },
     ],
     topic: 'Scent marketing',
-    summary: 'A signature scent for your store, hotel, clinic or office, tested in your space before you decide.',
+    summary: 'A signature scent for your salon, clinic, spa or hotel, chosen from samples we send you.',
     related: [
       { label: 'Hotels and spas', href: '/business/hotels-spas' },
       { label: 'Salons and barbershops', href: '/business/salons-barbershops' },
       { label: 'Home sprays', href: '/shop/home-sprays' },
       { label: 'Sachets', href: '/shop/sachets' },
     ],
-    prefill: { businessType: 'Retail or boutique', interest: 'Scent for my space' },
+    prefill: { businessType: 'Salon or barbershop', interest: SCENT_INTEREST },
     serviceType: 'Scent marketing and ambient fragrance design',
     seoKeywords: ['scent marketing Vancouver', 'ambient scenting', 'signature scent for business', 'scent marketing Lower Mainland'],
     inSitemap: true,
@@ -191,6 +195,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     h1: 'A signature scent and handmade amenities for your guests',
     kicker: 'Hotels and spas',
     trustLine: TRUST_LINE,
+    ctas: BRIEFING_CTAS,
     intro:
       'For boutique and independent hotels, spas and wellness studios in Vancouver and the Lower Mainland: a scent that feels like your property, and handmade shea butter soaps, linen sprays and sachets made in small batches in British Columbia.',
     image: {
@@ -206,11 +211,11 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       },
       {
         title: 'Spas: calm from reception to treatment room',
-        text: 'A consistent scent chosen with you and tested in your space. Soaps, sprays and sachets for treatment rooms and retail shelves, and take-home products that extend the experience after the visit.',
+        text: 'A consistent scent chosen with you from the samples we send. Soaps, sprays and sachets for treatment rooms and retail shelves, and take-home products that extend the experience after guests leave.',
       },
       {
         title: 'Small team, direct contact',
-        text: 'We are a small family team. You talk directly to the people who make your products, from the first scent test to every reorder.',
+        text: 'We are a small family team. You talk directly to the people who make your products, from your first briefing to every reorder.',
       },
     ],
     audienceTitle: 'Who this is for',
@@ -220,11 +225,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       'Aesthetic clinics and boutique gyms (reception and changing rooms)',
       'Guesthouses and bed and breakfasts',
     ],
-    steps: [
-      { title: 'Tell us about your property', text: 'Type of business, the spaces you want to scent and the feeling you want guests to have.' },
-      { title: 'Try scents in your space', text: `A scent test on site, ${TEST_TERMS}, plus samples of our soaps, sprays and sachets.` },
-      { title: 'Quote and simple reorders', text: 'A tailored written quote, then delivery and repeat orders so everything stays consistent.' },
-    ],
+    steps: [...SM.steps],
     facts: [
       { label: 'Products', value: 'Shea butter soaps (90 g), home and linen sprays (250 ml), scent sachets (30 g)' },
       { label: 'Branded options', value: detail(B2B_CONFIG.customizationOptions) },
@@ -232,7 +233,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       { label: 'Minimum order and lead time', value: B2B_CONFIG.minimumOrder && B2B_CONFIG.leadTime ? `${B2B_CONFIG.minimumOrder} / ${B2B_CONFIG.leadTime}` : detail(null) },
     ],
     faq: [
-      { q: 'Can you scent a hotel lobby or a spa?', a: 'Yes. We start with a scent test in the space, then recommend formats that suit the room. Equipment, if needed, is chosen together after the test.' },
+      { q: 'Can you scent a hotel lobby or a spa?', a: 'Yes. You send us a short briefing, we select a few scents and send you samples, and you choose your scent. Once you share the size of the space, we select the right diffusion equipment for it and send a proposal.' },
       { q: 'What amenities can you supply?', a: 'Handmade shea butter soaps, home and linen sprays and scent sachets, for guest rooms, treatment rooms and retail shelves. See the amenities page for details.' },
       { q: 'Can the products carry my brand?', a: `We offer branded options and private label. ${PRIVATE_LABEL_TIMING}` },
       { q: 'How much does it cost?', a: COST_ANSWER },
@@ -246,7 +247,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       { label: 'Private label', href: '/business/private-label' },
       { label: 'Shea butter soaps', href: '/shop/soaps' },
     ],
-    prefill: { businessType: 'Hotel', interest: 'Amenity soaps and sprays' },
+    prefill: { businessType: 'Boutique hotel', interest: 'Amenities' },
     serviceType: 'Scent and amenity supply for hotels and spas',
     seoKeywords: ['boutique hotel amenities Vancouver', 'handmade soap hotel amenities Canada', 'spa retail products', 'hotel scent Vancouver'],
     inSitemap: true,
@@ -260,6 +261,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     h1: 'A scent your clients remember, and a shelf that sells',
     kicker: 'Salons and barbershops',
     trustLine: TRUST_LINE,
+    ctas: BRIEFING_CTAS,
     intro:
       'A signature scent for the waiting area and the chair, and perfumes and body mists for your shelf or cologne bar. Made by hand in British Columbia for salons and barbershops in Vancouver and the Lower Mainland.',
     image: {
@@ -271,7 +273,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     blocks: [
       {
         title: 'A signature scent for your shop',
-        text: 'Clients recognize your shop the moment they walk in. We help you choose a scent for the waiting area and the chair, and test it in your space first.',
+        text: 'Clients recognize your shop the moment they walk in. We help you choose a scent for the waiting area and the chair, from samples we send you, before you decide.',
       },
       {
         title: 'Perfumes for your shelf or cologne bar',
@@ -284,11 +286,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     ],
     audienceTitle: 'Who this is for',
     audience: ['Barbershops and cologne bars', 'Hair and beauty salons', 'Nail and aesthetic studios', 'Grooming lounges'],
-    steps: [
-      { title: 'Tell us about your shop', text: 'The size of the space, the style of your clients and what you would like to carry on your shelf.' },
-      { title: 'Try it in your shop', text: `A scent test on site, ${TEST_TERMS}, and samples of our perfumes and body mists.` },
-      { title: 'Quote and reorders', text: 'A tailored written quote, then simple repeat orders.' },
-    ],
+    steps: [...SM.steps],
     facts: [
       { label: 'Perfumes', value: 'Eau de parfum, 50 ml (CS Horizon, CS Enigma, CS Her, CS Origin)' },
       { label: 'Body mists', value: '100 ml' },
@@ -297,8 +295,8 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     ],
     faq: [
       { q: 'Can I sell your perfumes in my shop?', a: 'Yes, we work with salons, barbershops and boutiques. Request a quote and tell us about your shop, and we will explain how it works.' },
-      { q: 'Can you scent my waiting area?', a: SCENT_TEST_ANSWER },
-      { q: 'Do you have a business that already carries your perfumes?', a: 'Yes. Our perfumes are already on the cologne bar of a premium barbershop in Vancouver. Read the short case on this site.' },
+      { q: 'Can you scent my waiting area?', a: SCENT_FLOW_ANSWER },
+      { q: 'Do you have a business that already carries your perfumes?', a: 'Yes. Our perfumes are already on the cologne bar of a premium barbershop in downtown Vancouver. Read the short case on this site.' },
       { q: 'How much does it cost?', a: COST_ANSWER },
       { q: 'Where do you deliver?', a: WHERE_WE_SERVE },
     ],
@@ -318,14 +316,14 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   {
     slug: 'amenities',
     path: '/business/amenities',
-    title: 'Handmade Amenity Soaps and Sprays in BC',
+    title: 'Branded Soaps, Sprays & Sachets for Spas',
     description:
-      'Handmade shea butter soaps, home and linen sprays and scent sachets for guest rooms, treatment rooms and shelves. Made in BC. Request samples.',
-    h1: 'Handmade amenities for guest rooms, treatment rooms and shelves',
+      'Handmade shea butter soaps, home sprays and sachets for spas, clinics, salons and hotels. Made in BC. Request samples or a quote.',
+    h1: 'Little things guests take home',
     kicker: 'Amenities',
-    trustLine: `Samples available, ${TEST_TERMS}. Tell us the rooms and the quantity and we send a tailored quote.`,
+    trustLine: `Samples of our soaps, sprays and sachets, ${SAMPLE_TERMS}. Tell us the rooms and the quantity and we send a tailored quote.`,
     intro:
-      'Shea butter soaps, home and linen sprays and scent sachets, handmade in small batches in British Columbia. A simple, consistent way to give guests, clients and shoppers something they will want to take home, with simple repeat orders.',
+      'A soap in a treatment room, a linen spray at reception, a sachet in a drawer: small details that people remember and often ask about. Our shea butter soaps (90 g), home and linen sprays (250 ml) and scented sachets (30 g) are made by hand in small batches in BC, so you can reorder the same quality and the same scent. We can add your card or logo where it works. Start with a small pilot order, see how guests react, and grow from there.',
     image: {
       src: '/videos/making-soap.webp',
       alt: 'Handmade shea butter soap being made at the CS Fragrances studio in British Columbia',
@@ -355,7 +353,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     ],
     steps: [
       { title: 'Tell us the rooms and the quantity', text: 'How many rooms or treatment rooms, how often you restock and the feeling you want.' },
-      { title: 'Try the samples', text: 'We send or bring samples of the soaps, sprays and sachets so you can choose in your own space.' },
+      { title: 'Try the samples', text: 'We send samples of the soaps, sprays and sachets so you can choose in your own space.' },
       { title: 'Quote and simple repeat orders', text: 'A tailored written quote, then repeat orders for the products that work for you.' },
     ],
     facts: [
@@ -384,7 +382,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       { label: 'Sachets', href: '/shop/sachets' },
       { label: 'Ingredients and allergens', href: '/ingredients' },
     ],
-    prefill: { businessType: 'Hotel', interest: 'Amenity soaps and sprays' },
+    prefill: { businessType: 'Boutique hotel', interest: 'Amenities' },
     serviceType: 'Supply of handmade amenity soaps, sprays and sachets',
     seoKeywords: ['handmade soap hotel amenities Canada', 'boutique hotel amenities Vancouver', 'spa amenities soap BC', 'linen spray for hotels'],
     inSitemap: true,
@@ -392,14 +390,14 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   {
     slug: 'corporate-gifts',
     path: '/business/corporate-gifts',
-    title: 'Corporate Gifts in Vancouver, Made in BC',
+    title: 'Corporate Gift Kits, Made in BC',
     description:
-      'Curated, locally handmade gift kits for clients and teams in Vancouver and the Lower Mainland. Request a quote.',
-    h1: 'Corporate gifts that feel personal',
+      'Curated handmade gift kits for clients and teams in Vancouver and the Lower Mainland. Made in BC, based in Surrey. Request a quote.',
+    h1: 'A client gift that comes from real hands',
     kicker: 'Corporate gifts',
     trustLine: 'Tell us who you are thanking and we build a kit around it. Samples available on request.',
     intro:
-      'Curated gift kits for clients and teams, built from our handmade collection of perfumes, shea butter soaps, sprays and sachets. Produced locally in British Columbia, so you can talk to the people who pack your order.',
+      'A gift card is forgotten by January. A handmade bar of soap, a sachet or a perfume in a wrapped box is not. We build gift kits from our own collection, made in BC by a family team you can talk to, with a card or your logo where it works. Great for clients, referral partners and your own team. Tell us how many people you want to thank and the date, and we will propose a kit that fits. No obligation before the quote.',
     image: {
       src: '/videos/making-sachets.webp',
       alt: 'Handmade scent sachets being weighed at the CS Fragrances studio in British Columbia',
@@ -454,7 +452,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       { label: 'Perfumes', href: '/shop/perfumes' },
       { label: 'Shea butter soaps', href: '/shop/soaps' },
     ],
-    prefill: { businessType: 'Office or corporate gifts', interest: 'Corporate gifts' },
+    prefill: { businessType: 'Office', interest: 'Corporate gifts' },
     serviceType: 'Corporate gift kits',
     seoKeywords: ['corporate gifts Vancouver', 'client gifts Vancouver', 'local corporate gift baskets BC'],
     inSitemap: true,
@@ -462,14 +460,15 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   {
     slug: 'private-label',
     path: '/business/private-label',
-    title: 'Private Label Soap & Perfume Made in BC',
+    title: 'Private Label Soap & Perfume, Made in BC',
     description:
-      'Your brand on handmade soaps, perfumes, sprays and sachets, made in small batches in British Columbia. Request a quote.',
-    h1: 'Private label: your brand, our craft',
+      'Your brand on handmade perfumes, sprays, soaps and sachets, made in small batches in British Columbia. Request a quote or samples.',
+    h1: 'Your brand. Our craft.',
     kicker: 'For business',
     trustLine: 'Tell us about your brand and we will confirm what is possible in your quote.',
     intro:
-      'Launch or grow your own fragrance and bath line without building a production studio. We make perfumes, body mists, home sprays, soaps and sachets with your brand on them, handcrafted in small batches in British Columbia.',
+      'Many spas, salons and gift shops want a product line that carries their own name. We make perfumes, sprays, soaps and sachets with your label, handcrafted in small batches in BC. It starts with a short conversation about your brand and your customers, then samples, then packaging and label, then production. You deal with the same small team from the first brief to the delivery. ' +
+      (B2B_CONFIG.privateLabelStart ? PRIVATE_LABEL_TIMING : 'Tell us your idea and we will keep you posted.'),
     image: {
       src: '/videos/making-soap.webp',
       alt: 'Handmade soap being made at the CS Fragrances studio in British Columbia',
@@ -527,7 +526,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       { label: 'Shea butter soaps', href: '/shop/soaps' },
       { label: 'Perfumes', href: '/shop/perfumes' },
     ],
-    prefill: { businessType: 'Retail or boutique', interest: 'Private label' },
+    prefill: { businessType: 'Retail', interest: 'Private label' },
     serviceType: 'Private label manufacturing of fragrance and bath products',
     seoKeywords: ['private label soap Canada', 'private label perfume Canada', 'custom soap manufacturer BC', 'white label fragrance'],
     inSitemap: true,

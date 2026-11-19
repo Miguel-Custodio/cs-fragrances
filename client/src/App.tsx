@@ -19,6 +19,7 @@ import Business from "./pages/Business";
 import BusinessPage from "./pages/BusinessPage";
 import BusinessRequest from "./pages/BusinessRequest";
 import BarbershopCase from "./pages/BarbershopCase";
+import ScentBriefing from "./pages/ScentBriefing";
 
 import { BUSINESS_PAGES } from "./data/business";
 import { POLICIES } from "./data/policies";
@@ -36,6 +37,7 @@ function Router() {
           <BusinessPage page={page} />
         </Route>
       ))}
+      <Route path={"/business/scent-briefing"} component={ScentBriefing} />
       <Route path={"/business/barbershop-case-study"} component={BarbershopCase} />
       <Route path={"/business/request-quote"}>
         <BusinessRequest kind="quote" />

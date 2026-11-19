@@ -4,8 +4,8 @@ import {
   BUSINESS_TYPES,
   CONSENT_TEXT,
   INTERESTS,
-  SAMPLE_WAYS,
-  SCENT_DIRECTIONS,
+  SAMPLE_PRODUCTS,
+  SCENT_INTEREST,
   briefingSubject,
   buildBriefingMessage,
   buildQuoteMessage,
@@ -20,7 +20,7 @@ import {
 } from '@shared/requestMessages';
 import { B2B_CONFIG } from '@shared/b2bConfig';
 import { COMPANY } from '@shared/company';
-import { SCENT_FAMILIES, SCENT_MOODS, SCENT_MARKETING_COPY, SPACE_TYPES } from '@/data/scentMarketingCopy';
+import { BRIEFING_NO_OBLIGATION, BRIEFING_PATH, FINAL_CTA, QUOTE_MICROCOPY, SCENT_MARKETING_COPY, SPACE_TYPES } from '@/data/scentMarketingCopy';
 
 export type Tab = 'briefing' | 'quote' | 'samples';
 
@@ -83,7 +83,16 @@ function Note() {
   );
 }
 
-/** Quote request. No backend: opens an email or WhatsApp message with all the details. */
+function MoreDetails({ children }: { children: React.ReactNode }) {
+  return (
+    <details className="md:col-span-2 rounded-md border border-border bg-white/60 px-4 py-3">
+      <summary className="cursor-pointer text-sm font-semibold text-primary">More details (optional)</summary>
+      <div className="mt-3 grid gap-4 md:grid-cols-2">{children}</div>
+    </details>
+  );
+}
+
+/** Quote request (amenities, gift kits, private label). No backend: opens an email or WhatsApp message. */
 export function QuoteRequestForm({
   idPrefix = 'quote',
   prefill = {},
@@ -103,11 +112,11 @@ export function QuoteRequestForm({
     phone: '',
     businessType: prefill.businessType ?? businessTypes[0],
     city: '',
-    spaceSize: '',
     interest: prefill.interest ?? interests[0],
     quantity: '',
-    timing: '',
     message: '',
+    startDate: '',
+    heardFrom: '',
     consent: false,
   });
   const set =
@@ -127,12 +136,13 @@ export function QuoteRequestForm({
         window.location.href = mailtoUrl(quoteSubject(f), body);
       }}
     >
+      <p className="md:col-span-2 text-center text-sm text-primary/80">{QUOTE_MICROCOPY}</p>
       <div>
         <label className={labelCls} htmlFor={id('name')}>Name *</label>
         <input id={id('name')} required autoComplete="name" className={field} value={f.name} onChange={set('name')} />
       </div>
       <div>
-        <label className={labelCls} htmlFor={id('business')}>Business name *</label>
+        <label className={labelCls} htmlFor={id('business')}>Company *</label>
         <input id={id('business')} required autoComplete="organization" className={field} value={f.business} onChange={set('business')} />
       </div>
       <div>
@@ -144,6 +154,10 @@ export function QuoteRequestForm({
         <input id={id('phone')} type="tel" autoComplete="tel" className={field} value={f.phone} onChange={set('phone')} />
       </div>
       <div>
+        <label className={labelCls} htmlFor={id('city')}>City / neighbourhood *</label>
+        <input id={id('city')} required autoComplete="address-level2" className={field} value={f.city} onChange={set('city')} />
+      </div>
+      <div>
         <label className={labelCls} htmlFor={id('type')}>Type of business *</label>
         <select id={id('type')} required className={field} value={f.businessType} onChange={set('businessType')}>
           {businessTypes.map((t) => (
@@ -152,33 +166,37 @@ export function QuoteRequestForm({
         </select>
       </div>
       <div>
-        <label className={labelCls} htmlFor={id('city')}>City *</label>
-        <input id={id('city')} required autoComplete="address-level2" className={field} value={f.city} onChange={set('city')} />
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('interest')}>I am interested in *</label>
+        <label className={labelCls} htmlFor={id('interest')}>Service needed *</label>
         <select id={id('interest')} required className={field} value={f.interest} onChange={set('interest')}>
           {interests.map((t) => (
             <option key={t}>{t}</option>
           ))}
         </select>
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('space')}>Size of space (approx. sq ft)</label>
-        <input id={id('space')} inputMode="numeric" className={field} value={f.spaceSize} onChange={set('spaceSize')} />
+        {f.interest === SCENT_INTEREST && (
+          <p className="mt-2 text-sm text-primary/80">
+            Scent for a space starts with a short briefing.{' '}
+            <a className="underline font-semibold" href={BRIEFING_PATH}>{SCENT_MARKETING_COPY.primaryCta}</a>
+          </p>
+        )}
       </div>
       <div>
         <label className={labelCls} htmlFor={id('quantity')}>Estimated quantity</label>
         <input id={id('quantity')} className={field} placeholder="e.g. units per month" value={f.quantity} onChange={set('quantity')} />
       </div>
-      <div>
-        <label className={labelCls} htmlFor={id('timing')}>Preferred timing</label>
-        <input id={id('timing')} className={field} placeholder="e.g. next month" value={f.timing} onChange={set('timing')} />
-      </div>
       <div className="md:col-span-2">
         <label className={labelCls} htmlFor={id('message')}>Message</label>
         <textarea id={id('message')} rows={4} className={field} value={f.message} onChange={set('message')} />
       </div>
+      <MoreDetails>
+        <div>
+          <label className={labelCls} htmlFor={id('start')}>Desired start date</label>
+          <input id={id('start')} className={field} placeholder="e.g. early January" value={f.startDate} onChange={set('startDate')} />
+        </div>
+        <div>
+          <label className={labelCls} htmlFor={id('heard')}>How did you hear about us?</label>
+          <input id={id('heard')} className={field} value={f.heardFrom} onChange={set('heardFrom')} />
+        </div>
+      </MoreDetails>
       <Consent id={id('consent')} checked={f.consent} onChange={(consent) => setF((p) => ({ ...p, consent }))} />
       <Actions
         emailLabel="Send quote request by email"
@@ -191,120 +209,7 @@ export function QuoteRequestForm({
   );
 }
 
-/** Scent briefing (first step of scent marketing). No backend: opens an email or WhatsApp message. */
-export function ScentBriefingForm({ idPrefix = 'briefing' }: { idPrefix?: string }) {
-  const ref = useRef<HTMLFormElement>(null);
-  const [f, setF] = useState<BriefingValues>({
-    name: '',
-    business: '',
-    email: '',
-    phone: '',
-    city: '',
-    spaceType: SPACE_TYPES[0],
-    families: [],
-    likes: '',
-    dislikes: '',
-    moods: [],
-    spaceSize: '',
-    message: '',
-    consent: false,
-  });
-  const set =
-    (k: keyof BriefingValues) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-      setF((p) => ({ ...p, [k]: e.target.value }));
-  const toggle = (k: 'families' | 'moods', value: string) =>
-    setF((p) => ({ ...p, [k]: p[k].includes(value) ? p[k].filter((x) => x !== value) : [...p[k], value] }));
-  const body = buildBriefingMessage(f);
-  const id = (k: string) => `${idPrefix}-${k}`;
-
-  return (
-    <form
-      ref={ref}
-      aria-label="Scent briefing"
-      className="grid gap-4 md:grid-cols-2"
-      onSubmit={(e) => {
-        e.preventDefault();
-        window.location.href = mailtoUrl(briefingSubject(f), body);
-      }}
-    >
-      <fieldset className="md:col-span-2">
-        <legend className={labelCls}>Scent families you like</legend>
-        <div className="flex flex-wrap gap-x-5 gap-y-2">
-          {SCENT_FAMILIES.map((s) => (
-            <label key={s} className="inline-flex items-center gap-2 text-primary/90">
-              <input type="checkbox" checked={f.families.includes(s)} onChange={() => toggle('families', s)} className="h-4 w-4" /> {s}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-      <div>
-        <label className={labelCls} htmlFor={id('likes')}>Scents or notes you like</label>
-        <textarea id={id('likes')} rows={3} className={field} placeholder="e.g. lavender, vanilla, fresh linen" value={f.likes} onChange={set('likes')} />
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('dislikes')}>Scents or notes you dislike</label>
-        <textarea id={id('dislikes')} rows={3} className={field} placeholder="e.g. too sweet, heavy musk" value={f.dislikes} onChange={set('dislikes')} />
-      </div>
-      <fieldset className="md:col-span-2">
-        <legend className={labelCls}>Mood you want guests to feel</legend>
-        <div className="flex flex-wrap gap-x-5 gap-y-2">
-          {SCENT_MOODS.map((s) => (
-            <label key={s} className="inline-flex items-center gap-2 text-primary/90">
-              <input type="checkbox" checked={f.moods.includes(s)} onChange={() => toggle('moods', s)} className="h-4 w-4" /> {s}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-      <div>
-        <label className={labelCls} htmlFor={id('space')}>Type of space *</label>
-        <select id={id('space')} required className={field} value={f.spaceType} onChange={set('spaceType')}>
-          {SPACE_TYPES.map((t) => (
-            <option key={t}>{t}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('size')}>Approximate size (sq ft), optional</label>
-        <input id={id('size')} inputMode="numeric" className={field} value={f.spaceSize} onChange={set('spaceSize')} />
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('name')}>Name *</label>
-        <input id={id('name')} required autoComplete="name" className={field} value={f.name} onChange={set('name')} />
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('business')}>Business name *</label>
-        <input id={id('business')} required autoComplete="organization" className={field} value={f.business} onChange={set('business')} />
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('email')}>Email *</label>
-        <input id={id('email')} type="email" required autoComplete="email" className={field} value={f.email} onChange={set('email')} />
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('phone')}>Phone / WhatsApp</label>
-        <input id={id('phone')} type="tel" autoComplete="tel" className={field} value={f.phone} onChange={set('phone')} />
-      </div>
-      <div className="md:col-span-2">
-        <label className={labelCls} htmlFor={id('city')}>City *</label>
-        <input id={id('city')} required autoComplete="address-level2" className={field} value={f.city} onChange={set('city')} />
-      </div>
-      <div className="md:col-span-2">
-        <label className={labelCls} htmlFor={id('message')}>Anything else we should know</label>
-        <textarea id={id('message')} rows={3} className={field} value={f.message} onChange={set('message')} />
-      </div>
-      <Consent id={id('consent')} checked={f.consent} onChange={(consent) => setF((p) => ({ ...p, consent }))} />
-      <Actions
-        emailLabel="Send briefing by email"
-        onWhatsApp={() => {
-          if (ref.current?.reportValidity()) window.open(whatsappUrl(body), '_blank', 'noopener,noreferrer');
-        }}
-      />
-      <Note />
-    </form>
-  );
-}
-
-/** Sample / scent-test request. No backend: opens an email or WhatsApp message with all the details. */
+/** Product samples (soaps, sprays, sachets, perfumes). Scent for a space goes through the briefing. */
 export function SampleRequestForm({
   idPrefix = 'samples',
   prefill = {},
@@ -322,10 +227,7 @@ export function SampleRequestForm({
     phone: '',
     businessType: prefill.businessType ?? businessTypes[0],
     city: '',
-    sampleWay: SAMPLE_WAYS[0],
-    scentDirections: [],
-    spaceSize: '',
-    timing: '',
+    samplesOf: [],
     message: '',
     consent: false,
   });
@@ -333,11 +235,8 @@ export function SampleRequestForm({
     (k: keyof SampleValues) =>
     (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
       setF((p) => ({ ...p, [k]: e.target.value }));
-  const toggleScent = (s: string) =>
-    setF((p) => ({
-      ...p,
-      scentDirections: p.scentDirections.includes(s) ? p.scentDirections.filter((x) => x !== s) : [...p.scentDirections, s],
-    }));
+  const toggle = (s: string) =>
+    setF((p) => ({ ...p, samplesOf: p.samplesOf.includes(s) ? p.samplesOf.filter((x) => x !== s) : [...p.samplesOf, s] }));
   const body = buildSampleMessage(f);
   const id = (k: string) => `${idPrefix}-${k}`;
 
@@ -351,6 +250,10 @@ export function SampleRequestForm({
         window.location.href = mailtoUrl(sampleSubject(f), body);
       }}
     >
+      <p className="md:col-span-2 text-center text-sm text-primary/80">
+        Samples of our products, {BRIEFING_NO_OBLIGATION}. Looking for a scent for your space?{' '}
+        <a className="underline font-semibold" href={BRIEFING_PATH}>{SCENT_MARKETING_COPY.primaryCta}</a>.
+      </p>
       <div>
         <label className={labelCls} htmlFor={id('name')}>Name *</label>
         <input id={id('name')} required autoComplete="name" className={field} value={f.name} onChange={set('name')} />
@@ -368,6 +271,10 @@ export function SampleRequestForm({
         <input id={id('phone')} type="tel" autoComplete="tel" className={field} value={f.phone} onChange={set('phone')} />
       </div>
       <div>
+        <label className={labelCls} htmlFor={id('city')}>City / neighbourhood *</label>
+        <input id={id('city')} required autoComplete="address-level2" className={field} value={f.city} onChange={set('city')} />
+      </div>
+      <div>
         <label className={labelCls} htmlFor={id('type')}>Type of business *</label>
         <select id={id('type')} required className={field} value={f.businessType} onChange={set('businessType')}>
           {businessTypes.map((t) => (
@@ -375,36 +282,16 @@ export function SampleRequestForm({
           ))}
         </select>
       </div>
-      <div>
-        <label className={labelCls} htmlFor={id('city')}>City *</label>
-        <input id={id('city')} required autoComplete="address-level2" className={field} value={f.city} onChange={set('city')} />
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('way')}>What would you like? *</label>
-        <select id={id('way')} required className={field} value={f.sampleWay} onChange={set('sampleWay')}>
-          {SAMPLE_WAYS.map((t) => (
-            <option key={t}>{t}</option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label className={labelCls} htmlFor={id('space')}>Size of space (approx. sq ft)</label>
-        <input id={id('space')} inputMode="numeric" className={field} value={f.spaceSize} onChange={set('spaceSize')} />
-      </div>
       <fieldset className="md:col-span-2">
-        <legend className={labelCls}>Scent directions you like</legend>
+        <legend className={labelCls}>Samples of</legend>
         <div className="flex flex-wrap gap-x-5 gap-y-2">
-          {SCENT_DIRECTIONS.map((s) => (
+          {SAMPLE_PRODUCTS.map((s) => (
             <label key={s} className="inline-flex items-center gap-2 text-primary/90">
-              <input type="checkbox" checked={f.scentDirections.includes(s)} onChange={() => toggleScent(s)} className="h-4 w-4" /> {s}
+              <input type="checkbox" checked={f.samplesOf.includes(s)} onChange={() => toggle(s)} className="h-4 w-4" /> {s}
             </label>
           ))}
         </div>
       </fieldset>
-      <div className="md:col-span-2">
-        <label className={labelCls} htmlFor={id('timing')}>Preferred timing</label>
-        <input id={id('timing')} className={field} placeholder="e.g. in the next two weeks" value={f.timing} onChange={set('timing')} />
-      </div>
       <div className="md:col-span-2">
         <label className={labelCls} htmlFor={id('message')}>Message</label>
         <textarea id={id('message')} rows={3} className={field} value={f.message} onChange={set('message')} />
@@ -412,6 +299,125 @@ export function SampleRequestForm({
       <Consent id={id('consent')} checked={f.consent} onChange={(consent) => setF((p) => ({ ...p, consent }))} />
       <Actions
         emailLabel="Send sample request by email"
+        onWhatsApp={() => {
+          if (ref.current?.reportValidity()) window.open(whatsappUrl(body), '_blank', 'noopener,noreferrer');
+        }}
+      />
+      <Note />
+    </form>
+  );
+}
+
+/**
+ * Scent briefing (Marketing v3, B6): the first step of scent for a space. 12 fields, CASL consent.
+ * Space size is optional here (it is asked again at step 4). No backend: email or WhatsApp.
+ */
+export function ScentBriefingForm({ idPrefix = 'briefing' }: { idPrefix?: string }) {
+  const ref = useRef<HTMLFormElement>(null);
+  const [f, setF] = useState<BriefingValues>({
+    business: '',
+    name: '',
+    email: '',
+    phone: '',
+    city: '',
+    spaceType: SPACE_TYPES[0],
+    likes: '',
+    dislikes: '',
+    mood: '',
+    spaceSize: '',
+    message: '',
+    heardFrom: '',
+    consent: false,
+  });
+  const set =
+    (k: keyof BriefingValues) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
+      setF((p) => ({ ...p, [k]: e.target.value }));
+  const body = buildBriefingMessage(f);
+  const id = (k: string) => `${idPrefix}-${k}`;
+
+  return (
+    <form
+      ref={ref}
+      aria-label="Scent briefing"
+      className="grid gap-4 md:grid-cols-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        window.location.href = mailtoUrl(briefingSubject(f), body);
+      }}
+    >
+      <div>
+        <label className={labelCls} htmlFor={id('business')}>Business name *</label>
+        <input id={id('business')} required autoComplete="organization" className={field} value={f.business} onChange={set('business')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('name')}>Your name *</label>
+        <input id={id('name')} required autoComplete="name" className={field} value={f.name} onChange={set('name')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('email')}>Email *</label>
+        <input id={id('email')} type="email" required autoComplete="email" className={field} value={f.email} onChange={set('email')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('phone')}>Phone / WhatsApp</label>
+        <input id={id('phone')} type="tel" autoComplete="tel" className={field} value={f.phone} onChange={set('phone')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('city')}>City / neighbourhood *</label>
+        <input id={id('city')} required autoComplete="address-level2" className={field} value={f.city} onChange={set('city')} />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('type')}>Type of space *</label>
+        <select id={id('type')} required className={field} value={f.spaceType} onChange={set('spaceType')}>
+          {SPACE_TYPES.map((t) => (
+            <option key={t}>{t}</option>
+          ))}
+        </select>
+      </div>
+      <div className="md:col-span-2">
+        <label className={labelCls} htmlFor={id('likes')}>Scents and notes you like *</label>
+        <textarea
+          id={id('likes')}
+          required
+          rows={3}
+          className={field}
+          placeholder="e.g. fresh and clean, warm and woody, floral, citrus, vanilla"
+          value={f.likes}
+          onChange={set('likes')}
+        />
+      </div>
+      <div className="md:col-span-2">
+        <label className={labelCls} htmlFor={id('dislikes')}>Scents and notes you don’t like</label>
+        <textarea id={id('dislikes')} rows={2} className={field} value={f.dislikes} onChange={set('dislikes')} />
+      </div>
+      <div className="md:col-span-2">
+        <label className={labelCls} htmlFor={id('mood')}>Mood you want guests to feel *</label>
+        <input
+          id={id('mood')}
+          required
+          className={field}
+          placeholder="e.g. calm, energetic, luxurious, welcoming"
+          value={f.mood}
+          onChange={set('mood')}
+        />
+      </div>
+      <div>
+        <label className={labelCls} htmlFor={id('size')}>Approximate size of the space (sq ft)</label>
+        <input id={id('size')} inputMode="numeric" className={field} placeholder="Optional for now" value={f.spaceSize} onChange={set('spaceSize')} />
+      </div>
+      <div className="md:col-span-2">
+        <label className={labelCls} htmlFor={id('message')}>Anything else we should know</label>
+        <textarea id={id('message')} rows={3} className={field} value={f.message} onChange={set('message')} />
+      </div>
+      <MoreDetails>
+        <div className="md:col-span-2">
+          <label className={labelCls} htmlFor={id('heard')}>How did you hear about us?</label>
+          <input id={id('heard')} className={field} value={f.heardFrom} onChange={set('heardFrom')} />
+        </div>
+      </MoreDetails>
+      <Consent id={id('consent')} checked={f.consent} onChange={(consent) => setF((p) => ({ ...p, consent }))} />
+      <Actions
+        emailLabel="Send my briefing by email"
         onWhatsApp={() => {
           if (ref.current?.reportValidity()) window.open(whatsappUrl(body), '_blank', 'noopener,noreferrer');
         }}
@@ -438,7 +444,7 @@ export default function RequestForms({
   businessTypes,
   interests,
   idPrefix = 'req',
-  heading = 'Let’s find the scent of your business',
+  heading = FINAL_CTA.headline.replace(/\.$/, ''),
   intro,
 }: {
   /** Which forms to offer, in tab order. */
@@ -482,8 +488,7 @@ export default function RequestForms({
       <div className="container max-w-3xl mx-auto px-4">
         <h2 id={`${idPrefix}-title`} className="text-2xl md:text-3xl text-primary mb-2 text-center">{heading}</h2>
         <p className="text-center text-primary/80 mb-8">
-          {intro ??
-            `A scent test in your space, no obligation${B2B_CONFIG.freeSamples ? ', free of charge' : ''}. Then a tailored quote, and a real person who answers.`}
+          {intro ?? (tabs[0] === 'briefing' ? FINAL_CTA.text : QUOTE_MICROCOPY)}
         </p>
         <div role="tablist" aria-label="Type of request" className="flex flex-wrap justify-center gap-3 mb-8">
           {tabs.map((t) => (

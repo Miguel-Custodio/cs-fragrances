@@ -4,28 +4,32 @@
  */
 import { COMPANY, WHATSAPP_BASE_URL } from './company';
 
+/** Type of business / space (Marketing v3, B6). */
 export const BUSINESS_TYPES = [
-  'Hotel',
-  'Spa or wellness',
   'Salon or barbershop',
-  'Retail or boutique',
-  'Office or corporate gifts',
-  'Clinic or gym',
+  'Aesthetic clinic',
+  'Spa or wellness',
+  'Gym',
+  'Boutique hotel',
+  'Retail',
+  'Office',
   'Other',
 ] as const;
 
+/** "Service needed" in the quote form (Marketing v3, B6). Scent for my space leads to the briefing. */
 export const INTERESTS = [
-  'Scent for my space',
-  'Amenity soaps and sprays',
-  'Private label',
+  'Amenities',
   'Corporate gifts',
+  'Private label',
   'Perfumes for resale',
-  'Not sure yet',
+  'Scent for my space (start with the scent briefing)',
+  'Not sure',
 ] as const;
 
-export const SCENT_DIRECTIONS = ['Fresh and clean', 'Floral', 'Woody', 'Warm and sweet', 'Not sure yet'] as const;
+/** Product samples (amenities, gift kits, private label). Scent for a space starts with the briefing instead. */
+export const SAMPLE_PRODUCTS = ['Shea butter soaps', 'Home and linen sprays', 'Sachets', 'Perfumes', 'Body mists', 'Not sure yet'] as const;
 
-export const SAMPLE_WAYS = ['Scent test at my space', 'Samples sent to me', 'Either is fine'] as const;
+export const SCENT_INTEREST = INTERESTS[4];
 
 export const CONSENT_TEXT = 'I agree to be contacted by CS Fragrances about my request.';
 
@@ -36,11 +40,12 @@ export interface QuoteValues {
   phone: string;
   businessType: string;
   city: string;
-  spaceSize: string;
   interest: string;
   quantity: string;
-  timing: string;
   message: string;
+  /** Optional, under "More details". */
+  startDate: string;
+  heardFrom: string;
   consent: boolean;
 }
 
@@ -51,10 +56,7 @@ export interface SampleValues {
   phone: string;
   businessType: string;
   city: string;
-  sampleWay: string;
-  scentDirections: string[];
-  spaceSize: string;
-  timing: string;
+  samplesOf: string[];
   message: string;
   consent: boolean;
 }
@@ -70,11 +72,11 @@ export function buildQuoteMessage(f: QuoteValues): string {
     `Email: ${v(f.email)}`,
     `Phone / WhatsApp: ${v(f.phone)}`,
     `Type of business: ${v(f.businessType)}`,
-    `City: ${v(f.city)}`,
-    `Size of space (approx. sq ft): ${v(f.spaceSize)}`,
-    `Interested in: ${v(f.interest)}`,
+    `City / neighbourhood: ${v(f.city)}`,
+    `Service needed: ${v(f.interest)}`,
     `Estimated quantity: ${v(f.quantity)}`,
-    `Preferred timing: ${v(f.timing)}`,
+    `Desired start date: ${v(f.startDate)}`,
+    `How I heard about you: ${v(f.heardFrom)}`,
     '',
     `Message: ${v(f.message)}`,
     '',
@@ -91,11 +93,8 @@ export function buildSampleMessage(f: SampleValues): string {
     `Email: ${v(f.email)}`,
     `Phone / WhatsApp: ${v(f.phone)}`,
     `Type of business: ${v(f.businessType)}`,
-    `City: ${v(f.city)}`,
-    `I would like: ${v(f.sampleWay)}`,
-    `Scent directions I like: ${f.scentDirections.length ? f.scentDirections.join(', ') : '-'}`,
-    `Size of space (approx. sq ft): ${v(f.spaceSize)}`,
-    `Preferred timing: ${v(f.timing)}`,
+    `City / neighbourhood: ${v(f.city)}`,
+    `Samples of: ${f.samplesOf.length ? f.samplesOf.join(', ') : '-'}`,
     '',
     `Message: ${v(f.message)}`,
     '',
@@ -114,39 +113,41 @@ export const sampleSubject = (f: Pick<SampleValues, 'business'>) =>
   `Sample request${f.business.trim() ? `: ${f.business.trim()}` : ''}`;
 
 export interface BriefingValues {
-  name: string;
   business: string;
+  name: string;
   email: string;
   phone: string;
   city: string;
   spaceType: string;
-  families: string[];
+  /** Scents and notes the client likes (required). */
   likes: string;
   dislikes: string;
-  moods: string[];
-  /** Optional at the briefing stage. */
+  /** Mood to make guests feel (required). */
+  mood: string;
+  /** Optional at the briefing stage; asked again at step 4. */
   spaceSize: string;
   message: string;
+  heardFrom: string;
   consent: boolean;
 }
 
 export function buildBriefingMessage(f: BriefingValues): string {
   return [
-    'Hello CS Fragrances! Here is my scent briefing for my space.',
+    'Hello CS Fragrances! Here is my scent briefing. Please send me samples.',
     '',
-    `Name: ${v(f.name)}`,
     `Business: ${v(f.business)}`,
+    `Name: ${v(f.name)}`,
     `Email: ${v(f.email)}`,
     `Phone / WhatsApp: ${v(f.phone)}`,
-    `City: ${v(f.city)}`,
+    `City / neighbourhood: ${v(f.city)}`,
     `Type of space: ${v(f.spaceType)}`,
-    `Scent families I like: ${f.families.length ? f.families.join(', ') : '-'}`,
-    `Scents or notes I like: ${v(f.likes)}`,
-    `Scents or notes I dislike: ${v(f.dislikes)}`,
-    `Mood I want: ${f.moods.length ? f.moods.join(', ') : '-'}`,
-    `Approximate size of space (sq ft, optional): ${v(f.spaceSize)}`,
+    `Scents and notes I like: ${v(f.likes)}`,
+    `Scents and notes I don't like: ${v(f.dislikes)}`,
+    `Mood I want guests to feel: ${v(f.mood)}`,
+    `Approximate size of the space (sq ft, optional): ${v(f.spaceSize)}`,
+    `How I heard about you: ${v(f.heardFrom)}`,
     '',
-    `Message: ${v(f.message)}`,
+    `Anything else: ${v(f.message)}`,
     '',
     `Consent: ${f.consent ? CONSENT_TEXT : '-'}`,
   ].join('\n');

@@ -114,6 +114,16 @@ describe.skipIf(!fs.existsSync(path.join(dist, 'sitemap.xml')))('build output', 
       expect(fs.readFileSync(f, 'utf8'), f).not.toMatch(/scentec|\bIFF\b|scentwellness/i);
     }
   });
+  it('B2B pages show no price, no Offer/price in JSON-LD, and no on-site scent test or "free" claim', () => {
+    for (const r of SITE_ROUTES.filter((x) => x.path.startsWith('/business'))) {
+      const html = fs.readFileSync(path.join(dist, r.path, 'index.html'), 'utf8');
+      const ld = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n');
+      expect(ld, r.path).not.toMatch(/"(offers|price|priceCurrency|lowPrice|highPrice)"/);
+      const text = html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
+      expect(text, r.path).not.toMatch(/\$\s?\d|\bCAD\s?\d|\d\s?CAD\b/);
+      expect(text, r.path).not.toMatch(/scent[- ]test|on-site|on site|\bfree\b/i);
+    }
+  });
   it('prerenders every route with its own title, canonical and one h1', () => {
     const titles = new Set<string>();
     for (const r of SITE_ROUTES) {

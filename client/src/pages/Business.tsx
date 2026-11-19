@@ -7,67 +7,118 @@ import { usePageMeta } from '@/hooks/usePageMeta';
 import { breadcrumbNode, ORG_ID, SITE_URL } from '@/lib/seo';
 import { PUBLIC_BUSINESS_PAGES } from '@/data/business';
 import { B2B_CONFIG, detail } from '@shared/b2bConfig';
-import { SCENT_MARKETING_COPY } from '@/data/scentMarketingCopy';
+import { BRIEFING_PATH, FINAL_CTA, SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
 
-// Copy: /workspace/gestao/b2b-storytelling-seo.md, parts B1 and B2.
-const TITLE = 'Scent Marketing & Private Label in Vancouver';
+// Copy: /workspace/gestao/b2b-storytelling-seo.md v3, parts B1 and B2 (placeholders left out: unconfirmed facts
+// come from shared/b2bConfig.ts and read "contact us for details").
+const TITLE = 'Scent Marketing for Vancouver Businesses';
 const DESCRIPTION =
-  'Signature scent, amenity soaps, private label and corporate gifts for hotels, spas, salons and offices. Handcrafted in BC. Request a quote or samples.';
+  'Signature scent, amenity soaps, private label and corporate gifts. Made in BC, based in Surrey, serving Vancouver and the Lower Mainland. Request a quote.';
 
-const TEST_TERMS = B2B_CONFIG.freeSamples ? 'free of charge and with no obligation' : 'with no obligation';
+const STEPS = SM.steps;
 
-const STEPS = SCENT_MARKETING_COPY.steps;
-
-const OFFERS = [
+// B2 "Segments" (order = priority). Placeholders dropped; the terms of resale and dates are not stated.
+const SEGMENTS = [
   {
-    title: 'Scent signature',
-    text: 'We help you choose a scent for your space and supply it in formats that suit the room. Equipment, if needed, is chosen together at your scent test.',
-    href: '/business/scent-marketing',
-  },
-  {
-    title: 'Amenity soaps, sprays and sachets',
-    text: 'Handmade shea butter soaps (90 g bars), home and linen sprays (250 ml) and scented sachets (30 g), for guest rooms, treatment rooms and retail.',
-    href: '/business/amenities',
-  },
-  {
-    title: 'Private label',
-    text: 'Perfumes, body mists, home sprays, soaps and sachets under your brand, handcrafted in small batches.',
-    href: '/business/private-label',
-  },
-  {
-    title: 'Corporate gift kits',
-    text: 'Curated gift sets built from our collection, for clients and teams.',
-    href: '/business/corporate-gifts',
-  },
-  {
-    title: 'Perfumes for resale',
-    text: 'Our eau de parfum (50 ml) and body mists for salons, barbershops and boutiques.',
+    title: 'Salons and barbershops',
     href: '/business/salons-barbershops',
+    points: [
+      'A signature scent for the waiting area and the chair, so clients recognize your shop as soon as they walk in.',
+      'Perfumes for your shelf or cologne bar, for resale.',
+      'Amenities and gift-ready packaging that turn a favourite scent into an easy add-on.',
+    ],
+  },
+  {
+    title: 'Aesthetic clinics',
+    href: '/business/scent-marketing',
+    points: [
+      'A calm, discreet scent for reception and treatment rooms, chosen with you from the samples we send.',
+      'Amenities and small gifts for patients to take home.',
+      'A consistent scent from one appointment to the next.',
+    ],
+  },
+  {
+    title: 'Spas and wellness studios',
+    href: '/business/hotels-spas',
+    points: [
+      'A signature scent from reception to treatment room.',
+      'Soaps, sprays and sachets for treatment rooms and your retail shelf.',
+      'A private-label line under your own name later.',
+    ],
+  },
+  {
+    title: 'Boutique gyms',
+    href: '/business/scent-marketing',
+    points: [
+      'A fresh, welcoming scent for reception and changing rooms.',
+      'Small amenities and gift kits for members.',
+      'Scent only where it makes sense for your space.',
+    ],
+  },
+  {
+    title: 'Boutique and independent hotels',
+    href: '/business/hotels-spas',
+    points: [
+      'Amenities for rooms in your own style: handmade shea butter soaps, linen sprays and sachets.',
+      'A recognizable lobby scent that feels like your property.',
+      'One local contact for refills and reorders.',
+    ],
+  },
+  {
+    title: 'Corporate gifts (for any business)',
+    href: '/business/corporate-gifts',
+    points: [
+      'Curated gift kits made from our collection, with a card or your logo where it works.',
+      'Made in BC by a family team you can talk to.',
+      'Tell us the date and how many people you want to thank, and we propose a kit.',
+    ],
   },
 ];
 
+// B2 "What we offer (four lines)".
+const OFFERS = [
+  {
+    title: 'Scent for your space',
+    text: 'A signature scent chosen from samples we send you, and the right diffusion equipment for your space, selected after you share the size of the room, with regular refills and one contact for adjustments.',
+    href: '/business/scent-marketing',
+  },
+  {
+    title: 'Amenities with your brand',
+    text: 'Handmade shea butter soap (90 g), home and linen spray (250 ml) and scented sachets (30 g), with your card or logo where possible.',
+    href: '/business/amenities',
+  },
+  {
+    title: 'Corporate gift kits',
+    text: 'Gift sets for clients and teams.',
+    href: '/business/corporate-gifts',
+  },
+  {
+    title: 'Private label',
+    text: 'Your brand on perfumes, sprays, soaps and sachets, made in small batches.',
+    href: '/business/private-label',
+  },
+];
+
+// B2 FAQ (six questions). Q4 and Q5 use the b2bConfig wording while facts are unconfirmed.
 const HUB_FAQ = [
   {
     q: 'What is scent marketing?',
-    a: 'Scent marketing is the use of a consistent fragrance in a physical space to support how people feel about your brand. It can be as simple as a signature room spray and scented amenities, or a diffusion service tuned to the size of your space.',
+    a: 'Scent marketing is the use of a consistent fragrance in a physical space to support how people feel about your brand. It can be as simple as a signature room spray and scented amenities, or a diffusion setup selected for your room, with regular refills.',
   },
-  {
-    q: 'How does the scent test and sampling work?',
-    a: `Tell us about your space and we bring a small selection of scents to try on site. You smell them in the real room, with real airflow, and decide what fits. It is ${TEST_TERMS}. After that we send a tailored written quote.`,
-  },
+  { q: SM.faqFlow.q, a: SM.faqFlow.a },
   {
     q: 'How much does it cost?',
-    a: 'It depends on the size of your space, the scent and the products you choose, so we quote each project individually. Request a quote and we will reply with a clear proposal after the scent test.',
+    a: 'It depends on the size of your space, the scent and the products you choose, so we quote each project individually. After you have chosen your scent and shared your square footage, we send a proposal.',
   },
   {
     q: 'Can I have products under my own brand?',
-    a: `Yes. We can make perfumes, body mists, home sprays, soaps and sachets with your label. ${
+    a: `Yes. We can make perfumes, sprays, soaps and sachets with your label. ${
       B2B_CONFIG.privateLabelStart ? `Private label projects start from ${B2B_CONFIG.privateLabelStart}.` : 'Tell us about your project and we will confirm timing, minimum order and lead time in your quote.'
     }`,
   },
   {
-    q: 'Where do you deliver?',
-    a: `We are based in Surrey, British Columbia, and serve ${B2B_CONFIG.serviceAreaText}. Delivery elsewhere in Canada: ${B2B_CONFIG.deliveryOutsideBC ?? 'contact us for details'}.`,
+    q: 'Where do you work?',
+    a: `We are made in BC, based in Surrey and serve ${B2B_CONFIG.serviceAreaText}. Delivery elsewhere in Canada: ${B2B_CONFIG.deliveryOutsideBC ?? 'contact us for details'}.`,
   },
   {
     q: 'Are your products made locally?',
@@ -128,51 +179,47 @@ export default function Business() {
               Give your business a scent people remember
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/85 leading-relaxed mb-3">
-              A signature scent for your space. Made by hand in British Columbia.
+              A signature scent for your space, made by hand in BC.
             </p>
             <p className="text-base md:text-lg text-primary-foreground/80 leading-relaxed mb-8">
-              Scent marketing, amenity soaps and sprays, private label and corporate gifts for hotels, spas,
-              salons, boutiques and offices in Vancouver and the Lower Mainland. Small batches, a small family
-              team, and a scent test in your space before you decide.
+              Scent for your space, branded amenities, corporate gifts and private label for salons, barbershops,
+              clinics, spas, gyms and boutique hotels. Made in BC, based in Surrey, serving Vancouver and the Lower Mainland.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <a href="#quote" className="inline-block rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground hover:bg-accent/85">
-                Request a quote
+              <a href={BRIEFING_PATH} className="inline-block rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground hover:bg-accent/85">
+                {SM.primaryCtaLong}
               </a>
-              <a href="#samples" className="inline-block rounded-full border border-primary-foreground/50 px-8 py-3 font-semibold text-primary-foreground hover:bg-primary-foreground/10">
-                Request samples
+              <a href="#quote" className="inline-block rounded-full border border-primary-foreground/50 px-8 py-3 font-semibold text-primary-foreground hover:bg-primary-foreground/10">
+                {SM.secondaryCta}
               </a>
             </div>
-            <p className="mt-5 text-sm">
-              <a href="#briefing" className="text-primary-foreground underline underline-offset-4">Start a scent briefing for your space</a>
-            </p>
-            <p className="mt-3 text-sm text-primary-foreground/70">On-site scent test, {TEST_TERMS} · Tailored quote</p>
+            <p className="mt-5 text-sm text-primary-foreground/70">{SM.underCtas}</p>
           </div>
         </header>
 
         <section className="py-14 md:py-20">
           <div className="container max-w-3xl mx-auto px-4">
             <h2 className="text-2xl md:text-4xl text-primary mb-6 text-center leading-snug">
-              It started with a bar of soap. Now it can become your signature scent.
+              It started with a bar of soap. Now it can become the scent of your space.
             </h2>
             <div className="space-y-4 text-lg text-primary/90 leading-relaxed">
               <p>
-                CS Fragrances began with two names, Custodio and Soncin, and a handmade bar of soap. Raquel, a
+                CS Fragrances began with two names, Custodio and Soncin, and a handmade bar of soap. Raquel, then a
                 chemistry student, was making artisanal soap by hand. Miguel sold it during college, bar by bar,
                 to help pay her tuition. Today we are building the brand together with our family, and
                 everything we make is still blended, poured and packed by hand, in small batches, here in British
                 Columbia.
               </p>
               <p>
-                That hands-on approach is what we bring to businesses. We craft our own perfumes, body mists,
+                That hands-on approach is what we bring to businesses. We make our own perfumes, body mists,
                 home and linen sprays, shea butter soaps and scent sachets, so we can match a scent to your space
                 and keep it consistent from one order to the next. Raquel&rsquo;s chemistry background brings the
                 science; our hands bring the artistry.
               </p>
               <p>
-                Scent marketing is about one simple idea: people remember how a place feels. We help hotels,
-                spas, salons, shops and offices choose a scent that feels like their brand. Our perfumes are
-                already on the cologne bar of a premium barbershop in Vancouver.
+                People remember how a place feels. We help salons, barbershops, clinics, spas, gyms and boutique
+                hotels choose a scent that feels like their brand, and we deliver it in the formats that suit their
+                space. Our perfumes already sit on the cologne bar of a premium barbershop in downtown Vancouver.
               </p>
               <p>
                 We are a small family team, so you talk directly to the people who make your products.{' '}
@@ -184,7 +231,7 @@ export default function Business() {
 
         <section className="bg-secondary py-14 md:py-20" aria-labelledby="how-title">
           <div className="container max-w-5xl mx-auto px-4">
-            <h2 id="how-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">How scent marketing works: 5 steps</h2>
+            <h2 id="how-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">How scent for your space works (5 steps)</h2>
             <ol className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
               {STEPS.map((s, i) => (
                 <li key={s.title} className="rounded-lg bg-card p-6 shadow-sm">
@@ -201,25 +248,18 @@ export default function Business() {
           <div className="container max-w-6xl mx-auto px-4">
             <h2 id="segments-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">Who we work with</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {PUBLIC_BUSINESS_PAGES.filter((p) => p.slug !== 'private-label').map((p) => (
-                <a key={p.slug} href={p.path} className="block rounded-lg bg-card p-6 shadow-sm hover:shadow-md transition-shadow border border-border">
-                  <h3 className="text-xl text-primary mb-3">{p.topic}</h3>
-                  <p className="text-primary/85 leading-relaxed mb-4">{p.summary}</p>
+              {SEGMENTS.map((seg) => (
+                <a key={seg.title} href={seg.href} className="block rounded-lg bg-card p-6 shadow-sm hover:shadow-md transition-shadow border border-border">
+                  <h3 className="text-xl text-primary mb-3">{seg.title}</h3>
+                  <ul className="list-disc pl-5 space-y-2 text-primary/85 leading-relaxed mb-4">
+                    {seg.points.map((pt) => (
+                      <li key={pt}>{pt}</li>
+                    ))}
+                  </ul>
                   <span className="font-semibold text-primary underline underline-offset-4">Learn more</span>
                 </a>
               ))}
-              <a href="/business/private-label" className="block rounded-lg bg-card p-6 shadow-sm hover:shadow-md transition-shadow border border-border">
-                <h3 className="text-xl text-primary mb-3">Private label</h3>
-                <p className="text-primary/85 leading-relaxed mb-4">
-                  Perfumes, body mists, home sprays, soaps and sachets made by us and sold under your brand.
-                </p>
-                <span className="font-semibold text-primary underline underline-offset-4">Learn more</span>
-              </a>
             </div>
-            <p className="mt-8 text-center text-primary/80">
-              Clinics and boutique gyms: a signature scent for reception and changing rooms is part of our{' '}
-              <a href="/business/scent-marketing" className="underline underline-offset-4">scent marketing</a> service.
-            </p>
           </div>
         </section>
 
@@ -247,7 +287,7 @@ export default function Business() {
           <div className="container max-w-3xl mx-auto px-4 text-center">
             <h2 id="proof-title" className="text-2xl md:text-3xl text-primary mb-5">Already on the shelf</h2>
             <p className="text-lg text-primary/90 leading-relaxed">
-              A premium barbershop in Vancouver carries CS Fragrances perfumes in its cologne bar.{' '}
+              Our perfumes are on the cologne bar of a premium barbershop in downtown Vancouver.{' '}
               <a href="/business/barbershop-case-study" className="underline underline-offset-4">Read the short case</a>.
             </p>
             {B2B_CONFIG.caseQuote && (
@@ -278,7 +318,30 @@ export default function Business() {
           </div>
         </section>
 
-        <RequestForms idPrefix="hub" tabs={['quote', 'samples', 'briefing']} />
+        <section className="bg-primary text-primary-foreground py-14 text-center" aria-labelledby="final-cta-title">
+          <div className="container max-w-3xl mx-auto px-4">
+            <h2 id="final-cta-title" className="text-2xl md:text-4xl mb-3 text-primary-foreground">{FINAL_CTA.headline}</h2>
+            <p className="text-lg text-primary-foreground/85 mb-6">{FINAL_CTA.text}</p>
+            <div className="flex flex-wrap justify-center gap-3">
+              <a href={BRIEFING_PATH} className="inline-block rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground hover:bg-accent/85">
+                {SM.primaryCtaLong}
+              </a>
+              <a href="#quote" className="inline-block rounded-full border border-primary-foreground/50 px-8 py-3 font-semibold text-primary-foreground hover:bg-primary-foreground/10">
+                {SM.secondaryCta}
+              </a>
+              <a
+                href={`https://wa.me/${B2B_CONFIG.whatsappNumber}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block rounded-full border border-primary-foreground/50 px-8 py-3 font-semibold text-primary-foreground hover:bg-primary-foreground/10"
+              >
+                WhatsApp {B2B_CONFIG.whatsappDisplay}
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <RequestForms idPrefix="hub" tabs={['quote', 'briefing']} heading="Request a quote or send your briefing" />
       </main>
       <Footer />
     </div>

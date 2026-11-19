@@ -9,17 +9,17 @@ const COPY = {
     path: '/business/request-quote',
     name: 'Request a quote',
     title: 'Request a Quote for Your Business',
-    description: 'Tell us about your business and get a tailored quote for scent, amenities, private label or corporate gifts. Handcrafted in BC.',
+    description: 'Tell us about your business and get a recommendation and quote for amenities, private label or corporate gifts. Handcrafted in BC.',
     h1: 'Request a quote',
-    lead: 'Tell us about your business, your space and what you have in mind. We reply with a tailored quote.',
+    lead: 'Tell us what you need and we will come back with a recommendation. A quote is not a commitment.',
   },
   samples: {
     path: '/business/request-samples',
     name: 'Request samples',
     title: 'Request Samples for Your Business',
-    description: 'Ask for samples or an on-site scent test for your hotel, spa, salon or office. Handcrafted in British Columbia.',
+    description: 'Ask for samples of our handmade soaps, sprays, sachets and perfumes for your business. Handcrafted in British Columbia.',
     h1: 'Request samples',
-    lead: 'Ask for samples or an on-site scent test. Tell us a little about your space and we will get back to you.',
+    lead: 'Ask for samples of our soaps, sprays, sachets and perfumes. For a scent for your space, start with a scent briefing instead.',
   },
 } as const;
 
