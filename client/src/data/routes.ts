@@ -19,6 +19,7 @@ export const SITE_ROUTES: SiteRoute[] = [
   { path: '/ingredients', inSitemap: true },
   { path: '/business', inSitemap: true },
   ...BUSINESS_PAGES.map((p) => ({ path: p.path, inSitemap: p.inSitemap })),
+  { path: '/business/barbershop-case-study', inSitemap: true },
   // Conversion pages: reachable by link, but thin content, so noindex and not in the sitemap.
   { path: '/business/request-quote', inSitemap: false },
   { path: '/business/request-samples', inSitemap: false },

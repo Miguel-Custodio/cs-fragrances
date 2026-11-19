@@ -43,7 +43,7 @@ export const B2B_CONFIG = {
   googleBusinessProfileUrl: null as string | null,
   // TODO(Raquel): real fairs/markets we attended, shown as proof only when listed here and true.
   marketsAttended: [] as string[],
-  // TODO(Raquel/Regal): written OK to publish a quote from the barbershop (and, separately, the name).
+  // TODO(Raquel): written OK from the barbershop to publish a quote from the barbershop (and, separately, the name).
   caseQuote: null as { text: string; attribution: string } | null,
 
   /** Confirmed contact details (already public on the site). No other phone/email exists yet. */

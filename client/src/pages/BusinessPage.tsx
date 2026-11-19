@@ -8,6 +8,16 @@ import { breadcrumbNode, ORG_ID, SITE_URL } from '@/lib/seo';
 import { PUBLIC_BUSINESS_PAGES, type BusinessPageDef } from '@/data/business';
 import { Check } from 'lucide-react';
 
+/** Real product photos cropped to 1200x630 (client/public/og, made by scripts/make-og-images.py). */
+const OG_ALT: Record<string, string> = {
+  'scent-marketing': 'A CS Fragrances eau de parfum bottle on a mirror surrounded by white roses',
+  'hotels-spas': 'A handmade CS Fragrances shea butter soap bar on a soft cream background',
+  'salons-barbershops': 'CS Fragrances eau de parfum bottles in sunlight',
+  amenities: 'A handmade CS Fragrances shea butter soap bar on a soft cream background',
+  'corporate-gifts': 'A CS Fragrances gift box with a body mist and a shea butter soap',
+  'private-label': 'Hands holding a handmade shea butter soap bar in a field of flowers',
+};
+
 function jsonLd(p: BusinessPageDef) {
   const url = `${SITE_URL}${p.path}`;
   return [
@@ -44,8 +54,9 @@ function jsonLd(p: BusinessPageDef) {
 export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
   usePageMeta(p.title, p.description, {
     path: p.path,
-    ogImage: p.image.src,
-    ogImageAlt: p.image.alt,
+    ...(OG_ALT[p.slug]
+      ? { ogImage: `/og/${p.slug}.jpg`, ogImageAlt: OG_ALT[p.slug] }
+      : { ogImage: p.image.src, ogImageAlt: p.image.alt }),
     noindex: p.noindex,
     jsonLd: jsonLd(p),
   });

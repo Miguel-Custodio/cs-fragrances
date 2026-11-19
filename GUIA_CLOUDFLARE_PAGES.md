@@ -143,3 +143,12 @@ A documentação oficial avisa: isso **não** basta para o domínio principal (`
 
 Se algo travar no meio do caminho, pare antes de mudar o DNS e me chame com um print da tela.
 
+
+## SEO e pré-renderização (nov/2026)
+
+- O `pnpm build` agora gera um HTML estático por rota (título, meta, canonical, Open Graph e JSON-LD já no HTML), `404.html`, `sitemap.xml` e `robots.txt` em `dist/public`. Nada disso depende de serviço pago e funciona igual na Vercel e no Cloudflare Pages.
+- Comando de build e pasta de saída não mudam: `pnpm build` e `dist/public`.
+- Cloudflare Pages: não crie regra SPA (`/* /index.html 200`). Com o `404.html` presente, rotas inexistentes devolvem 404 de verdade. Os redirecionamentos (`/b2b` para `/business`) estão em `client/public/_redirects`; na Vercel estão em `vercel.json`.
+- Redirecionar `csfragrances.ca` (sem www) para `https://www.csfragrances.ca` com 301 é feito no painel do domínio (Cloudflare: Rules > Redirect Rules; Vercel: Domains). Não está no código.
+- Ao criar uma rota nova, inclua-a em `client/src/data/routes.ts`. O build falha se uma página fora do sitemap não tiver `noindex`, ou se aparecer "Scentec", "IFF" ou "[PLACEHOLDER" no HTML do B2B.
+- Fatos B2B ainda não confirmados (pedido mínimo, prazos, entrega, equipamentos, termos) ficam em `shared/b2bConfig.ts`. Enquanto estiverem `null`, o site mostra "Contact us for details".

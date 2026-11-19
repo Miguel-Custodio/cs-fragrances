@@ -77,7 +77,7 @@ fs.writeFileSync(path.join(publicDir, 'sitemap.xml'), sitemapXml());
 fs.writeFileSync(path.join(publicDir, 'robots.txt'), robotsTxt());
 
 // Guard: nothing about the unauthorized supplier brands may ship (SCENTEC_BRANDING_ENABLED must stay off).
-const forbidden = /scentec|\bIFF\b|scentwellness/i;
+const forbidden = /scentec|\bIFF\b|scentwellness|regal/i;
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
     const p = path.join(dir, e.name);

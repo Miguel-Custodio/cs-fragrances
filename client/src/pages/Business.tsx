@@ -113,8 +113,8 @@ const hubJsonLd = [
 export default function Business() {
   usePageMeta(TITLE, DESCRIPTION, {
     path: '/business',
-    ogImage: '/videos/blending-fragrance.webp',
-    ogImageAlt: 'Fragrance being blended by hand at the CS Fragrances studio in British Columbia',
+    ogImage: '/og/business.jpg',
+    ogImageAlt: 'A CS Fragrances body mist and shea butter soap in a gift box',
     jsonLd: hubJsonLd,
   });
 

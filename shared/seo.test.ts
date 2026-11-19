@@ -134,4 +134,24 @@ describe.skipIf(!fs.existsSync(path.join(dist, 'sitemap.xml')))('build output', 
     expect(fs.readFileSync(path.join(dist, '404.html'), 'utf8')).toContain('noindex');
     expect(fs.readFileSync(path.join(dist, 'robots.txt'), 'utf8')).toContain('Sitemap:');
   });
+  it('never names the barbershop in any page, script or asset text', () => {
+    for (const f of walk(dist).filter((x) => /\.(html|js|css|xml|txt|json)$/.test(x))) {
+      expect(/regal/i.test(fs.readFileSync(f, 'utf8')), f).toBe(false);
+    }
+  });
+  it('has no broken internal links and every og:image file exists', () => {
+    const exists = (p: string) => {
+      const clean = decodeURI(p.split('#')[0].split('?')[0]);
+      if (clean === '' || clean === '/') return true;
+      const rel = clean.replace(/^\//, '');
+      return fs.existsSync(path.join(dist, rel)) || fs.existsSync(path.join(dist, rel, 'index.html'));
+    };
+    const broken: string[] = [];
+    for (const f of walk(dist).filter((x) => x.endsWith('.html'))) {
+      const html = fs.readFileSync(f, 'utf8');
+      for (const m of html.matchAll(/(?:href|src)="(\/[^"]*)"/g)) if (!exists(m[1])) broken.push(`${path.relative(dist, f)} -> ${m[1]}`);
+      for (const m of html.matchAll(/property="og:image" content="https:\/\/www\.csfragrances\.ca([^"]+)"/g)) if (!exists(m[1])) broken.push(`${path.relative(dist, f)} og:image ${m[1]}`);
+    }
+    expect(broken).toEqual([]);
+  });
 });

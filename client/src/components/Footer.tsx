@@ -2,6 +2,7 @@ import { Mail, MessageCircle, Instagram } from 'lucide-react';
 import { COMPANY, WHATSAPP_BASE_URL } from '@shared/company';
 import { KITS_ENABLED } from '@/lib/flags';
 import { POLICY_LINKS } from '@/data/policies';
+import { PUBLIC_BUSINESS_PAGES } from '@/data/business';
 
 export default function Footer() {
   return (
@@ -48,16 +49,13 @@ export default function Footer() {
                   For Business
                 </a>
               </li>
-              <li>
-                <a href="/business/scent-marketing" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                  Scent Marketing
-                </a>
-              </li>
-              <li>
-                <a href="/business/private-label" className="text-primary-foreground/80 hover:text-accent transition-colors">
-                  Private Label
-                </a>
-              </li>
+              {PUBLIC_BUSINESS_PAGES.map((p) => (
+                <li key={p.slug}>
+                  <a href={p.path} className="text-primary-foreground/80 hover:text-accent transition-colors">
+                    {p.topic}
+                  </a>
+                </li>
+              ))}
               
               <li>
                 <a href="/ingredients" className="text-primary-foreground/80 hover:text-accent transition-colors">
