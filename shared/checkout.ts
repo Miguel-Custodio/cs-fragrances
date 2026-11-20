@@ -211,7 +211,7 @@ export async function handleCheckout(
     });
   } catch (err) {
     console.error('Square request failed (network)', err instanceof Error ? err.message : err);
-    return unavailable('square_unreachable', 502);
+    return json({ error: 'checkout_unavailable', reason: 'square_unreachable', fallback: 'whatsapp', detail: (err instanceof Error ? `${err.name}: ${err.message}` : String(err)).slice(0, 160) }, 502);
   }
 
   const data = (await squareRes.json().catch(() => ({}))) as {
