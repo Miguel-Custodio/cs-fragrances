@@ -80,7 +80,7 @@ const OFFERS = [
   },
   {
     title: 'Amenities with your brand',
-    text: 'Handmade shea butter soap (90 g), home and linen spray (250 ml) and scented sachets (30 g), with your card or logo where possible.',
+    text: 'Handmade shea butter soap (100 g), home and linen spray (250 ml) and scented sachets (30 g), with your card or logo where possible.',
     href: '/business/amenities',
   },
   {

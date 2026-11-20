@@ -107,7 +107,7 @@ export const KITS: readonly KitDef[] = [
     contents: 'Buy 4 handmade soaps and get a 5th one free (5 soaps in total).',
     priceCents: onlinePriceFromFairCents(3900),
     fairPriceCents: 3900,
-    // Provisional photo from Marketing (Canva); soap labels in the photo still say 100 g, real weight is 90 g.
+    // Provisional photo from Marketing (Canva); soaps are 100 g (confirmed by Raquel 2026-11-19).
     image: '/kits/four-soaps-one-free.webp',
   },
   {

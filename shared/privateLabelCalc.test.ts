@@ -125,7 +125,7 @@ describe('what the browser can see (public catalog and API result)', () => {
   it('the public catalog has no grams, percentages, costs or prices, and names the strong perfume neutrally', () => {
     const json = JSON.stringify(PRIVATE_LABEL_PRODUCTS);
     expect(json).not.toMatch(/gram|percent|concentrat|fragrance|price|cost|cad|\$|%/i);
-    expect(PRIVATE_LABEL_PRODUCTS.find((p) => p.id === 'edp-30')!.name).toBe('Eau de parfum, intense');
+    expect(PRIVATE_LABEL_PRODUCTS.find((p) => p.id === 'edp-30')!.name).toBe('Extrait de parfum');
     expect(Object.keys(PRIVATE_LABEL_PRODUCTS[0]).sort()).toEqual(['confirmed', 'id', 'listed', 'name', 'unit']);
   });
   it('toPublic has no gram figures: whole percent and rounded counts only', () => {

@@ -20,7 +20,7 @@ export interface PrivateLabelProduct {
 
 export const PRIVATE_LABEL_PRODUCTS: PrivateLabelProduct[] = [
   { id: 'edp', name: 'Eau de parfum', unit: '50 ml', confirmed: true, listed: true },
-  { id: 'edp-30', name: 'Eau de parfum, intense', unit: '50 ml', confirmed: true, listed: true },
+  { id: 'edp-30', name: 'Extrait de parfum', unit: '50 ml', confirmed: true, listed: true },
   { id: 'body-mist', name: 'Body mist', unit: '100 ml', confirmed: true, listed: true },
   { id: 'home-spray', name: 'Home and linen spray', unit: '250 ml', confirmed: true, listed: true },
   { id: 'bar-soap', name: 'Bar soap', unit: '100 g', confirmed: true, listed: true },

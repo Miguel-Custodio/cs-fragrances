@@ -38,7 +38,7 @@ export interface CatalogEntry {
 }
 
 export const PERFUME_PRICE_CENTS = 6990; // CAD 69.90 (50 ml)
-export const SOAP_PRICE_CENTS = 1290; // CAD 12.90 online (90 g bar; Miguel 2026-11-17)
+export const SOAP_PRICE_CENTS = 1290; // CAD 12.90 online (100 g bar; weight confirmed by Raquel 2026-11-19)
 export const DECORATIVE_SOAP_PRICE_CENTS = 1490; // CAD 14.90 online (Christmas decorative bar; Miguel 2026-11-17)
 export const BODY_MIST_PRICE_CENTS = 2990; // CAD 29.90 online (100 ml; fair price 24.90)
 export const HOME_SPRAY_PRICE_CENTS = 3490; // CAD 34.90 online (250 ml; fair price 29.90)
@@ -63,7 +63,7 @@ export const HOME_SPRAY_SCENTS: Scent[] = [
 ];
 export const SACHET_SCENTS: Scent[] = [...BODY_MIST_SCENTS, ...HOME_SPRAY_SCENTS];
 
-/** Shea butter bar soaps (90 g; the CSV says 100 g, Miguel confirmed 90 g). CS Christmas Magic is the separate legacy entry below. */
+/** Shea butter bar soaps (100 g; confirmed by Raquel 2026-11-19). CS Christmas Magic is the separate legacy entry below. */
 export const SHEA_SOAP_SCENTS: Scent[] = [
   ['morning-dew', 'CS Morning Dew'],
   ['wild-instinct', 'CS Wild Instinct'],
@@ -151,14 +151,14 @@ export const CATALOG: readonly CatalogEntry[] = [
   // (the Canva price list also lists Christmas Magic as shea butter).
   {
     id: 'cs-soap-christmas-magic',
-    name: 'CS Christmas Magic Shea Butter Soap (90 g)',
+    name: 'CS Christmas Magic Shea Butter Soap (100 g)',
     category: 'soap',
     priceCents: SOAP_PRICE_CENTS,
   },
   ...SHEA_SOAP_SCENTS.map(
     ([slug, label]): CatalogEntry => ({
       id: `soap-shea-${slug}`,
-      name: `${label} Shea Butter Soap (90 g)`,
+      name: `${label} Shea Butter Soap (100 g)`,
       category: 'soap',
       priceCents: SOAP_PRICE_CENTS,
     }),
@@ -166,7 +166,7 @@ export const CATALOG: readonly CatalogEntry[] = [
   ...GOAT_SOAP_SCENTS.map(
     ([slug, label]): CatalogEntry => ({
       id: `soap-goat-${slug}`,
-      name: `${label} Goat Milk Soap (90 g)`,
+      name: `${label} Goat Milk Soap (100 g)`,
       category: 'soap',
       priceCents: SOAP_PRICE_CENTS,
       availability: 'sold-out',

@@ -177,13 +177,13 @@ export const products: Product[] = [
   ),
   // Soaps
   fromCatalog('cs-soap-christmas-magic', {
-    description: 'Artisanal shea butter bar soap, 90 g. Christmas scent.',
+    description: 'Artisanal shea butter bar soap, 100 g. Christmas scent.',
     images: [img('soap-shea-generic')],
     imageCaption: SHEA_PHOTO_CAPTION,
   }),
   ...SHEA_SOAP_SCENTS.map(([slug]) =>
     fromCatalog(`soap-shea-${slug}`, {
-      description: 'Artisanal shea butter bar soap, 90 g.',
+      description: 'Artisanal shea butter bar soap, 100 g.',
       images: [img('soap-shea-generic')], // generic example photo (not scent-specific)
       imageCaption: slug === 'enigma' ? undefined : SHEA_PHOTO_CAPTION,
     }),
@@ -191,7 +191,7 @@ export const products: Product[] = [
   // Sold out: CS does not make goat milk soap (Miguel, 2026-11-17). No photos on purpose.
   ...GOAT_SOAP_SCENTS.map(([slug]) =>
     fromCatalog(`soap-goat-${slug}`, {
-      description: 'Goat milk bar soap, 90 g. Sold out.',
+      description: 'Goat milk bar soap, 100 g. Sold out.',
       images: [],
     }),
   ),

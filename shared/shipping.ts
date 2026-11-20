@@ -51,8 +51,9 @@ export interface ShippingRule {
 }
 
 /**
- * PLACEHOLDER rates (CAD cents). Not real prices.
- * Change only this object when Miguel confirms the amounts.
+ * Zone rates (CAD cents). Metro Vancouver 8, rest of BC 10, Prairies 15, East 18 and US 25 were
+ * approved by Miguel on 2026-11-19. Territories (30) keep the earlier value, not explicitly discussed.
+ * Change only this object to adjust prices.
  */
 export const SHIPPING_RATES: {
   readonly [K in Exclude<ShippingZoneId, 'pickup'>]: {
@@ -60,12 +61,12 @@ export const SHIPPING_RATES: {
     freeOverCents: number | null;
   };
 } = {
-  'metro-vancouver': { rateCents: 800, freeOverCents: 12000 }, // TODO placeholder CAD 8.00, free from 120.00
-  bc: { rateCents: 1000, freeOverCents: 12000 }, // TODO placeholder CAD 10.00, free from 120.00
-  western: { rateCents: 1500, freeOverCents: 15000 }, // TODO placeholder CAD 15.00, free from 150.00
-  eastern: { rateCents: 1800, freeOverCents: 15000 }, // TODO placeholder CAD 18.00, free from 150.00
-  territories: { rateCents: 3000, freeOverCents: 20000 }, // TODO placeholder CAD 30.00, free from 200.00
-  usa: { rateCents: 2500, freeOverCents: null }, // TODO placeholder CAD 25.00, no free shipping
+  'metro-vancouver': { rateCents: 800, freeOverCents: 12000 }, // CAD 8.00, free from 120.00
+  bc: { rateCents: 1000, freeOverCents: 12000 }, // CAD 10.00, free from 120.00
+  western: { rateCents: 1500, freeOverCents: 15000 }, // CAD 15.00, free from 150.00
+  eastern: { rateCents: 1800, freeOverCents: 15000 }, // CAD 18.00, free from 150.00
+  territories: { rateCents: 3000, freeOverCents: 20000 }, // CAD 30.00, free from 200.00
+  usa: { rateCents: 2500, freeOverCents: null }, // CAD 25.00, no free shipping
 };
 
 /**

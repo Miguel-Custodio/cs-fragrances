@@ -77,7 +77,7 @@ Confira pelo menos:
 | `SQUARE_LOCATION_ID` | variável | o Location ID da Square | |
 | `SQUARE_ENVIRONMENT` | variável | `sandbox` na Preview; `production` só quando o site for ao ar de verdade | |
 | `SITE_URL` | variável | na Preview, o endereço `*.pages.dev`; na Production, `https://www.csfragrances.ca` | |
-| `SHIPPING_RATES_CONFIRMED` | variável | `false` | só mude para `true` quando os valores de frete forem os reais |
+| `SHIPPING_RATES_CONFIRMED` | variável | `true` | os valores de frete foram aprovados pelo Miguel em 19/11; com `false` o checkout fica bloqueado |
 | `TAX_ENABLED` | variável | `false` | deixe desligado até o registro de GST/PST |
 | `KITS_ENABLED` | variável | `false` | deixe desligado até a Raquel aprovar os kits |
 | `VITE_TAX_ENABLED` | variável | `false` | tem que ser igual ao `TAX_ENABLED` |

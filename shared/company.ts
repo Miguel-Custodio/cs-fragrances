@@ -10,8 +10,10 @@ export const COMPANY = {
   region: 'British Columbia, Canada',
   countryCode: 'CA',
   countryName: 'Canada',
-  /** Canadian Business Number. Miguel will provide it from the other computer. */
-  businessNumber: '[PLACEHOLDER: Business Number]',
+  /** BC Business Summary (Miguel, 2026-11-19): sole proprietorship. */
+  businessType: 'BC sole proprietorship',
+  registrationNumber: 'FM1064689',
+  businessNumber: '788282168BC0001',
   email: 'info@csfragrances.ca',
   whatsappDisplay: '+1 604 518 6863',
   whatsappNumber: '16045186863',

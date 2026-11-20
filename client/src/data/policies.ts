@@ -123,7 +123,7 @@ export const shippingPolicy: PolicyDoc = {
         'British Columbia, including the Lower Mainland',
         'The rest of Canada',
         'The United States',
-        'Local pickup (free) is available. [PLACEHOLDER: pickup address / area and pickup hours]',
+        'Local pickup (free) is available. We arrange the pickup place and time with you by WhatsApp or email after you order.',
       ],
     },
     {
@@ -178,7 +178,7 @@ export const termsOfUse: PolicyDoc = {
     {
       heading: 'About us',
       paragraphs: [
-        `${COMPANY.legalName} (“CS Fragrances”, “we”, “us”) is based in ${COMPANY.region}. Legal business name: ${COMPANY.legalName}. Business Number: ${COMPANY.businessNumber}. Contact: ${COMPANY.email}, WhatsApp ${COMPANY.whatsappDisplay}.`,
+        `${COMPANY.legalName} (“CS Fragrances”, “we”, “us”) is based in ${COMPANY.region}. Legal business name: COMFYSHOP E-COMMERCE, a ${COMPANY.businessType}. Registration No. ${COMPANY.registrationNumber}. Business Number ${COMPANY.businessNumber}. Contact: ${COMPANY.email}, WhatsApp ${COMPANY.whatsappDisplay}.`,
       ],
     },
     {

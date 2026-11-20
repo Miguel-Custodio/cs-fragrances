@@ -235,7 +235,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     ],
     steps: [...SM.steps],
     facts: [
-      { label: 'Products', value: 'Shea butter soaps (90 g), home and linen sprays (250 ml), scent sachets (30 g)' },
+      { label: 'Products', value: 'Shea butter soaps (100 g), home and linen sprays (250 ml), scent sachets (30 g)' },
       { label: 'Branded options', value: detail(B2B_CONFIG.customizationOptions) },
       { label: 'Private label', value: PRIVATE_LABEL_TIMING },
       { label: 'Minimum order and lead time', value: B2B_CONFIG.minimumOrder && B2B_CONFIG.leadTime ? `${B2B_CONFIG.minimumOrder} / ${B2B_CONFIG.leadTime}` : detail(null) },
@@ -333,7 +333,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     kicker: 'Amenities',
     trustLine: `Samples of our soaps, sprays and sachets, ${SAMPLE_TERMS}. Tell us the rooms and the quantity and we send a tailored quote.`,
     intro:
-      'A soap in a treatment room, a linen spray at reception, a sachet in a drawer: small details that people remember and often ask about. Our shea butter soaps (90 g), home and linen sprays (250 ml) and scented sachets (30 g) are made by hand in small batches in BC, so you can reorder the same quality and the same scent. We can add your card or logo where it works. Start with a small pilot order, see how guests react, and grow from there.',
+      'A soap in a treatment room, a linen spray at reception, a sachet in a drawer: small details that people remember and often ask about. Our shea butter soaps (100 g), home and linen sprays (250 ml) and scented sachets (30 g) are made by hand in small batches in BC, so you can reorder the same quality and the same scent. We can add your card or logo where it works. Start with a small pilot order, see how guests react, and grow from there.',
     image: {
       src: '/videos/making-soap.webp',
       alt: 'Handmade shea butter soap being made at the CS Fragrances studio in British Columbia',
@@ -343,7 +343,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     blocks: [
       {
         title: 'Shea butter soaps',
-        text: 'Handmade bar soaps (90 g) made with shea butter, in a range of scents. Made in small batches in British Columbia, with the ingredient list on the product page.',
+        text: 'Handmade bar soaps (100 g) made with shea butter, in a range of scents. Made in small batches in British Columbia, with the ingredient list on the product page.',
       },
       {
         title: 'Home and linen sprays',
@@ -367,7 +367,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       { title: 'Quote and simple repeat orders', text: 'A tailored written quote, then repeat orders for the products that work for you.' },
     ],
     facts: [
-      { label: 'Soaps', value: 'Shea butter bar soap, 90 g' },
+      { label: 'Soaps', value: 'Shea butter bar soap, 100 g' },
       { label: 'Home and linen sprays', value: '250 ml' },
       { label: 'Sachets', value: '30 g' },
       { label: 'Branded options (label, card, logo)', value: detail(B2B_CONFIG.customizationOptions) },
