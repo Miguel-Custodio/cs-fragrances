@@ -21,6 +21,8 @@ export const SITE_ROUTES: SiteRoute[] = [
   ...BUSINESS_PAGES.map((p) => ({ path: p.path, inSitemap: p.inSitemap })),
   // Briefing form (first step of scent for a space): indexed, see Marketing v3 C2/C3.
   { path: '/business/scent-briefing', inSitemap: true },
+  // Private label batch calculator: standalone and indexable.
+  { path: '/business/private-label/calculator', inSitemap: true },
   { path: '/business/barbershop-case-study', inSitemap: true },
   // Conversion pages: reachable by link, but thin content, so noindex and not in the sitemap.
   { path: '/business/request-quote', inSitemap: false },

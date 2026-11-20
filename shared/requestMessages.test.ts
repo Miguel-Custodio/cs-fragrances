@@ -124,11 +124,27 @@ describe('scent briefing (Marketing v3, B6)', () => {
     expect(c.description.length).toBeLessThanOrEqual(155);
     expect(c.h1).toBe('Tell us about your space');
   });
-  it('no scent text promises an on-site test, a visit or a free sample, or names equipment', () => {
+  it('no scent text promises an on-site test or a visit, or names equipment; "free" only with the flag on', () => {
     const pub = BUSINESS_PAGES.filter((p) => p.inSitemap);
     const text = JSON.stringify([pub, SCENT_MARKETING_COPY]);
-    expect(text).not.toMatch(/scent[- ]test|on-site|on site|we bring|free of charge|\bfree\b/i);
-    expect(B2B_CONFIG.freeSamples).toBe(false);
+    expect(text).not.toMatch(/scent[- ]test|on-site|on site|we bring/i);
+    if (!B2B_CONFIG.freeSamples) expect(text).not.toMatch(/\bfree\b/i);
+    expect(B2B_CONFIG.freeSamples).toBe(true); // Miguel, 19/11/2026
+  });
+  it('two sectors: private label states the 1 kg minimum, turnkey and the calculator; scent marketing states machine and loan', () => {
+    const pl = BUSINESS_PAGES.find((x) => x.slug === 'private-label')!;
+    const sm = BUSINESS_PAGES.find((x) => x.slug === 'scent-marketing')!;
+    expect(pl.sector).toBe('private-label');
+    expect(sm.sector).toBe('scent-marketing');
+    expect(JSON.stringify(pl)).toMatch(/one kilogram|1 kg/);
+    expect(JSON.stringify(pl)).toMatch(/turnkey/i);
+    expect(pl.ctas?.[0].href).toBe('#calculator');
+    expect(JSON.stringify(sm)).toMatch(/diffusion machine/);
+    expect(JSON.stringify(sm)).toMatch(/on loan/);
+    expect(JSON.stringify(sm)).toMatch(/monthly maintenance/i);
+  });
+  it('/business/private-label/calculator is a public route (in the sitemap)', () => {
+    expect(SITE_ROUTES).toContainEqual({ path: '/business/private-label/calculator', inSitemap: true });
   });
 });
 

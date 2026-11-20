@@ -7,7 +7,7 @@ import { buildGraph, buildRobots, buildSitemap, renderHeadTags, organizationNode
 import { productReviewSchema } from '../client/src/lib/reviewSchema';
 import { REVIEWS } from '../client/src/data/reviews';
 import { COMPANY } from './company';
-import { B2B_CONFIG, CONTACT_FOR_DETAILS, detail } from './b2bConfig';
+import { B2B_CONFIG, CONTACT_FOR_DETAILS, DELIVERY_TEXT, detail } from './b2bConfig';
 
 describe('sitemap and robots (generated from the route list)', () => {
   const sitemap = buildSitemap(SITE_ROUTES);
@@ -92,12 +92,19 @@ describe('structured data', () => {
 describe('placeholders stay out of the public copy', () => {
   it('uses neutral wording when a B2B value is not confirmed', () => {
     expect(detail(B2B_CONFIG.minimumOrder)).toBe(CONTACT_FOR_DETAILS);
+    expect(detail(B2B_CONFIG.privateLabelMinimum)).not.toBe(CONTACT_FOR_DETAILS);
+    expect(detail(B2B_CONFIG.customizationOptions)).not.toBe(CONTACT_FOR_DETAILS);
     expect(detail('2 weeks')).toBe('2 weeks');
   });
-  it('does not mention the USA while US delivery is unconfirmed', () => {
-    expect(B2B_CONFIG.usDelivery).toBeNull();
-    const text = JSON.stringify(BUSINESS_PAGES.filter((p) => p.inSitemap));
-    expect(text).not.toMatch(/\bUSA\b|United States|\bUS\b/);
+  it('mentions the USA only because US delivery is confirmed (Miguel, 19/11/2026)', () => {
+    expect(B2B_CONFIG.usDelivery).toBeTruthy();
+    expect(DELIVERY_TEXT).toContain('United States');
+    expect(DELIVERY_TEXT).toContain('Shipping is paid by the client');
+    expect(DELIVERY_TEXT).not.toMatch(/contact us/i);
+  });
+  it('shows no street address and keeps the meeting copy neutral', () => {
+    expect(B2B_CONFIG.meetingText).toMatch(/café/);
+    expect(JSON.stringify(B2B_CONFIG)).not.toMatch(/15738|V4N|85 Ave/i);
   });
   it('has no raw [PLACEHOLDER] in business page data', () => {
     expect(JSON.stringify(BUSINESS_PAGES)).not.toContain('[PLACEHOLDER');
@@ -121,7 +128,9 @@ describe.skipIf(!fs.existsSync(path.join(dist, 'sitemap.xml')))('build output', 
       expect(ld, r.path).not.toMatch(/"(offers|price|priceCurrency|lowPrice|highPrice)"/);
       const text = html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
       expect(text, r.path).not.toMatch(/\$\s?\d|\bCAD\s?\d|\d\s?CAD\b/);
-      expect(text, r.path).not.toMatch(/scent[- ]test|on-site|on site|\bfree\b/i);
+      expect(text, r.path).not.toMatch(/scent[- ]test|on-site|on site/i);
+      // "free" is allowed only while Miguel's decision stands (b2bConfig.freeSamples).
+      if (!B2B_CONFIG.freeSamples) expect(text, r.path).not.toMatch(/\bfree\b/i);
     }
   });
   it('prerenders every route with its own title, canonical and one h1', () => {

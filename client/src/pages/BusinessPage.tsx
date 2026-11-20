@@ -2,6 +2,8 @@ import Navigation from '@/components/Navigation';
 import Footer from '@/components/Footer';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import RequestForms from '@/components/RequestForms';
+import PrivateLabelCalculator from '@/components/PrivateLabelCalculator';
+import { CALCULATOR_PATH } from '@/data/scentMarketingCopy';
 import Reviews from '@/components/Reviews';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { breadcrumbNode, ORG_ID, SITE_URL } from '@/lib/seo';
@@ -9,6 +11,11 @@ import { PUBLIC_BUSINESS_PAGES, type BusinessPageDef } from '@/data/business';
 import { Check } from 'lucide-react';
 
 /** Real product photos cropped to 1200x630 (client/public/og, made by scripts/make-og-images.py). */
+const SECTOR_LINK = {
+  'private-label': { label: 'private label', href: '/business/private-label' },
+  'scent-marketing': { label: 'scent marketing', href: '/business/scent-marketing' },
+} as const;
+
 const OG_ALT: Record<string, string> = {
   'scent-marketing': 'A CS Fragrances eau de parfum bottle on a mirror surrounded by white roses',
   'hotels-spas': 'A handmade CS Fragrances shea butter soap bar on a soft cream background',
@@ -77,6 +84,11 @@ export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
         <header className="container max-w-6xl mx-auto px-4 py-12 md:py-16 grid md:grid-cols-3 gap-10 items-center">
           <div className="md:col-span-2">
             <p className="font-display tracking-[0.3em] uppercase text-xs md:text-sm text-muted-foreground mb-3">{p.kicker}</p>
+            {p.sector && p.path !== SECTOR_LINK[p.sector].href && (
+              <p className="mb-3 text-sm text-primary/70">
+                Part of our <a className="underline" href={SECTOR_LINK[p.sector].href}>{SECTOR_LINK[p.sector].label}</a> sector
+              </p>
+            )}
             <h1 className="text-3xl md:text-5xl text-primary mb-5 leading-tight">{p.h1}</h1>
             <p className="text-lg md:text-xl text-primary/85 leading-relaxed mb-7">{p.intro}</p>
             <div className="flex flex-wrap gap-3">
@@ -148,6 +160,17 @@ export default function BusinessPage({ page: p }: { page: BusinessPageDef }) {
             </div>
           </div>
         </section>
+
+        {p.slug === 'private-label' && (
+          <section className="py-14 md:py-20" aria-label="Private label batch calculator">
+            <div className="container max-w-4xl mx-auto px-4">
+              <PrivateLabelCalculator headingLevel={2} idPrefix="calculator" />
+              <p className="mt-4 text-center text-sm text-muted-foreground">
+                Prefer a full page? <a className="underline" href={CALCULATOR_PATH}>Open the batch calculator</a>.
+              </p>
+            </div>
+          </section>
+        )}
 
         <section className="bg-secondary py-14 md:py-20">
           <div className="container max-w-4xl mx-auto px-4">

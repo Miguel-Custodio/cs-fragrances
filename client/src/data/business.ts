@@ -1,6 +1,6 @@
 import { SCENTEC_BRANDING_ENABLED } from '@/lib/flags';
-import { B2B_CONFIG, detail } from '@shared/b2bConfig';
-import { BRIEFING_PATH, SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
+import { B2B_CONFIG, DELIVERY_TEXT, detail } from '@shared/b2bConfig';
+import { BRIEFING_PATH, CALCULATOR_PATH, FREE, SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
 import { SCENT_INTEREST } from '@shared/requestMessages';
 
 /**
@@ -75,6 +75,8 @@ export interface BusinessPageDef {
   ctas?: { label: string; href: string }[];
   /** Replaces the default business types / interests of the forms. */
   formOptions?: { businessTypes: string[]; interests: string[] };
+  /** Which of the two B2B sectors the page belongs to (shown as a link under the kicker). */
+  sector?: 'private-label' | 'scent-marketing';
   serviceType: string;
   /** Search phrases used naturally in the copy (for maintainers). */
   seoKeywords: string[];
@@ -98,7 +100,7 @@ const PRIVATE_LABEL_TIMING = B2B_CONFIG.privateLabelStart
   ? `Private label projects start from ${B2B_CONFIG.privateLabelStart}.`
   : 'Tell us about your project and we will confirm timing in your quote.';
 
-const WHERE_WE_SERVE = `We are based in Surrey, British Columbia, and serve ${B2B_CONFIG.serviceAreaText}. Delivery elsewhere in Canada: ${B2B_CONFIG.deliveryOutsideBC ?? 'contact us for details'}.`;
+const WHERE_WE_SERVE = `We are based in Surrey, British Columbia, and serve ${B2B_CONFIG.serviceAreaText}. ${DELIVERY_TEXT}`;
 
 const RESALE_TERMS_TEXT = B2B_CONFIG.resaleTerms ?? 'contact us for details';
 
@@ -113,6 +115,7 @@ const MADE_LOCALLY_ANSWER =
 export const BUSINESS_PAGES: BusinessPageDef[] = [
   {
     slug: 'scent-marketing',
+    sector: 'scent-marketing',
     path: '/business/scent-marketing',
     title: SM.title,
     description: SM.description,
@@ -140,8 +143,8 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
         text: 'Boutique and independent hotels, spas and wellness studios, salons and barbershops, retail stores, offices and showrooms. Clinics and boutique gyms too: reception, treatment rooms and changing rooms.',
       },
       {
-        title: 'Made by us, in small batches',
-        text: 'Our own home sprays and sachets are handcrafted in British Columbia, so we can match a scent to your space and talk to you directly about it.',
+        title: 'Fragrance, machine and service',
+        text: `We supply the fragrance and the diffusion machine, with a monthly maintenance service and the machine on loan. Our own home sprays and sachets are handcrafted in British Columbia, so the scent you choose stays the same.`,
       },
     ],
     audienceTitle: 'Who scent marketing is for',
@@ -156,8 +159,8 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     facts: [
       { label: 'Where we work', value: B2B_CONFIG.serviceAreaText },
       { label: 'Formats and equipment', value: detail(B2B_CONFIG.diffuserEquipment ?? `Home and linen sprays and sachets from our collection. ${SM.equipmentFact}`) },
-      { label: 'Minimum order', value: detail(B2B_CONFIG.minimumOrder) },
-      { label: 'Lead time', value: detail(B2B_CONFIG.leadTime) },
+      { label: 'Samples', value: B2B_CONFIG.freeSamples ? 'Free, selected from your briefing' : 'Selected from your briefing' },
+      ...(B2B_CONFIG.meetingText ? [{ label: 'Meetings', value: B2B_CONFIG.meetingText }] : []),
     ],
     faq: [
       {
@@ -165,6 +168,10 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
         a: 'Scent marketing is the use of a consistent fragrance in a physical space to support how people feel about your brand. It can be as simple as a signature room spray and scented amenities, or a diffusion setup selected for your room, with regular refills.',
       },
       { q: SM.faqFlow.q, a: SM.faqFlow.a },
+      {
+        q: 'Do I have to buy the machine?',
+        a: 'We supply the fragrance and the diffusion machine. The machine can be placed with you on loan, and we offer a monthly maintenance service. We confirm the details of your setup in your proposal.',
+      },
       { q: 'How much does it cost?', a: COST_ANSWER },
       {
         q: 'Can you create a scent just for my brand?',
@@ -174,7 +181,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       { q: 'Are your products made locally?', a: MADE_LOCALLY_ANSWER },
     ],
     topic: 'Scent marketing',
-    summary: 'A signature scent for your salon, clinic, spa or hotel, chosen from samples we send you.',
+    summary: 'A signature scent for your salon, clinic, spa or hotel, with the diffusion machine on loan and monthly maintenance.',
     related: [
       { label: 'Hotels and spas', href: '/business/hotels-spas' },
       { label: 'Salons and barbershops', href: '/business/salons-barbershops' },
@@ -188,6 +195,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   },
   {
     slug: 'hotels-spas',
+    sector: 'scent-marketing',
     path: '/business/hotels-spas',
     title: 'Hotel & Spa Amenities and Scent in Vancouver',
     description:
@@ -254,6 +262,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   },
   {
     slug: 'salons-barbershops',
+    sector: 'scent-marketing',
     path: '/business/salons-barbershops',
     title: 'Scent & Perfumes for Salons and Barbershops',
     description:
@@ -315,6 +324,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   },
   {
     slug: 'amenities',
+    sector: 'private-label',
     path: '/business/amenities',
     title: 'Branded Soaps, Sprays & Sachets for Spas',
     description:
@@ -389,6 +399,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   },
   {
     slug: 'corporate-gifts',
+    sector: 'private-label',
     path: '/business/corporate-gifts',
     title: 'Corporate Gift Kits, Made in BC',
     description:
@@ -459,16 +470,20 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
   },
   {
     slug: 'private-label',
+    sector: 'private-label',
     path: '/business/private-label',
     title: 'Private Label Soap & Perfume, Made in BC',
     description:
-      'Your brand on handmade perfumes, sprays, soaps and sachets, made in small batches in British Columbia. Request a quote or samples.',
+      'Your brand on every product in our catalog, with the fragrances you choose. Minimum one kg of fragrance. Made in BC. Try the batch calculator.',
     h1: 'Your brand. Our craft.',
-    kicker: 'For business',
-    trustLine: 'Tell us about your brand and we will confirm what is possible in your quote.',
+    kicker: 'Private label',
+    trustLine: `${FREE ? 'Free samples. ' : 'Samples available. '}No obligation. Shipping is paid by the client.`,
+    ctas: [
+      { label: 'Open the batch calculator', href: '#calculator' },
+      { label: 'Request a quote', href: '#quote' },
+    ],
     intro:
-      'Many spas, salons and gift shops want a product line that carries their own name. We make perfumes, sprays, soaps and sachets with your label, handcrafted in small batches in BC. It starts with a short conversation about your brand and your customers, then samples, then packaging and label, then production. You deal with the same small team from the first brief to the delivery. ' +
-      (B2B_CONFIG.privateLabelStart ? PRIVATE_LABEL_TIMING : 'Tell us your idea and we will keep you posted.'),
+      'Your brand on every product in our catalog: perfumes, body mists, home and linen sprays, soaps, sachets, wax melts and candles, made with the fragrances you choose. We make them by hand in small batches in BC. The minimum order is one kilogram of fragrance, which you spread across any mix of products, and our optional turnkey service can create the artwork, labels and boxes for you.',
     image: {
       src: '/videos/making-soap.webp',
       alt: 'Handmade soap being made at the CS Fragrances studio in British Columbia',
@@ -477,16 +492,16 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     },
     blocks: [
       {
-        title: 'Products we can make for your brand',
-        text: 'Eau de parfum, body mists, home and linen sprays, shea butter bar soaps and fragranced sachets. Tell us what your customers love and we will help you shape the range.',
+        title: 'Every product in our catalog',
+        text: 'Eau de parfum, body mists, home and linen sprays, shea butter bar soaps, sachets, wax melts and candles. Mix them as you like to build your own range under your name.',
       },
       {
-        title: 'Handcrafted in small batches',
-        text: 'The same hands-on approach behind our own collection: careful blending, attention to detail and consistent quality, ideal for boutiques, hotels, spas, gift companies and growing brands.',
+        title: 'The fragrances you choose',
+        text: `You pick the fragrances. We send ${FREE}samples first, so you can smell them in your own space and decide before you commit.`,
       },
       {
-        title: 'One partner, start to finish',
-        text: 'From scent selection and samples to production and delivery, you deal with the same small team.',
+        title: 'Turnkey, if you want it',
+        text: 'Optional: we create the artwork, the labels, the boxes and more, and you approve each piece. Or send us your own artwork. One small team from the first brief to the delivery.',
       },
     ],
     audienceTitle: 'Who private label is for',
@@ -498,29 +513,42 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       'Local and online brands adding fragrance to their range',
     ],
     steps: [
-      { title: 'Brief', text: 'Tell us about your brand, your customers and the products you have in mind.' },
-      { title: 'Scent selection and samples', text: 'Choose from fragrance directions and test samples.' },
-      { title: 'Packaging and labels', text: 'Agree the packaging and the label content for your brand.' },
-      { title: 'Production and delivery', text: 'We produce your order by hand and deliver it to you.' },
+      { title: 'Tell us about your brand', text: 'Your customers, the products you have in mind and the fragrances you like.' },
+      { title: 'Choose your fragrances', text: `We send ${FREE}samples so you can choose.` },
+      { title: 'Plan your batch', text: 'Use the batch calculator: enter your kilograms of fragrance, 10% is counted as production loss, and fill the rest with any mix of products.' },
+      { title: 'Artwork and packaging', text: 'Send your artwork, or let us create it with your approval (optional turnkey service): labels, boxes and more.' },
+      { title: 'Production and delivery', text: 'We produce your order by hand and deliver it to you. Shipping is paid by the client.' },
     ],
     facts: [
-      { label: 'Products', value: 'Perfumes, body mists, home sprays, soaps, sachets' },
+      { label: 'Products', value: 'Every product in our catalog: perfumes, body mists, home and linen sprays, soaps, sachets, wax melts, candles' },
+      { label: 'Minimum order', value: detail(B2B_CONFIG.privateLabelMinimum) },
+      { label: 'Turnkey service', value: B2B_CONFIG.turnkeyService ? 'Optional: artwork, labels, boxes and more, created with your approval' : detail(null) },
+      { label: 'Samples', value: B2B_CONFIG.freeSamples ? 'Free' : 'Available on request' },
       { label: 'Project start', value: B2B_CONFIG.privateLabelStart ? `From ${B2B_CONFIG.privateLabelStart}` : detail(null) },
-      { label: 'Minimum order quantity', value: detail(B2B_CONFIG.minimumOrder) },
       { label: 'Production and delivery time', value: detail(B2B_CONFIG.leadTime) },
       { label: 'Pricing', value: 'Quoted per project' },
     ],
     faq: [
       { q: 'What is private label?', a: 'Private label means the product is made by us and sold under your brand name, with your own label and packaging.' },
-      { q: 'Which products can you make?', a: 'Perfumes, body mists, home sprays, soaps and sachets. Tell us what you need and we will confirm what is possible.' },
-      { q: 'Can I choose my own fragrance?', a: 'We suggest fragrance directions based on your brand and share samples before you decide.' },
+      { q: 'Which products can you make?', a: 'Every product in our catalog: perfumes, body mists, home and linen sprays, soaps, sachets, wax melts and candles.' },
+      { q: 'Can I choose my own fragrance?', a: `Yes. You choose the fragrances. We send ${FREE}samples so you can decide before you commit.` },
+      {
+        q: 'What is the minimum order?',
+        a: 'The minimum is one kilogram of fragrance per batch. You spread it across the products you want, in any mix, for example some perfumes, some body mists and a home spray. The batch calculator shows how many units fit.',
+      },
+      {
+        q: 'How does the batch calculator work?',
+        a: 'You enter the kilograms of fragrance you want. A small part of the fragrance is counted as production loss, ten percent, and the rest is yours to use. Enter how many units of each product you want and the calculator shows how much of the batch is used, what remains and how many more units fit. Two kilograms doubles the capacity.',
+      },
+      { q: 'Can you create the labels and boxes?', a: 'Yes, if you want it. Our optional turnkey service covers the artwork, the labels, the boxes and more, and you approve each piece. You can also send us your own artwork.' },
       { q: 'When can we start?', a: PRIVATE_LABEL_TIMING },
       { q: 'Where do you deliver?', a: WHERE_WE_SERVE },
-      { q: 'What are the minimum order quantities and lead times?', a: 'They depend on the product and the project. Send us your request and we will confirm both in your quote.' },
+      { q: 'How long does production take?', a: 'It depends on the project and the size of the batch. We confirm it in your quote.' },
     ],
     topic: 'Private label',
-    summary: 'Perfumes, body mists, home sprays, soaps and sachets made by us and sold under your brand.',
+    summary: 'Your brand on every product in our catalog, with the fragrances you choose. Minimum one kilogram of fragrance.',
     related: [
+      { label: 'Private label batch calculator', href: CALCULATOR_PATH },
       { label: 'Amenity soaps, sprays and sachets', href: '/business/amenities' },
       { label: 'Corporate gift kits', href: '/business/corporate-gifts' },
       { label: 'Shea butter soaps', href: '/shop/soaps' },

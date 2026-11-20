@@ -6,8 +6,8 @@ import Reviews from '@/components/Reviews';
 import { usePageMeta } from '@/hooks/usePageMeta';
 import { breadcrumbNode, ORG_ID, SITE_URL } from '@/lib/seo';
 import { PUBLIC_BUSINESS_PAGES } from '@/data/business';
-import { B2B_CONFIG, detail } from '@shared/b2bConfig';
-import { BRIEFING_PATH, FINAL_CTA, SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
+import { B2B_CONFIG, DELIVERY_TEXT, detail } from '@shared/b2bConfig';
+import { BRIEFING_PATH, CALCULATOR_PATH, FINAL_CTA, FREE, SCENT_MARKETING_COPY as SM } from '@/data/scentMarketingCopy';
 
 // Copy: /workspace/gestao/b2b-storytelling-seo.md v3, parts B1 and B2 (placeholders left out: unconfirmed facts
 // come from shared/b2bConfig.ts and read "contact us for details").
@@ -17,7 +17,7 @@ const DESCRIPTION =
 
 const STEPS = SM.steps;
 
-// B2 "Segments" (order = priority). Placeholders dropped; the terms of resale and dates are not stated.
+// B2 "Segments" (order = priority), now under Sector 2 (scent marketing). Placeholders dropped; the terms of resale and dates are not stated.
 const SEGMENTS = [
   {
     title: 'Salons and barbershops',
@@ -64,23 +64,19 @@ const SEGMENTS = [
       'One local contact for refills and reorders.',
     ],
   },
-  {
-    title: 'Corporate gifts (for any business)',
-    href: '/business/corporate-gifts',
-    points: [
-      'Curated gift kits made from our collection, with a card or your logo where it works.',
-      'Made in BC by a family team you can talk to.',
-      'Tell us the date and how many people you want to thank, and we propose a kit.',
-    ],
-  },
 ];
 
-// B2 "What we offer (four lines)".
+// Sector 1 (Miguel, 19/11/2026): private label on every catalog product, plus branded ready-made products.
 const OFFERS = [
   {
-    title: 'Scent for your space',
-    text: 'A signature scent chosen from samples we send you, and the right diffusion equipment for your space, selected after you share the size of the room, with regular refills and one contact for adjustments.',
-    href: '/business/scent-marketing',
+    title: 'Private label',
+    text: 'Your brand on every product in our catalog, made with the fragrances you choose. Minimum order: one kilogram of fragrance, mixed across any products. Optional turnkey service for the artwork, labels and boxes.',
+    href: '/business/private-label',
+  },
+  {
+    title: 'Private label batch calculator',
+    text: 'Enter your kilograms of fragrance, choose any mix of products and see how many units fit in your batch.',
+    href: CALCULATOR_PATH,
   },
   {
     title: 'Amenities with your brand',
@@ -89,13 +85,44 @@ const OFFERS = [
   },
   {
     title: 'Corporate gift kits',
-    text: 'Gift sets for clients and teams.',
+    text: 'Gift sets for clients and teams, made from our collection.',
     href: '/business/corporate-gifts',
   },
+];
+
+// The two main paths on the hub (Miguel, 19/11/2026).
+const SECTORS = [
   {
+    kicker: 'Sector 1',
     title: 'Private label',
-    text: 'Your brand on perfumes, sprays, soaps and sachets, made in small batches.',
     href: '/business/private-label',
+    tagline: 'Your brand on every product in our catalog.',
+    points: [
+      'All of our products: perfumes, body mists, home and linen sprays, soaps, sachets, wax melts and candles.',
+      `Made with the fragrances you choose. We send ${FREE}samples first.`,
+      'Minimum order: one kilogram of fragrance, spread across any mix of products. Use the calculator to plan it.',
+      'Optional turnkey service: we create the artwork, labels and boxes with your approval.',
+    ],
+    ctas: [
+      { label: 'Open the batch calculator', href: CALCULATOR_PATH },
+      { label: 'Learn more', href: '/business/private-label' },
+    ],
+  },
+  {
+    kicker: 'Sector 2',
+    title: 'Scent marketing',
+    href: '/business/scent-marketing',
+    tagline: 'A signature scent for your space.',
+    points: [
+      `You send a short briefing, we send ${FREE}samples, and you choose your scent.`,
+      'We supply the fragrance and the diffusion machine.',
+      'Monthly maintenance service, and the machine on loan.',
+      'We propose after you choose your scent and share the size of your space. No obligation.',
+    ],
+    ctas: [
+      { label: SM.primaryCta, href: BRIEFING_PATH },
+      { label: 'Learn more', href: '/business/scent-marketing' },
+    ],
   },
 ];
 
@@ -112,13 +139,17 @@ const HUB_FAQ = [
   },
   {
     q: 'Can I have products under my own brand?',
-    a: `Yes. We can make perfumes, sprays, soaps and sachets with your label. ${
-      B2B_CONFIG.privateLabelStart ? `Private label projects start from ${B2B_CONFIG.privateLabelStart}.` : 'Tell us about your project and we will confirm timing, minimum order and lead time in your quote.'
+    a: `Yes. Private label covers every product in our catalog, made with the fragrances you choose. The minimum order is one kilogram of fragrance, spread across any mix of products, and our optional turnkey service can create the artwork, labels and boxes. ${
+      B2B_CONFIG.privateLabelStart ? `Private label projects start from ${B2B_CONFIG.privateLabelStart}.` : 'We confirm timing and lead time in your quote.'
     }`,
   },
   {
+    q: 'What do you offer for scenting a space?',
+    a: `We supply the fragrance and the diffusion machine, with a monthly maintenance service, and the machine can be placed with you on loan. It starts with a short briefing and ${FREE}samples, and we send a proposal after you choose your scent.`,
+  },
+  {
     q: 'Where do you work?',
-    a: `We are made in BC, based in Surrey and serve ${B2B_CONFIG.serviceAreaText}. Delivery elsewhere in Canada: ${B2B_CONFIG.deliveryOutsideBC ?? 'contact us for details'}.`,
+    a: `We are made in BC, based in Surrey and serve ${B2B_CONFIG.serviceAreaText}. ${DELIVERY_TEXT}`,
   },
   {
     q: 'Are your products made locally?',
@@ -179,23 +210,67 @@ export default function Business() {
               Give your business a scent people remember
             </h1>
             <p className="text-lg md:text-xl text-primary-foreground/85 leading-relaxed mb-3">
-              A signature scent for your space, made by hand in BC.
+              Two ways to work with us: your brand on our products, or a signature scent for your space. Made by hand in BC.
             </p>
             <p className="text-base md:text-lg text-primary-foreground/80 leading-relaxed mb-8">
-              Scent for your space, branded amenities, corporate gifts and private label for salons, barbershops,
-              clinics, spas, gyms and boutique hotels. Made in BC, based in Surrey, serving Vancouver and the Lower Mainland.
+              Private label on every product in our catalog, and scent marketing with the fragrance, the diffusion
+              machine and monthly maintenance, for salons, barbershops, clinics, spas, gyms and boutique hotels. Made
+              in BC, based in Surrey, serving Vancouver and the Lower Mainland.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
-              <a href={BRIEFING_PATH} className="inline-block rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground hover:bg-accent/85">
-                {SM.primaryCtaLong}
+              <a href="/business/private-label" className="inline-block rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground hover:bg-accent/85">
+                Private label
+              </a>
+              <a href="/business/scent-marketing" className="inline-block rounded-full bg-accent px-8 py-3 font-semibold text-accent-foreground hover:bg-accent/85">
+                Scent marketing
               </a>
               <a href="#quote" className="inline-block rounded-full border border-primary-foreground/50 px-8 py-3 font-semibold text-primary-foreground hover:bg-primary-foreground/10">
                 {SM.secondaryCta}
               </a>
             </div>
-            <p className="mt-5 text-sm text-primary-foreground/70">{SM.underCtas}</p>
+            <p className="mt-5 text-sm text-primary-foreground/70">
+              {FREE ? 'Free samples. ' : ''}No obligation. Shipping is paid by the client.
+            </p>
           </div>
         </header>
+
+        <section className="py-14 md:py-20" aria-labelledby="sectors-title">
+          <div className="container max-w-6xl mx-auto px-4">
+            <h2 id="sectors-title" className="text-2xl md:text-4xl text-primary mb-3 text-center">Two ways to work with us</h2>
+            <p className="text-center text-primary/80 mb-10">Pick the one that fits your business. Both start with free samples and no obligation.</p>
+            <div className="grid md:grid-cols-2 gap-8">
+              {SECTORS.map((sec) => (
+                <article key={sec.title} className="flex flex-col rounded-xl border border-border bg-card p-7 shadow-sm">
+                  <p className="font-display tracking-[0.25em] uppercase text-xs text-muted-foreground mb-2">{sec.kicker}</p>
+                  <h3 className="text-2xl md:text-3xl text-primary mb-2">
+                    <a href={sec.href} className="underline-offset-4 hover:underline">{sec.title}</a>
+                  </h3>
+                  <p className="text-lg text-primary/90 mb-4">{sec.tagline}</p>
+                  <ul className="list-disc pl-5 space-y-2 text-primary/85 leading-relaxed mb-6">
+                    {sec.points.map((pt) => (
+                      <li key={pt}>{pt}</li>
+                    ))}
+                  </ul>
+                  <div className="mt-auto flex flex-wrap gap-3">
+                    {sec.ctas.map((c, i) => (
+                      <a
+                        key={c.href}
+                        href={c.href}
+                        className={
+                          i === 0
+                            ? 'inline-block rounded-full bg-primary px-6 py-2.5 font-semibold text-primary-foreground hover:bg-primary/90'
+                            : 'inline-block rounded-full border border-primary/40 px-6 py-2.5 font-semibold text-primary hover:bg-primary/10'
+                        }
+                      >
+                        {c.label}
+                      </a>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <section className="py-14 md:py-20">
           <div className="container max-w-3xl mx-auto px-4">
@@ -229,9 +304,29 @@ export default function Business() {
           </div>
         </section>
 
+        <section className="bg-secondary py-14 md:py-20" aria-labelledby="offer-title">
+          <div className="container max-w-5xl mx-auto px-4">
+            <p className="font-display tracking-[0.25em] uppercase text-xs text-muted-foreground mb-2 text-center">Sector 1</p>
+            <h2 id="offer-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">Private label and branded products</h2>
+            <ul className="grid md:grid-cols-2 gap-6">
+              {OFFERS.map((o) => (
+                <li key={o.title} className="rounded-lg bg-card p-6 shadow-sm">
+                  <h3 className="text-lg text-primary mb-2">
+                    <a href={o.href} className="underline underline-offset-4">{o.title}</a>
+                  </h3>
+                  <p className="text-primary/85 leading-relaxed">{o.text}</p>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-6 text-center text-sm text-muted-foreground">
+              Minimum order for private label: {detail(B2B_CONFIG.privateLabelMinimum)}. Every project is quoted individually.
+            </p>
+          </div>
+        </section>
+
         <section className="bg-secondary py-14 md:py-20" aria-labelledby="how-title">
           <div className="container max-w-5xl mx-auto px-4">
-            <h2 id="how-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">How scent for your space works (5 steps)</h2>
+            <h2 id="how-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">Scent marketing: how it works (5 steps)</h2>
             <ol className="grid md:grid-cols-3 lg:grid-cols-5 gap-6">
               {STEPS.map((s, i) => (
                 <li key={s.title} className="rounded-lg bg-card p-6 shadow-sm">
@@ -246,7 +341,8 @@ export default function Business() {
 
         <section className="py-14 md:py-20" aria-labelledby="segments-title">
           <div className="container max-w-6xl mx-auto px-4">
-            <h2 id="segments-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">Who we work with</h2>
+            <p className="font-display tracking-[0.25em] uppercase text-xs text-muted-foreground mb-2 text-center">Sector 2</p>
+            <h2 id="segments-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">Scent marketing, for your kind of space</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {SEGMENTS.map((seg) => (
                 <a key={seg.title} href={seg.href} className="block rounded-lg bg-card p-6 shadow-sm hover:shadow-md transition-shadow border border-border">
@@ -260,26 +356,6 @@ export default function Business() {
                 </a>
               ))}
             </div>
-          </div>
-        </section>
-
-        <section className="bg-secondary py-14 md:py-20" aria-labelledby="offer-title">
-          <div className="container max-w-5xl mx-auto px-4">
-            <h2 id="offer-title" className="text-2xl md:text-3xl text-primary mb-8 text-center">What we offer</h2>
-            <ul className="grid md:grid-cols-2 gap-6">
-              {OFFERS.map((o) => (
-                <li key={o.title} className="rounded-lg bg-card p-6 shadow-sm">
-                  <h3 className="text-lg text-primary mb-2">
-                    <a href={o.href} className="underline underline-offset-4">{o.title}</a>
-                  </h3>
-                  <p className="text-primary/85 leading-relaxed">{o.text}</p>
-                </li>
-              ))}
-            </ul>
-            <p className="mt-6 text-center text-sm text-muted-foreground">
-              Minimum order and lead time: {detail(B2B_CONFIG.minimumOrder === null ? null : `${B2B_CONFIG.minimumOrder}${B2B_CONFIG.leadTime ? `, ${B2B_CONFIG.leadTime}` : ''}`)}.
-              Every project is quoted individually.
-            </p>
           </div>
         </section>
 
