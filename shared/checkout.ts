@@ -110,8 +110,9 @@ export async function handleCheckout(
   }
 
   // 1. Is online payment configured at all?
-  const token = env.SQUARE_ACCESS_TOKEN?.trim();
-  const locationId = env.SQUARE_LOCATION_ID?.trim();
+  // Strip anything that can't be in a Square token (stray spaces, line breaks, invisible chars from copy-paste).
+  const token = env.SQUARE_ACCESS_TOKEN?.replace(/[^A-Za-z0-9_.\-]/g, '');
+  const locationId = env.SQUARE_LOCATION_ID?.replace(/[^A-Za-z0-9_\-]/g, '');
   if (!token || !locationId) return unavailable('square_not_configured');
   if (env.SHIPPING_RATES_CONFIRMED !== 'true') return unavailable('shipping_rates_not_confirmed');
 
