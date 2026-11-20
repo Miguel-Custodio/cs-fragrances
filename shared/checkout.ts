@@ -212,7 +212,7 @@ export async function handleCheckout(
     });
   } catch (err) {
     console.error('Square request failed (network)', err instanceof Error ? err.message : err);
-    return json({ error: 'checkout_unavailable', reason: 'square_unreachable', fallback: 'whatsapp', detail: (err instanceof Error ? `${err.name}: ${err.message}` : String(err)).slice(0, 160) }, 502);
+    return unavailable('square_unreachable', 502);
   }
 
   const data = (await squareRes.json().catch(() => ({}))) as {
@@ -228,8 +228,7 @@ export async function handleCheckout(
       squareRes.status,
       JSON.stringify((data.errors ?? []).map((e) => ({ code: e.code, category: e.category, detail: e.detail }))),
     );
-    const fp = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token)))).slice(0, 4).map((b) => b.toString(16).padStart(2, '0')).join('');
-    return json({ error: 'checkout_unavailable', reason: 'square_error', fallback: 'whatsapp', status: squareRes.status, codes: (data.errors ?? []).map((e) => `${e.code}: ${(e.detail ?? '').slice(0, 120)}`), tokenLen: token.length, tokenFp: fp }, 502);
+    return unavailable('square_error', 502);
   }
 
   return json({ url, orderRef });
