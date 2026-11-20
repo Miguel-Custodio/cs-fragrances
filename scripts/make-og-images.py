@@ -6,12 +6,12 @@ PUB = os.path.join(os.path.dirname(__file__), '..', 'client', 'public')
 # slug: (source photo, vertical centre of the crop as a fraction of the photo height)
 JOBS = {
     'business': ('kits/bodymist-soap.webp', 0.50),
-    'scent-marketing': ('images/Campaign_Her001.webp', 0.45),
+    'scent-marketing': ('images/Studio_CS Her.webp', 0.50),
     'hotels-spas': ('shop/cover-soaps.webp', 0.50),
     'salons-barbershops': ('images/Studio_4 Fragrances.webp', 0.42),
     'amenities': ('shop/cover-soaps.webp', 0.55),
     'corporate-gifts': ('kits/bodymist-soap.webp', 0.55),
-    'private-label': ('images/Campaign_Soaps_001.png', 0.45),
+    'private-label': ('process/soap-step-2-shapes.webp', 0.40),
     'barbershop-case-study': ('images/Studio_4 Fragrances.webp', 0.60),
 }
 os.makedirs(os.path.join(PUB, 'og'), exist_ok=True)

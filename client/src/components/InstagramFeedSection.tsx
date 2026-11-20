@@ -52,7 +52,7 @@ export default function InstagramFeedSection() {
       id: '6',
       url: instagramUrl,
       caption: 'Join the CS Fragrances community',
-      thumbnail: '/images/Campaign_Her001.webp',
+      thumbnail: '/process/soap-step-3-poured.webp',
     },
   ];
 

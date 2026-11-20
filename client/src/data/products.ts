@@ -129,7 +129,6 @@ export const products: Product[] = [
       '/images/CS HER/6.webp',
       '/images/CS HER/7.webp',
       '/images/CS HER/8.webp',
-      '/images/CS HER/9.webp',
     ],
     featured: true,
     ingredientImage: '/images/CS HER/5.webp',
