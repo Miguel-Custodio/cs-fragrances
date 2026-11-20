@@ -228,7 +228,8 @@ export async function handleCheckout(
       squareRes.status,
       JSON.stringify((data.errors ?? []).map((e) => ({ code: e.code, category: e.category, detail: e.detail }))),
     );
-    return unavailable('square_error', 502);
+    const fp = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(token)))).slice(0, 4).map((b) => b.toString(16).padStart(2, '0')).join('');
+    return json({ error: 'checkout_unavailable', reason: 'square_error', fallback: 'whatsapp', status: squareRes.status, codes: (data.errors ?? []).map((e) => `${e.code}: ${(e.detail ?? '').slice(0, 120)}`), tokenLen: token.length, tokenFp: fp }, 502);
   }
 
   return json({ url, orderRef });
