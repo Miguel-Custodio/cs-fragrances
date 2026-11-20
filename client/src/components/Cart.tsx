@@ -14,6 +14,7 @@ export default function Cart() {
   const { isCartOpen, closeCart } = useCartUI();
   const [busy, setBusy] = useState(false);
   const [whatsAppUrl, setWhatsAppUrl] = useState<string | null>(null);
+  const [fallbackReason, setFallbackReason] = useState<string | null>(null);
 
   const selection: ShippingSelection =
     shippingMethod === 'pickup' ? { method: 'pickup' } : { method: 'ship', postalCode };
@@ -38,12 +39,14 @@ export default function Cart() {
     if (!quote) return;
     setBusy(true);
     setWhatsAppUrl(null);
+    setFallbackReason(null);
     const result = await startCheckout(items, selection, city);
     if (result.kind === 'redirect') {
       window.location.href = result.url; // Square-hosted payment page
       return;
     }
     // Online payment unavailable -> offer the pre-filled WhatsApp order instead.
+    setFallbackReason(result.reason);
     setWhatsAppUrl(buildWhatsAppOrderUrl(quote, city));
     setBusy(false);
   };
@@ -255,6 +258,7 @@ export default function Cart() {
                     Online payment isn&apos;t available right now. You can send your order by WhatsApp and
                     we&apos;ll confirm it with you.
                   </p>
+                  {fallbackReason && <p className="text-xs text-amber-700/70">Code: {fallbackReason}</p>}
                   <a
                     href={whatsAppUrl}
                     target="_blank"
