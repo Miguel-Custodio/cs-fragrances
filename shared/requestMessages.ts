@@ -2,7 +2,7 @@
  * Builds the text of the two B2B requests (quote and samples) and the mailto / WhatsApp links.
  * No backend: the visitor's email app or WhatsApp opens with the message ready to send.
  */
-import { COMPANY, WHATSAPP_BASE_URL } from './company';
+import { COMPANY, WHATSAPP_BASE_URL } from './company.js';
 
 /** Type of business / space (Marketing v3, B6). */
 export const BUSINESS_TYPES = [

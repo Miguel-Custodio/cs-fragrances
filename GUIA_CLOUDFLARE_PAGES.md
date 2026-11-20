@@ -152,3 +152,9 @@ Se algo travar no meio do caminho, pare antes de mudar o DNS e me chame com um p
 - Redirecionar `csfragrances.ca` (sem www) para `https://www.csfragrances.ca` com 301 é feito no painel do domínio (Cloudflare: Rules > Redirect Rules; Vercel: Domains). Não está no código.
 - Ao criar uma rota nova, inclua-a em `client/src/data/routes.ts`. O build falha se uma página fora do sitemap não tiver `noindex`, ou se aparecer "Scentec", "IFF" ou "[PLACEHOLDER" no HTML do B2B.
 - Fatos B2B ainda não confirmados (pedido mínimo, prazos, entrega, equipamentos, termos) ficam em `shared/b2bConfig.ts`. Enquanto estiverem `null`, o site mostra "Contact us for details".
+
+## Calculadora de private label (função de servidor)
+A calculadora chama `POST /api/private-label-calc`. A tabela de fragrância por produto fica só no servidor
+(`shared/privateLabelFormulas.ts`); o navegador recebe apenas % do lote e contagens arredondadas.
+No Cloudflare Pages a função é `functions/api/private-label-calc.ts` (nenhuma variável de ambiente, sem custo extra).
+No Vercel é `api/private-label-calc.ts`. Sem função (hospedagem 100% estática) a calculadora avisa que está indisponível.

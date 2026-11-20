@@ -65,9 +65,9 @@ export default function PrivateLabelCalculatorPage() {
           <div className="container max-w-3xl mx-auto px-4 text-primary/90 leading-relaxed space-y-3">
             <h2 className="text-2xl text-primary">How it works</h2>
             <p>
-              Fragrance is the unit of your batch. Enter how many kilograms you want (minimum one), and 10% is counted as
-              production loss. The rest is yours to spread across perfumes, body mists, home sprays, soaps, sachets,
-              wax melts and candles, in any mix.
+              Fragrance is the unit of your batch. Enter how many kilograms you want (minimum one), then spread it across
+              perfumes, body mists, home sprays, soaps, sachets, wax melts and candles, in any mix. The calculator shows
+              how much of your batch is filled and about how many more units fit.
             </p>
             <p>
               Want us to take care of everything? Our optional turnkey service covers the artwork, labels and boxes, with

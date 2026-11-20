@@ -515,7 +515,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
     steps: [
       { title: 'Tell us about your brand', text: 'Your customers, the products you have in mind and the fragrances you like.' },
       { title: 'Choose your fragrances', text: `We send ${FREE}samples so you can choose.` },
-      { title: 'Plan your batch', text: 'Use the batch calculator: enter your kilograms of fragrance, 10% is counted as production loss, and fill the rest with any mix of products.' },
+      { title: 'Plan your batch', text: 'Use the batch calculator: enter your kilograms of fragrance and fill your batch with any mix of products.' },
       { title: 'Artwork and packaging', text: 'Send your artwork, or let us create it with your approval (optional turnkey service): labels, boxes and more.' },
       { title: 'Production and delivery', text: 'We produce your order by hand and deliver it to you. Shipping is paid by the client.' },
     ],
@@ -538,7 +538,7 @@ export const BUSINESS_PAGES: BusinessPageDef[] = [
       },
       {
         q: 'How does the batch calculator work?',
-        a: 'You enter the kilograms of fragrance you want. A small part of the fragrance is counted as production loss, ten percent, and the rest is yours to use. Enter how many units of each product you want and the calculator shows how much of the batch is used, what remains and how many more units fit. Two kilograms doubles the capacity.',
+        a: 'You enter the kilograms of fragrance you want. Then enter how many units of each product you want, and the calculator shows how much of your batch is filled and about how many more units fit. Two kilograms doubles the capacity.',
       },
       { q: 'Can you create the labels and boxes?', a: 'Yes, if you want it. Our optional turnkey service covers the artwork, the labels, the boxes and more, and you approve each piece. You can also send us your own artwork.' },
       { q: 'When can we start?', a: PRIVATE_LABEL_TIMING },
