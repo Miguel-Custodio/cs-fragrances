@@ -102,7 +102,8 @@ function resolveSiteUrl(request: Request, env: CheckoutEnv): string {
 export async function handleCheckout(
   request: Request,
   env: CheckoutEnv,
-  fetchImpl: typeof fetch = fetch,
+  // Wrapped: on Cloudflare Workers a detached `fetch` throws "Illegal invocation".
+  fetchImpl: typeof fetch = (input, init) => fetch(input, init),
 ): Promise<Response> {
   if (request.method !== 'POST') {
     return json({ error: 'method_not_allowed' }, 405);
