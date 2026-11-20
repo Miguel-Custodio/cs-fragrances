@@ -16,6 +16,14 @@ async function startServer() {
       ? path.resolve(__dirname, "public")
       : path.resolve(__dirname, "..", "dist", "public");
 
+  // Prerendered routes are <route>.html (no trailing-slash redirect): /about -> about.html
+  app.get("*", (req, res, next) => {
+    const clean = decodeURIComponent(req.path).replace(/\/+$/, "");
+    if (!clean || clean.includes("..") || path.extname(clean)) return next();
+    const file = path.join(staticPath, `${clean}.html`);
+    return res.sendFile(file, (err) => (err ? next() : undefined));
+  });
+
   app.use(express.static(staticPath));
 
   // Handle client-side routing - serve index.html for all routes

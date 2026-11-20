@@ -123,7 +123,7 @@ describe.skipIf(!fs.existsSync(path.join(dist, 'sitemap.xml')))('build output', 
   });
   it('B2B pages show no price, no Offer/price in JSON-LD, and no on-site scent test or "free" claim', () => {
     for (const r of SITE_ROUTES.filter((x) => x.path.startsWith('/business'))) {
-      const html = fs.readFileSync(path.join(dist, r.path, 'index.html'), 'utf8');
+      const html = fs.readFileSync(path.join(dist, `${r.path.slice(1)}.html`), 'utf8');
       const ld = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]).join('\n');
       expect(ld, r.path).not.toMatch(/"(offers|price|priceCurrency|lowPrice|highPrice)"/);
       const text = html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '');
@@ -136,7 +136,7 @@ describe.skipIf(!fs.existsSync(path.join(dist, 'sitemap.xml')))('build output', 
   it('prerenders every route with its own title, canonical and one h1', () => {
     const titles = new Set<string>();
     for (const r of SITE_ROUTES) {
-      const file = path.join(dist, r.path === '/' ? 'index.html' : `${r.path.slice(1)}/index.html`);
+      const file = path.join(dist, r.path === '/' ? 'index.html' : `${r.path.slice(1)}.html`);
       const html = fs.readFileSync(file, 'utf8');
       const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
       expect(title, r.path).toBeTruthy();
@@ -172,7 +172,7 @@ describe.skipIf(!fs.existsSync(path.join(dist, 'sitemap.xml')))('build output', 
       const clean = decodeURI(p.split('#')[0].split('?')[0]);
       if (clean === '' || clean === '/') return true;
       const rel = clean.replace(/^\//, '');
-      return fs.existsSync(path.join(dist, rel)) || fs.existsSync(path.join(dist, rel, 'index.html'));
+      return fs.existsSync(path.join(dist, rel)) || fs.existsSync(path.join(dist, `${rel}.html`));
     };
     const broken: string[] = [];
     for (const f of walk(dist).filter((x) => x.endsWith('.html'))) {

@@ -3,7 +3,7 @@
  *
  *   vite build                      -> dist/public (SPA bundle + index.html template)
  *   vite build --ssr entry-server   -> dist/server/entry-server.js
- *   node scripts/prerender.mjs      -> dist/public/<route>/index.html for every route,
+ *   node scripts/prerender.mjs      -> dist/public/<route>.html for every route (about.html, business/scent-briefing.html; NOT dir/index.html, which Cloudflare 308-redirects to /about/),
  *                                      404.html, sitemap.xml and robots.txt
  *
  * The browser still runs the normal React app (it replaces the prerendered markup), so behaviour
@@ -64,7 +64,7 @@ for (const route of routes) {
   if (route.path.startsWith('/business') && out.includes('[PLACEHOLDER')) {
     problems.push(`${route.path}: raw [PLACEHOLDER] text is visible; use shared/b2bConfig.ts`);
   }
-  const file = route.path === '/' ? 'index.html' : path.join(route.path.slice(1), 'index.html');
+  const file = route.path === '/' ? 'index.html' : `${route.path.slice(1)}.html`;
   fs.mkdirSync(path.dirname(path.join(publicDir, file)), { recursive: true });
   fs.writeFileSync(path.join(publicDir, file), out);
   written.push(route.path);

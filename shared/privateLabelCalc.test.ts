@@ -211,7 +211,7 @@ describe.skipIf(!fs.existsSync(path.join(dist, 'sitemap.xml')))('built site hide
     html.replace(/<script[\s\S]*?<\/script>/g, '').replace(/<style[\s\S]*?<\/style>/g, '').replace(/<[^>]+>/g, ' ');
 
   it('calculator and private label pages show no grams of fragrance, concentration or loss figure', () => {
-    for (const rel of ['business/private-label/calculator/index.html', 'business/private-label/index.html']) {
+    for (const rel of ['business/private-label/calculator.html', 'business/private-label.html']) {
       const html = text(path.join(dist, rel));
       const t = visible(html);
       expect(t, rel).not.toMatch(/\d\s?(g|grams?)\s+(of\s+)?(fragrance|oil)|of fragrance per unit|\bgrams? of|concentration|per unit|production loss|usable|remaining/i);

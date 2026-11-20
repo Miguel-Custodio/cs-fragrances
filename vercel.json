@@ -3,6 +3,7 @@
   "outputDirectory": "dist/public",
   "installCommand": "pnpm install",
   "framework": "vite",
+  "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
     { "source": "/b2b", "destination": "/business", "permanent": true },
